@@ -123,7 +123,7 @@ namespace QQ {
 			this->button3->BackColor = System::Drawing::Color::SlateBlue;
 			this->button3->FlatAppearance->BorderSize = 0;
 			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button3->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->button3->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->button3->ForeColor = System::Drawing::Color::White;
 			this->button3->Location = System::Drawing::Point(190, 354);
@@ -138,7 +138,7 @@ namespace QQ {
 			this->button1->BackColor = System::Drawing::Color::SlateBlue;
 			this->button1->FlatAppearance->BorderSize = 0;
 			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->button1->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->button1->ForeColor = System::Drawing::Color::White;
 			this->button1->Location = System::Drawing::Point(10, 354);
@@ -201,6 +201,8 @@ namespace QQ {
 			this->exit->AutoSize = true;
 			this->exit->BackColor = System::Drawing::Color::Transparent;
 			this->exit->FlatAppearance->BorderSize = 0;
+			this->exit->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->exit->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->exit->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->exit->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
@@ -232,11 +234,11 @@ namespace QQ {
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(361, 29);
 			this->textBox2->TabIndex = 2;
+			this->textBox2->UseSystemPasswordChar = true;
 			// 
 			// aurorise
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Inherit;
 			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->BackColor = System::Drawing::Color::White;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
@@ -249,7 +251,6 @@ namespace QQ {
 			this->Name = L"aurorise";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"aurorise";
-			this->TopMost = true;
 			this->Load += gcnew System::EventHandler(this, &aurorise::aurorise_Load);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
