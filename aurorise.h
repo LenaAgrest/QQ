@@ -1,5 +1,8 @@
 #pragma once
 
+#include <msclr/marshal_cppstd.h>
+#include <string>
+int Check_сredentials(std::string username, std::string password);
 namespace QQ {
 
 	using namespace System;
@@ -8,19 +11,14 @@ namespace QQ {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace msclr::interop;
 
-	/// <summary>
-	/// Сводка для aurorise
-	/// </summary>
 	public ref class aurorise : public System::Windows::Forms::Form
 	{
 	public:
 		aurorise(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: добавьте код конструктора
-			//
 		}
 
 	protected:
@@ -35,59 +33,46 @@ namespace QQ {
 			}
 		}
 
-
-
-
-
 	private: System::Windows::Forms::Panel^ panel1;
 
 	private: System::Windows::Forms::Label^ label3;
-	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::TextBox^ name;
+
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button3;
-	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Button^ vxod;
+
 	private: System::Windows::Forms::Panel^ panel3;
 
 
 	private: System::Windows::Forms::Button^ exit;
 	private: System::Windows::Forms::Panel^ panel2;
-	private: System::Windows::Forms::TextBox^ textBox2;
-
-
-
-
-
-
+	private: System::Windows::Forms::TextBox^ password;
 
 	protected:
 
 
 	private:
-		/// <summary>
-		/// Обязательная переменная конструктора.
-		/// </summary>
+
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Требуемый метод для поддержки конструктора — не изменяйте 
-		/// содержимое этого метода с помощью редактора кода.
-		/// </summary>
+
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(aurorise::typeid));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->password = (gcnew System::Windows::Forms::TextBox());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
 			this->button3 = (gcnew System::Windows::Forms::Button());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->vxod = (gcnew System::Windows::Forms::Button());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->name = (gcnew System::Windows::Forms::TextBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->exit = (gcnew System::Windows::Forms::Button());
-			this->panel2 = (gcnew System::Windows::Forms::Panel());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -97,18 +82,39 @@ namespace QQ {
 				| System::Windows::Forms::AnchorStyles::Left));
 			this->panel1->BackColor = System::Drawing::Color::Transparent;
 			this->panel1->Controls->Add(this->panel2);
-			this->panel1->Controls->Add(this->textBox2);
+			this->panel1->Controls->Add(this->password);
 			this->panel1->Controls->Add(this->panel3);
 			this->panel1->Controls->Add(this->button3);
-			this->panel1->Controls->Add(this->button1);
+			this->panel1->Controls->Add(this->vxod);
 			this->panel1->Controls->Add(this->label3);
-			this->panel1->Controls->Add(this->textBox1);
+			this->panel1->Controls->Add(this->name);
 			this->panel1->Controls->Add(this->label2);
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Location = System::Drawing::Point(37, 45);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(407, 447);
 			this->panel1->TabIndex = 4;
+			// 
+			// panel2
+			// 
+			this->panel2->BackColor = System::Drawing::Color::SlateBlue;
+			this->panel2->Location = System::Drawing::Point(10, 328);
+			this->panel2->Name = L"panel2";
+			this->panel2->Size = System::Drawing::Size(361, 2);
+			this->panel2->TabIndex = 9;
+			// 
+			// password
+			// 
+			this->password->BackColor = System::Drawing::Color::White;
+			this->password->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->password->Font = (gcnew System::Drawing::Font(L"Montserrat Medium", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->password->ForeColor = System::Drawing::Color::MediumSlateBlue;
+			this->password->Location = System::Drawing::Point(10, 296);
+			this->password->Name = L"password";
+			this->password->Size = System::Drawing::Size(361, 29);
+			this->password->TabIndex = 2;
+			this->password->UseSystemPasswordChar = true;
 			// 
 			// panel3
 			// 
@@ -133,20 +139,21 @@ namespace QQ {
 			this->button3->Text = L"Нет аккаунта\?";
 			this->button3->UseVisualStyleBackColor = true;
 			// 
-			// button1
+			// vxod
 			// 
-			this->button1->BackColor = System::Drawing::Color::SlateBlue;
-			this->button1->FlatAppearance->BorderSize = 0;
-			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->vxod->BackColor = System::Drawing::Color::SlateBlue;
+			this->vxod->FlatAppearance->BorderSize = 0;
+			this->vxod->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->vxod->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button1->ForeColor = System::Drawing::Color::White;
-			this->button1->Location = System::Drawing::Point(10, 354);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(161, 43);
-			this->button1->TabIndex = 3;
-			this->button1->Text = L"Войти";
-			this->button1->UseVisualStyleBackColor = true;
+			this->vxod->ForeColor = System::Drawing::Color::White;
+			this->vxod->Location = System::Drawing::Point(10, 354);
+			this->vxod->Name = L"vxod";
+			this->vxod->Size = System::Drawing::Size(161, 43);
+			this->vxod->TabIndex = 3;
+			this->vxod->Text = L"Войти";
+			this->vxod->UseVisualStyleBackColor = true;
+			this->vxod->Click += gcnew System::EventHandler(this, &aurorise::vxod_Click);
 			// 
 			// label3
 			// 
@@ -160,17 +167,17 @@ namespace QQ {
 			this->label3->TabIndex = 3;
 			this->label3->Text = L"Пароль";
 			// 
-			// textBox1
+			// name
 			// 
-			this->textBox1->BackColor = System::Drawing::Color::White;
-			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox1->Font = (gcnew System::Drawing::Font(L"Montserrat Medium", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->name->BackColor = System::Drawing::Color::White;
+			this->name->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->name->Font = (gcnew System::Drawing::Font(L"Montserrat Medium", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBox1->ForeColor = System::Drawing::Color::MediumSlateBlue;
-			this->textBox1->Location = System::Drawing::Point(10, 197);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(361, 29);
-			this->textBox1->TabIndex = 1;
+			this->name->ForeColor = System::Drawing::Color::MediumSlateBlue;
+			this->name->Location = System::Drawing::Point(10, 197);
+			this->name->Name = L"name";
+			this->name->Size = System::Drawing::Size(361, 29);
+			this->name->TabIndex = 1;
 			// 
 			// label2
 			// 
@@ -215,27 +222,6 @@ namespace QQ {
 			this->exit->UseVisualStyleBackColor = false;
 			this->exit->Click += gcnew System::EventHandler(this, &aurorise::exit_Click);
 			// 
-			// panel2
-			// 
-			this->panel2->BackColor = System::Drawing::Color::SlateBlue;
-			this->panel2->Location = System::Drawing::Point(10, 328);
-			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(361, 2);
-			this->panel2->TabIndex = 9;
-			// 
-			// textBox2
-			// 
-			this->textBox2->BackColor = System::Drawing::Color::White;
-			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox2->Font = (gcnew System::Drawing::Font(L"Montserrat Medium", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->textBox2->ForeColor = System::Drawing::Color::MediumSlateBlue;
-			this->textBox2->Location = System::Drawing::Point(10, 296);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(361, 29);
-			this->textBox2->TabIndex = 2;
-			this->textBox2->UseSystemPasswordChar = true;
-			// 
 			// aurorise
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Inherit;
@@ -266,5 +252,28 @@ namespace QQ {
 private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) {
 	Form::Close();
 }
+	
+private: System::Void vxod_Click(System::Object^ sender, System::EventArgs^ e) {
+	std::string username = marshal_as<std::string>(name->Text);
+	std::string pswd = marshal_as<std::string>(password->Text);
+	
+	int isAuthenticated = Check_сredentials(username, pswd);
+
+	if (name->Text->Length == 0 || password->Text->Length == 0) {
+		MessageBox::Show("Введите имя пользователя и пароль", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	if (isAuthenticated == 1) {
+		MessageBox::Show("Успешный вход!", "Добро пожаловать", MessageBoxButtons::OK, MessageBoxIcon::Information);
+	}
+	else if (isAuthenticated == 0) {
+		MessageBox::Show("Неверное имя пользователя или пароль", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
+	else if (isAuthenticated == 3) {
+		MessageBox::Show("Ошибка подключения к базе данных", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
+}
 };
+
 }

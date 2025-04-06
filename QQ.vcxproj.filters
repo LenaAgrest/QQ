@@ -18,9 +18,15 @@
     <ClCompile Include="aurorise.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="PostgresConnection.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
