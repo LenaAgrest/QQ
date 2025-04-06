@@ -15,7 +15,7 @@ private:
         "port=5433 "
         "dbname=qqdb_slabsdoes "
         "user=qqdb_slabsdoes "
-        "password= а это секрет";
+        "password= а это секрет  ";
 
     PostgresConnection() : conn(nullptr) {}
 
