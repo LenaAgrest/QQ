@@ -32,21 +32,20 @@ namespace QQ {
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::TextBox^ textBox1;
 
-
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 	private: System::Windows::Forms::PictureBox^ pictureBox2;
-	private: System::Windows::Forms::PictureBox^ pictureBoxAvatar;
-	private: System::Windows::Forms::Label^ labelUserName;
-	private: System::Windows::Forms::ContextMenuStrip^ contextMenu;
-
 
 	protected:
 
 	private:
-		System::ComponentModel::Container ^components;
+
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
-
+		/// <summary>
+		/// Требуемый метод для поддержки конструктора — не изменяйте 
+		/// содержимое этого метода с помощью редактора кода.
+		/// </summary>
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyUserControl::typeid));
@@ -71,18 +70,6 @@ namespace QQ {
 			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
 			this->flowLayoutPanel1->Size = System::Drawing::Size(1920, 100);
 			this->flowLayoutPanel1->TabIndex = 0;
-			FlowLayoutPanel^ userPanel = gcnew FlowLayoutPanel();
-			userPanel->FlowDirection = FlowDirection::LeftToRight;
-			userPanel->AutoSize = true;
-			userPanel->BackColor = Color::SlateBlue;
-			userPanel->Controls->Add(pictureBoxAvatar);
-			userPanel->Controls->Add(labelUserName);
-			userPanel->Margin = System::Windows::Forms::Padding(0, 30, 30, 0);
-			userPanel->Anchor = AnchorStyles::Right;
-
-			flowLayoutPanel1->Controls->Add(userPanel);
-			flowLayoutPanel1->SetFlowBreak(userPanel, true);
-
 			// 
 			// pictureBox1
 			// 
@@ -125,30 +112,6 @@ namespace QQ {
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(583, 41);
 			this->textBox1->TabIndex = 1;
-
-
-			// pictureBoxAvatar
-			this->pictureBoxAvatar = gcnew PictureBox();
-			this->pictureBoxAvatar->Size = Drawing::Size(40, 40);
-			this->pictureBoxAvatar->SizeMode = PictureBoxSizeMode::Zoom;
-			this->pictureBoxAvatar->Image = Image::FromFile("ava.png"); // путь к аватарке
-			this->pictureBoxAvatar->Paint += gcnew PaintEventHandler(this, &MyUserControl::pictureBoxAvatar_Paint);
-
-			// labelUserName
-			this->labelUserName = gcnew Label();
-			this->labelUserName->Text = "Имя пользователя";
-			this->labelUserName->Font = gcnew System::Drawing::Font("Montserrat", 12, FontStyle::Bold);
-			this->labelUserName->ForeColor = Color::White;
-			this->labelUserName->AutoSize = true;
-			this->labelUserName->Cursor = Cursors::Hand;
-			this->labelUserName->Click += gcnew EventHandler(this, &MyUserControl::labelUserName_Click);
-
-			// contextMenu
-			this->contextMenu = gcnew System::Windows::Forms::ContextMenuStrip();
-			this->contextMenu->Items->Add("Мой блог", nullptr, gcnew EventHandler(this, &MyUserControl::MenuMyBlog_Click));
-			this->contextMenu->Items->Add("Редактировать профиль", nullptr, gcnew EventHandler(this, &MyUserControl::MenuEditProfile_Click));
-			this->contextMenu->Items->Add("Выйти", nullptr, gcnew EventHandler(this, &MyUserControl::MenuLogout_Click));
-
 			// 
 			// MyUserControl
 			// 
@@ -165,17 +128,7 @@ namespace QQ {
 
 		}
 #pragma endregion
-		private: void pictureBoxAvatar_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
-			System::Drawing::Drawing2D::GraphicsPath^ path = gcnew System::Drawing::Drawing2D::GraphicsPath();
-			path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
-			pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
-		}
-		private: System::Void labelUserName_Click(System::Object^ sender, System::EventArgs^ e) {
-			contextMenu->Show(labelUserName, Point(0, labelUserName->Height));
-		}
-	private: System::Void MenuMyBlog_Click(System::Object^ sender, System::EventArgs^ e) {}
-	private: System::Void MenuEditProfile_Click(System::Object^ sender, System::EventArgs^ e) {}
-	private: System::Void MenuLogout_Click(System::Object^ sender, System::EventArgs^ e) {}
-
+	private: System::Void flowLayoutPanel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	}
 };
 }
