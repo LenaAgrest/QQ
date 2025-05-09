@@ -34,12 +34,8 @@ int Check_сredentials(std::string username, std::string password) {
         return 0;
     }
     else {
-        // Проверяем, найден ли пользователь
-        /*
-
-        PQclear(res);  // Освобождаем ресурсы результата запроса
-        dbConnection.disconnect();*/
-
+        PQclear(res); 
+        dbConnection.disconnect();
         return 1;
     } 
 }

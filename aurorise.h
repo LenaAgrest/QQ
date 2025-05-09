@@ -3,6 +3,7 @@
 #include <msclr/marshal_cppstd.h>
 #include <string>
 #include "reg.h"
+#include "MainForm.h"
 int Check_сredentials(std::string username, std::string password);
 namespace QQ {
 
@@ -268,6 +269,9 @@ private: System::Void vxod_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	if (isAuthenticated == 1) {
 		MessageBox::Show("Успешный вход!", "Добро пожаловать", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		QQ::MainForm^ mainForm = gcnew QQ::MainForm();
+		mainForm->Show();
+		this->Hide();
 	}
 	else if (isAuthenticated == 0) {
 		MessageBox::Show("Неверное имя пользователя или пароль", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);

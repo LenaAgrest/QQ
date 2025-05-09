@@ -24,6 +24,12 @@
     <ClCompile Include="reg.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="MyUserControl.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MainForm.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
@@ -33,6 +39,21 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="reg.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Post.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="MyUserControl.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="IMainView.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="BlogPresenter.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="MainForm.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,5 +69,6 @@
     <None Include="app.config">
       <Filter>Исходные файлы</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
