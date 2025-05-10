@@ -172,7 +172,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="ava.png" />
+    <Image Include="logo.png" />
     <Image Include="иконка.ico" />
+    <Image Include="лупа.png" />
     <Image Include="рег.png" />
   </ItemGroup>
   <ItemGroup>

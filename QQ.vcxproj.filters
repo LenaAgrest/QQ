@@ -24,10 +24,10 @@
     <ClCompile Include="reg.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MyUserControl.cpp">
+    <ClCompile Include="MainForm1.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MainForm1.cpp">
+    <ClCompile Include="MyUserControl.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,9 +44,6 @@
     <ClInclude Include="Post.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="MyUserControl.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="IMainView.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
@@ -56,12 +53,24 @@
     <ClInclude Include="MainForm1.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="MyUserControl.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="иконка.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
     <Image Include="рег.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="logo.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="лупа.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="ava.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
