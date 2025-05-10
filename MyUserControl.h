@@ -1,10 +1,14 @@
 #pragma once
 
 #include "BlogPostCard.h"
+#include "Post.h"
+#include "PostgresConnection.h"
+#include <msclr/marshal_cppstd.h>
 
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
+using namespace System::Collections::Generic;	
 using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace System::Drawing;
@@ -44,6 +48,7 @@ namespace QQ {
 	private: System::Windows::Forms::Label^ labelUserName;
 	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
 	private: System::ComponentModel::IContainer^ components;
+
 
 	protected:
 
@@ -125,7 +130,7 @@ namespace QQ {
 			this->textBox1->Location = System::Drawing::Point(49, 13);
 			this->textBox1->Margin = System::Windows::Forms::Padding(1, 13, 1, 0);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(583, 33);
+			this->textBox1->Size = System::Drawing::Size(583, 41);
 			this->textBox1->TabIndex = 3;
 			// 
 			// flowLayoutPanel3
@@ -135,10 +140,10 @@ namespace QQ {
 			this->flowLayoutPanel3->Controls->Add(this->pictureBoxAvatar);
 			this->flowLayoutPanel3->Controls->Add(this->labelUserName);
 			this->flowLayoutPanel3->Dock = System::Windows::Forms::DockStyle::Right;
-			this->flowLayoutPanel3->Location = System::Drawing::Point(1184, 7);
+			this->flowLayoutPanel3->Location = System::Drawing::Point(100, 90);
 			this->flowLayoutPanel3->Margin = System::Windows::Forms::Padding(100, 7, 3, 0);
 			this->flowLayoutPanel3->Name = L"flowLayoutPanel3";
-			this->flowLayoutPanel3->Size = System::Drawing::Size(327, 76);
+			this->flowLayoutPanel3->Size = System::Drawing::Size(390, 68);
 			this->flowLayoutPanel3->TabIndex = 4;
 			// 
 			// pictureBoxAvatar
@@ -164,7 +169,7 @@ namespace QQ {
 			this->labelUserName->Location = System::Drawing::Point(71, 12);
 			this->labelUserName->Margin = System::Windows::Forms::Padding(3, 12, 3, 0);
 			this->labelUserName->Name = L"labelUserName";
-			this->labelUserName->Size = System::Drawing::Size(253, 33);
+			this->labelUserName->Size = System::Drawing::Size(316, 41);
 			this->labelUserName->TabIndex = 1;
 			this->labelUserName->TabStop = true;
 			this->labelUserName->Text = L"Имя пользователя";
@@ -176,9 +181,6 @@ namespace QQ {
 			this->contextMenu->Name = L"contextMenu";
 			this->contextMenu->ShowImageMargin = false;
 			this->contextMenu->Size = System::Drawing::Size(36, 4);
-			this->contextMenu->Items->Add("Мой блог", nullptr, gcnew System::EventHandler(this, &MyUserControl::MenuMyBlog_Click));
-			this->contextMenu->Items->Add("Редактировать профиль", nullptr, gcnew System::EventHandler(this, &MyUserControl::MenuEditProfile_Click));
-			this->contextMenu->Items->Add("Выйти", nullptr, gcnew System::EventHandler(this, &MyUserControl::MenuLogout_Click));
 			// 
 			// mainflow
 			// 
@@ -187,6 +189,7 @@ namespace QQ {
 			this->mainflow->Name = L"mainflow";
 			this->mainflow->Size = System::Drawing::Size(1540, 765);
 			this->mainflow->TabIndex = 1;
+			this->mainflow->Resize += gcnew System::EventHandler(this, &MyUserControl::mainflow_Resize);
 			// 
 			// MyUserControl
 			// 
@@ -217,6 +220,7 @@ namespace QQ {
 		{
 			auto path = gcnew Drawing2D::GraphicsPath();
 			path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
+			this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
 		}
 
 		void labelUserName_Click(Object^ sender, EventArgs^ e)
@@ -242,5 +246,36 @@ namespace QQ {
 				Application::Exit();
 			}
 		}
-	};
+
+		private: System::Void mainflow_Resize(System::Object^ sender, System::EventArgs^ e)
+		{
+			int cardWidth = 400; // ширина карточки
+			int leftMargin = (mainflow->ClientSize.Width - cardWidth) / 2;
+			this->mainflow->Padding = System::Windows::Forms::Padding(Math::Max(leftMargin, 0), 10, 0, 0);
+		}
+		
+		public: 
+		
+		List<Post^>^ LoadAllPosts();
+
+		void DisplayPosts(System::Collections::Generic::List<BlogPostCard^>^ posts)
+		{
+			mainflow->Controls->Clear();
+			for each (BlogPostCard^ card in posts)
+				mainflow->Controls->Add(card);
+		}
+
+		void LoadAndDisplayPosts()
+		{
+			System::Collections::Generic::List<Post^>^ posts = LoadAllPosts();
+			System::Collections::Generic::List<BlogPostCard^>^ cards = gcnew List<BlogPostCard^>();
+
+			for each (Post ^ post in posts) {
+				BlogPostCard^ card = gcnew BlogPostCard(post);
+				cards->Add(card);
+			}
+
+			DisplayPosts(cards);
+		}
+};
 }

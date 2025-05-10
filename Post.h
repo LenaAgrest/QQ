@@ -2,23 +2,21 @@
 
 using namespace System;
 
-public ref class Post {
-public:
-    int id;
-    String^ title;
-    String^ text;
-    DateTime date;
-    String^ authorName;
-    bool commentsAllowed;
-    String^ imagePath;
+namespace QQ {
+    public ref class Post {
+    public:
+        Post(String^ title, String^ content, String^ author, array<Byte>^ imageData) {
+            Title = title;
+            Content = content;
+            Author = author;
+            ImageData = imageData;  // “еперь храним данные изображени€ как массив байтов
+        }
 
-    Post(int id, String^ title, String^ text, DateTime date, String^ authorName, bool commentsAllowed, String^ imagePath) {
-        this->id = id;
-        this->title = title;
-        this->text = text;
-        this->date = date;
-        this->authorName = authorName;
-        this->commentsAllowed = commentsAllowed;
-        this->imagePath = imagePath;
-    }
-};
+        String^ Title;
+        String^ Content;
+        String^ Author;
+        array<Byte>^ ImageData;  // ћассив байтов дл€ изображени€
+        DateTime Date;
+        bool CommentsAllowed;
+    };
+}

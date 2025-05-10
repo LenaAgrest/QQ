@@ -30,7 +30,7 @@
     <ClCompile Include="MyUserControl.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="BlogPostCard.cpp">
+    <ClCompile Include="PostRepository.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,9 +44,6 @@
     <ClInclude Include="reg.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Post.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="MainForm1.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
@@ -54,6 +51,12 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="BlogPostCard.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Post.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="PostRepository.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
