@@ -3,7 +3,7 @@
 #include <msclr/marshal_cppstd.h>
 #include <string>
 #include "reg.h"
-#include "MainForm.h"
+#include "MainForm1.h"
 int Check_ñredentials(std::string username, std::string password);
 namespace QQ {
 

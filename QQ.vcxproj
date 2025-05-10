@@ -120,17 +120,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aurorise.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainForm.cpp" />
+    <ClCompile Include="MainForm1.cpp" />
     <ClCompile Include="MyUserControl.cpp" />
     <ClCompile Include="reg.cpp" />
   </ItemGroup>
@@ -140,7 +145,7 @@
     </ClInclude>
     <ClInclude Include="BlogPresenter.h" />
     <ClInclude Include="IMainView.h" />
-    <ClInclude Include="MainForm.h">
+    <ClInclude Include="MainForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyUserControl.h">
@@ -155,6 +160,9 @@
   <ItemGroup>
     <EmbeddedResource Include="aurorise.resx">
       <DependentUpon>aurorise.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm1.resx">
+      <DependentUpon>MainForm1.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyUserControl.resx">
       <DependentUpon>MyUserControl.h</DependentUpon>

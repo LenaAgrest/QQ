@@ -27,7 +27,7 @@
     <ClCompile Include="MyUserControl.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MainForm.cpp">
+    <ClCompile Include="MainForm1.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="BlogPresenter.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="MainForm.h">
+    <ClInclude Include="MainForm1.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
