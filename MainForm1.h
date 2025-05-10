@@ -59,11 +59,15 @@ namespace QQ {
 			this->Name = L"MainForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MainForm::MainForm_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &MainForm::MainForm_Load);
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 
+	private: System::Void MainForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+		Application::Exit();
+	}
 	};
 }

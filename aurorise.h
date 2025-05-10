@@ -279,7 +279,7 @@ private: System::Void vxod_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 
 	if (isAuthenticated == 1) {
-		MessageBox::Show("Успешный вход!", "Добро пожаловать", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		//MessageBox::Show("Успешный вход!", "Добро пожаловать", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		QQ::MainForm^ mainForm = gcnew QQ::MainForm();
 		mainForm->Show();
 		this->Hide();

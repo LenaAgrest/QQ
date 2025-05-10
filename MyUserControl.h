@@ -1,5 +1,7 @@
 #pragma once
 
+#include "BlogPostCard.h"
+
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
@@ -40,6 +42,7 @@ namespace QQ {
 
 	private: System::Windows::Forms::ContextMenuStrip^ contextMenu;
 	private: System::Windows::Forms::Label^ labelUserName;
+	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
 	private: System::ComponentModel::IContainer^ components;
 
 	protected:
@@ -62,6 +65,7 @@ namespace QQ {
 			this->pictureBoxAvatar = (gcnew System::Windows::Forms::PictureBox());
 			this->labelUserName = (gcnew System::Windows::Forms::Label());
 			this->contextMenu = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->mainflow = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->flowLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->flowLayoutPanel2->SuspendLayout();
@@ -164,17 +168,31 @@ namespace QQ {
 			this->labelUserName->TabIndex = 1;
 			this->labelUserName->TabStop = true;
 			this->labelUserName->Text = L"Имя пользователя";
+			this->labelUserName->Click += gcnew System::EventHandler(this, &MyUserControl::labelUserName_Click);
 			// 
 			// contextMenu
 			// 
 			this->contextMenu->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->contextMenu->Name = L"contextMenu";
-			this->contextMenu->Size = System::Drawing::Size(61, 4);
+			this->contextMenu->ShowImageMargin = false;
+			this->contextMenu->Size = System::Drawing::Size(36, 4);
+			this->contextMenu->Items->Add("Мой блог", nullptr, gcnew System::EventHandler(this, &MyUserControl::MenuMyBlog_Click));
+			this->contextMenu->Items->Add("Редактировать профиль", nullptr, gcnew System::EventHandler(this, &MyUserControl::MenuEditProfile_Click));
+			this->contextMenu->Items->Add("Выйти", nullptr, gcnew System::EventHandler(this, &MyUserControl::MenuLogout_Click));
+			// 
+			// mainflow
+			// 
+			this->mainflow->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->mainflow->Location = System::Drawing::Point(0, 80);
+			this->mainflow->Name = L"mainflow";
+			this->mainflow->Size = System::Drawing::Size(1540, 765);
+			this->mainflow->TabIndex = 1;
 			// 
 			// MyUserControl
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->AutoSize = true;
+			this->Controls->Add(this->mainflow);
 			this->Controls->Add(this->flowLayoutPanel1);
 			this->Name = L"MyUserControl";
 			this->Size = System::Drawing::Size(1540, 845);
@@ -203,7 +221,7 @@ namespace QQ {
 
 		void labelUserName_Click(Object^ sender, EventArgs^ e)
 		{
-			contextMenu->Show(labelUserName, Point(0, labelUserName->Height));
+			this->contextMenu->Show(this->labelUserName, Drawing::Point(0, this->labelUserName->Height));
 		}
 
 		void MenuMyBlog_Click(Object^ sender, EventArgs^ e)

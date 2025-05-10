@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aurorise.cpp" />
+    <ClCompile Include="BlogPostCard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainForm1.cpp" />
     <ClCompile Include="MyUserControl.cpp" />
@@ -143,8 +144,7 @@
     <ClInclude Include="aurorise.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="BlogPresenter.h" />
-    <ClInclude Include="IMainView.h" />
+    <ClInclude Include="BlogPostCard.h" />
     <ClInclude Include="MainForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
