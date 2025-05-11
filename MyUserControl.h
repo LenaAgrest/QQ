@@ -49,7 +49,6 @@ namespace QQ {
 	private: System::Windows::Forms::ContextMenuStrip^ contextMenu;
 	private: System::Windows::Forms::Label^ labelUserName;
 	private: System::Windows::Forms::Panel^ panel1;
-	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
 
 	private: System::Windows::Forms::Label^ user_post;
 
@@ -66,6 +65,8 @@ namespace QQ {
 	private: System::Windows::Forms::GroupBox^ groupBox1;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ comm_info;
+	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
+
 
 
 
@@ -101,6 +102,7 @@ namespace QQ {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			this->flowLayoutPanel3->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->BeginInit();
+			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// flowLayoutPanel1
@@ -208,6 +210,7 @@ namespace QQ {
 			// 
 			// panel1
 			// 
+			this->panel1->Controls->Add(this->mainflow);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 80);
 			this->panel1->Name = L"panel1";
@@ -216,10 +219,12 @@ namespace QQ {
 			// 
 			// mainflow
 			// 
-			this->mainflow->AutoScroll = true;
-			this->mainflow->Location = System::Drawing::Point(250, 13);
+			this->mainflow->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom));
+			//this->mainflow->AutoScroll = true;
+			this->mainflow->AutoSize = true;
+			this->mainflow->Location = System::Drawing::Point(320, 0);
 			this->mainflow->Name = L"mainflow";
-			this->mainflow->Size = System::Drawing::Size(1026, 749);
+			//this->mainflow->Size = System::Drawing::Size(1026, 749);
 			this->mainflow->TabIndex = 0;
 			// 
 			// MyUserControl
@@ -228,9 +233,8 @@ namespace QQ {
 			this->AutoSize = true;
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->flowLayoutPanel1);
-			this->Controls->Add(this->mainflow);
 			this->Name = L"MyUserControl";
-			this->Size = System::Drawing::Size(1540, 845);
+			this->Size = System::Drawing::Size(1540, 800);
 			this->flowLayoutPanel1->ResumeLayout(false);
 			this->flowLayoutPanel1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
@@ -240,6 +244,7 @@ namespace QQ {
 			this->flowLayoutPanel3->ResumeLayout(false);
 			this->flowLayoutPanel3->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->EndInit();
+			this->panel1->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}
@@ -289,7 +294,6 @@ namespace QQ {
 					QQ::PostControl^ control = gcnew QQ::PostControl(post);
 					control->Margin = System::Windows::Forms::Padding(10);
 					this->mainflow->Controls->Add(control);
-					MessageBox::Show("Вы уверены, что хотите выйти?", "Подтверждение", MessageBoxButtons::YesNo);
 				}
 			}
 			catch (Exception^ ex) {

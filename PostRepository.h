@@ -1,6 +1,5 @@
 #pragma once
 
-#include "BlogPostCard.h"
 #include "Post.h"
 #include "PostgresConnection.h"
 #include <list>

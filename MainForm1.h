@@ -37,8 +37,22 @@ namespace QQ {
 
 	private: System::Void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		myControl = gcnew QQ::MyUserControl();
-		//myControl->Dock = System::Windows::Forms::DockStyle::Fill;
+		myControl->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->Controls->Add(myControl);
+
+		try {
+			// Загружаем все посты из базы
+			List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
+
+			// Добавляем каждый пост как элемент управления
+			for each (QQ::Post ^ post in posts) {
+				QQ::PostControl^ control = gcnew QQ::PostControl(post);
+				control->Margin = System::Windows::Forms::Padding(10);
+			}
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
+		}
 	}
 
 #pragma region Windows Form Designer generated code

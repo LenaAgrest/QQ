@@ -10,7 +10,8 @@ namespace QQ {
             Content = content;
             Author = author;
             Date = datetime;
-            ImageData = imageData;  // Теперь храним данные изображения как массив байтов
+            ImageData = imageData;
+            CommentsAllowed = true;
         }
 
         String^ Title;

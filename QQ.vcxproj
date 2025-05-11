@@ -135,7 +135,8 @@
   <ItemGroup>
     <ClCompile Include="aurorise.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PostControl.cpp" />
+    <ClCompile Include="PostControl_db.cpp" />
+    <ClCompile Include="PostControl_form.cpp" />
     <ClCompile Include="reg.cpp" />
   </ItemGroup>
   <ItemGroup>

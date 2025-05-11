@@ -24,7 +24,10 @@
     <ClCompile Include="reg.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="PostControl.cpp">
+    <ClCompile Include="PostControl_db.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="PostControl_form.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
