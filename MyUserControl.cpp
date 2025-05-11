@@ -1,9 +1,9 @@
 #include "MyUserControl.h"
-#include "PostRepository.h"
+//#include "PostRepository.h"
 
 using namespace QQ;
 
-/*void MyUserControl::LoadAndDisplayPosts()
+void MyUserControl::LoadAndDisplayPosts()
 {
     List<Post^>^ posts = PostRepository::LoadAllPosts();
     List<BlogPostCard^>^ cards = gcnew List<BlogPostCard^>();
@@ -13,15 +13,15 @@ using namespace QQ;
     }
 
     DisplayPosts(cards);
-}*/
+}
 
-/*void MyUserControl::DisplayPosts(List<BlogPostCard^>^ cards)
+void MyUserControl::DisplayPosts(List<BlogPostCard^>^ cards)
 {
     mainflow->Controls->Clear();
     for each (BlogPostCard ^ card in cards) {
         mainflow->Controls->Add(card);
     }
-}*/
+}
 
 System::Collections::Generic::List<Post^>^ QQ::MyUserControl::LoadAllPosts()
 {

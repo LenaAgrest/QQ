@@ -135,16 +135,13 @@
   <ItemGroup>
     <ClCompile Include="aurorise.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainForm1.cpp" />
-    <ClCompile Include="MyUserControl.cpp" />
-    <ClCompile Include="PostRepository.cpp" />
+    <ClCompile Include="PostControl.cpp" />
     <ClCompile Include="reg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="BlogPostCard.h" />
     <ClInclude Include="MainForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -152,7 +149,7 @@
       <FileType>CppControl</FileType>
     </ClInclude>
     <ClInclude Include="Post.h" />
-    <ClInclude Include="PostgresConnection.h" />
+    <ClInclude Include="PostControl.h" />
     <ClInclude Include="PostRepository.h" />
     <ClInclude Include="reg.h">
       <FileType>CppForm</FileType>

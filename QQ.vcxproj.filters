@@ -24,21 +24,12 @@
     <ClCompile Include="reg.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MainForm1.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="MyUserControl.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="PostRepository.cpp">
+    <ClCompile Include="PostControl.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="PostgresConnection.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="reg.h">
@@ -50,10 +41,10 @@
     <ClInclude Include="MyUserControl.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="BlogPostCard.h">
+    <ClInclude Include="Post.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Post.h">
+    <ClInclude Include="PostControl.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="PostRepository.h">

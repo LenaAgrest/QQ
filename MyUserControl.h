@@ -1,8 +1,9 @@
 #pragma once
 
-#include "BlogPostCard.h"
-#include "Post.h"
 #include "PostgresConnection.h"
+#include "PostRepository.h"
+#include "PostControl.h"
+#include "Post.h"
 #include <msclr/marshal_cppstd.h>
 
 using namespace System;
@@ -23,6 +24,7 @@ namespace QQ {
 		MyUserControl(void)
 		{
 			InitializeComponent();
+			this->Load += gcnew System::EventHandler(this, &MyUserControl::MainForm_Load);
 
 		}
 
@@ -46,7 +48,28 @@ namespace QQ {
 
 	private: System::Windows::Forms::ContextMenuStrip^ contextMenu;
 	private: System::Windows::Forms::Label^ labelUserName;
+	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
+
+	private: System::Windows::Forms::Label^ user_post;
+
+	private: System::Windows::Forms::Panel^ panel2;
+	private: System::Windows::Forms::Label^ title_post;
+	private: System::Windows::Forms::Label^ text_post;
+	private: System::Windows::Forms::Label^ date_post;
+
+
+
+	private: System::Windows::Forms::PictureBox^ image_post;
+	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::ContextMenuStrip^ svoistva_post;
+	private: System::Windows::Forms::GroupBox^ groupBox1;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Label^ comm_info;
+
+
+
+
 	private: System::ComponentModel::IContainer^ components;
 
 
@@ -70,6 +93,7 @@ namespace QQ {
 			this->pictureBoxAvatar = (gcnew System::Windows::Forms::PictureBox());
 			this->labelUserName = (gcnew System::Windows::Forms::Label());
 			this->contextMenu = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->mainflow = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->flowLayoutPanel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
@@ -182,21 +206,29 @@ namespace QQ {
 			this->contextMenu->ShowImageMargin = false;
 			this->contextMenu->Size = System::Drawing::Size(36, 4);
 			// 
+			// panel1
+			// 
+			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel1->Location = System::Drawing::Point(0, 80);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(1540, 765);
+			this->panel1->TabIndex = 1;
+			// 
 			// mainflow
 			// 
-			this->mainflow->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->mainflow->Location = System::Drawing::Point(0, 80);
+			this->mainflow->AutoScroll = true;
+			this->mainflow->Location = System::Drawing::Point(250, 13);
 			this->mainflow->Name = L"mainflow";
-			this->mainflow->Size = System::Drawing::Size(1540, 765);
-			this->mainflow->TabIndex = 1;
-			this->mainflow->Resize += gcnew System::EventHandler(this, &MyUserControl::mainflow_Resize);
+			this->mainflow->Size = System::Drawing::Size(1026, 749);
+			this->mainflow->TabIndex = 0;
 			// 
 			// MyUserControl
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->AutoSize = true;
-			this->Controls->Add(this->mainflow);
+			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->flowLayoutPanel1);
+			this->Controls->Add(this->mainflow);
 			this->Name = L"MyUserControl";
 			this->Size = System::Drawing::Size(1540, 845);
 			this->flowLayoutPanel1->ResumeLayout(false);
@@ -247,35 +279,23 @@ namespace QQ {
 			}
 		}
 
-		private: System::Void mainflow_Resize(System::Object^ sender, System::EventArgs^ e)
-		{
-			int cardWidth = 400; // ширина карточки
-			int leftMargin = (mainflow->ClientSize.Width - cardWidth) / 2;
-			this->mainflow->Padding = System::Windows::Forms::Padding(Math::Max(leftMargin, 0), 10, 0, 0);
-		}
-		
-		public: 
-		
-		List<Post^>^ LoadAllPosts();
+		private: void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
+			try {
+				// Загружаем все посты из базы
+				List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
 
-		void DisplayPosts(System::Collections::Generic::List<BlogPostCard^>^ posts)
-		{
-			mainflow->Controls->Clear();
-			for each (BlogPostCard^ card in posts)
-				mainflow->Controls->Add(card);
-		}
-
-		void LoadAndDisplayPosts()
-		{
-			System::Collections::Generic::List<Post^>^ posts = LoadAllPosts();
-			System::Collections::Generic::List<BlogPostCard^>^ cards = gcnew List<BlogPostCard^>();
-
-			for each (Post ^ post in posts) {
-				BlogPostCard^ card = gcnew BlogPostCard(post);
-				cards->Add(card);
+				// Добавляем каждый пост как элемент управления
+				for each (QQ::Post ^ post in posts) {
+					QQ::PostControl^ control = gcnew QQ::PostControl(post);
+					control->Margin = System::Windows::Forms::Padding(10);
+					this->mainflow->Controls->Add(control);
+					MessageBox::Show("Вы уверены, что хотите выйти?", "Подтверждение", MessageBoxButtons::YesNo);
+				}
 			}
-
-			DisplayPosts(cards);
+			catch (Exception^ ex) {
+				MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
+			}
 		}
+
 };
 }
