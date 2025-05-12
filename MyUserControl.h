@@ -15,7 +15,6 @@ using namespace System::Data;
 using namespace System::Drawing;
 using namespace System::Xml;
 
-
 namespace QQ {
 
 	public ref class MyUserControl : public System::Windows::Forms::UserControl
@@ -25,11 +24,9 @@ namespace QQ {
 		{
 			InitializeComponent();
 			this->Load += gcnew System::EventHandler(this, &MyUserControl::MainForm_Load);
-
 		}
 
 	protected:
-
 		~MyUserControl()
 		{
 			if (components)
@@ -37,6 +34,7 @@ namespace QQ {
 				delete components;
 			}
 		}
+
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::TextBox^ textBox1;
@@ -49,16 +47,11 @@ namespace QQ {
 	private: System::Windows::Forms::ContextMenuStrip^ contextMenu;
 	private: System::Windows::Forms::Label^ labelUserName;
 	private: System::Windows::Forms::Panel^ panel1;
-
 	private: System::Windows::Forms::Label^ user_post;
-
 	private: System::Windows::Forms::Panel^ panel2;
 	private: System::Windows::Forms::Label^ title_post;
 	private: System::Windows::Forms::Label^ text_post;
 	private: System::Windows::Forms::Label^ date_post;
-
-
-
 	private: System::Windows::Forms::PictureBox^ image_post;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::ContextMenuStrip^ svoistva_post;
@@ -66,18 +59,11 @@ namespace QQ {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ comm_info;
 	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
-
-
-
-
-
 	private: System::ComponentModel::IContainer^ components;
-
 
 	protected:
 
 	private:
-
 
 
 #pragma region Windows Form Designer generated code
@@ -166,8 +152,8 @@ namespace QQ {
 			this->flowLayoutPanel3->Controls->Add(this->pictureBoxAvatar);
 			this->flowLayoutPanel3->Controls->Add(this->labelUserName);
 			this->flowLayoutPanel3->Dock = System::Windows::Forms::DockStyle::Right;
-			this->flowLayoutPanel3->Location = System::Drawing::Point(100, 90);
-			this->flowLayoutPanel3->Margin = System::Windows::Forms::Padding(100, 7, 3, 0);
+			this->flowLayoutPanel3->Location = System::Drawing::Point(120, 90);
+			this->flowLayoutPanel3->Margin = System::Windows::Forms::Padding(120, 7, 3, 0);
 			this->flowLayoutPanel3->Name = L"flowLayoutPanel3";
 			this->flowLayoutPanel3->Size = System::Drawing::Size(390, 68);
 			this->flowLayoutPanel3->TabIndex = 4;
@@ -214,18 +200,24 @@ namespace QQ {
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 80);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1540, 765);
+			this->panel1->Size = System::Drawing::Size(1540, 720);
 			this->panel1->TabIndex = 1;
+			//this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel1->AutoScroll = true;
+			this->panel1->Controls->Add(this->mainflow);
 			// 
 			// mainflow
 			// 
-			this->mainflow->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom));
-			//this->mainflow->AutoScroll = true;
-			this->mainflow->AutoSize = true;
+			this->mainflow->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(System::Windows::Forms::AnchorStyles::Top);
+			this->mainflow->AutoScroll = false;
+			this->mainflow->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 			this->mainflow->Location = System::Drawing::Point(320, 0);
 			this->mainflow->Name = L"mainflow";
-			//this->mainflow->Size = System::Drawing::Size(1026, 749);
+			//this->mainflow->Size = System::Drawing::Size(1024, 1500);
+			this->mainflow->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->mainflow->AutoSize = true;
 			this->mainflow->TabIndex = 0;
+			this->mainflow->WrapContents = false;
 			// 
 			// MyUserControl
 			// 
@@ -295,6 +287,7 @@ namespace QQ {
 					control->Margin = System::Windows::Forms::Padding(10);
 					this->mainflow->Controls->Add(control);
 				}
+				MessageBox::Show("Загружено постов: " + posts->Count);
 			}
 			catch (Exception^ ex) {
 				MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);

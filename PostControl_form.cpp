@@ -21,6 +21,7 @@ using namespace QQ;
         else
         {
             image_post->Visible = false;
+            image_post->Enabled = false;
         }
         
         comm_info->Text = post->CommentsAllowed ? L"Разрешены" : L"Запрещены";
@@ -28,7 +29,7 @@ using namespace QQ;
 
     void PostControl::InitializeComponent(void)
     {
-        this->Size = System::Drawing::Size(1023, 749);
+        this->Size = System::Drawing::Size(1023, 350);
 
         this->user_post = gcnew Label();
         this->user_post->AutoSize = true;
@@ -49,17 +50,15 @@ using namespace QQ;
 
 
         this->text_post = gcnew Label();
-        
         this->text_post->AutoSize = true;
         this->text_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
             static_cast<System::Byte>(204)));
         this->text_post->Location = System::Drawing::Point(4, 90);
-        this->text_post->Name = L"this->text_post";
-        this->text_post->Size = System::Drawing::Size(188, 39);
+        this->text_post->Name = L"text_post";
+        //this->text_post->Size = System::Drawing::Size(350, 100);
 
 
         this->date_post = gcnew Label();
-        
         this->date_post->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
         this->date_post->AutoSize = true;
         this->date_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
@@ -101,14 +100,14 @@ using namespace QQ;
         this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
         this->label1->Font = (gcnew System::Drawing::Font(L"Montserrat ExtraBold", 19.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
             static_cast<System::Byte>(204)));
-        this->label1->Location = System::Drawing::Point(709, 3);
+        this->label1->Location = System::Drawing::Point(350, 3);
         this->label1->Margin = System::Windows::Forms::Padding(0);
         this->label1->Name = L"label1";
         this->label1->Size = System::Drawing::Size(40, 23);
         this->label1->TabIndex = 8;
         this->label1->Text = L"...";
-        this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-        this->label1->UseCompatibleTextRendering = true;
+        //this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+        //this->label1->UseCompatibleTextRendering = true;
         this->label1->ContextMenuStrip = this->svoistva_post;
 
 
@@ -158,6 +157,7 @@ using namespace QQ;
         this->groupBox1->Dock = System::Windows::Forms::DockStyle::Fill;
         this->groupBox1->Location = System::Drawing::Point(761, 3);
         this->groupBox1->Name = L"groupBox1";
+        this->groupBox1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
         this->groupBox1->Size = System::Drawing::Size(259, 297);
         this->groupBox1->TabIndex = 5;
         this->groupBox1->TabStop = false;
@@ -178,7 +178,7 @@ using namespace QQ;
         this->tableLayoutPanel1->RowCount = 1;
         this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
         this->tableLayoutPanel1->Size = System::Drawing::Size(1023, 303);
-
+        this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
         this->Controls->Add(tableLayoutPanel1);
     }
 

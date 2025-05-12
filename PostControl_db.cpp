@@ -28,7 +28,6 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
     if (!db.connect()) {
         return posts;
     }
-
     PGconn* conn = db.get(); // Нативный указатель
     std::string query = "SELECT id, blog_id, title, content, photo, post_date, comments_enabled FROM posts ORDER BY post_date DESC";
     PGresult* res = PQexec(conn, query.c_str()); // Нативный указатель
