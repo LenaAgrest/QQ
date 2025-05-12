@@ -21,13 +21,11 @@ namespace QQ {
     private:
         void InitializeComponent(void); // ← вот объявление
 
-    
-
     private: System::ComponentModel::IContainer^ components;
     private:
         Label^ user_post;
-        Label^ title_post;
-        Label^ text_post;
+        TextBox^ title_post;
+        TextBox^ text_post;
         Label^ date_post;
         PictureBox^ image_post;
         ToolStripMenuItem^ editItem;
@@ -39,6 +37,7 @@ namespace QQ {
         Panel^ panel2;
         GroupBox^ groupBox1;
         TableLayoutPanel^ tableLayoutPanel1;
+        TableLayoutPanel^ tableLayoutPanel2;
 
     //public: PostControl(Post^ post);
         void Delete_Click(Object^ sender, EventArgs^ e);

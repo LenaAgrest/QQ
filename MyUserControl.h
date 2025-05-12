@@ -196,26 +196,23 @@ namespace QQ {
 			// 
 			// panel1
 			// 
+			this->panel1->AutoScroll = true;
 			this->panel1->Controls->Add(this->mainflow);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 80);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1540, 720);
 			this->panel1->TabIndex = 1;
-			//this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel1->AutoScroll = true;
-			this->panel1->Controls->Add(this->mainflow);
 			// 
 			// mainflow
 			// 
-			this->mainflow->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(System::Windows::Forms::AnchorStyles::Top);
-			this->mainflow->AutoScroll = false;
+			this->mainflow->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->mainflow->AutoSize = true;
+			this->mainflow->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->mainflow->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 			this->mainflow->Location = System::Drawing::Point(320, 0);
 			this->mainflow->Name = L"mainflow";
-			//this->mainflow->Size = System::Drawing::Size(1024, 1500);
-			this->mainflow->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			this->mainflow->AutoSize = true;
+			this->mainflow->Size = System::Drawing::Size(0, 0);
 			this->mainflow->TabIndex = 0;
 			this->mainflow->WrapContents = false;
 			// 
@@ -237,6 +234,7 @@ namespace QQ {
 			this->flowLayoutPanel3->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->EndInit();
 			this->panel1->ResumeLayout(false);
+			this->panel1->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
