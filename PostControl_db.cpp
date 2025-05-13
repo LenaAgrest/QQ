@@ -1,4 +1,4 @@
-#define NOMINMAX
+п»ї#define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
 #define IDataObject IDataObject_WINAPI
@@ -28,32 +28,32 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
     if (!db.connect()) {
         return posts;
     }
-    PGconn* conn = db.get(); // Нативный указатель
-    std::string query = "SELECT id, blog_id, title, content, photo, post_date, comments_enabled FROM posts ORDER BY post_date DESC";
-    PGresult* res = PQexec(conn, query.c_str()); // Нативный указатель
+    PGconn* conn = db.get(); // РќР°С‚РёРІРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ
+    std::string query = "SELECT posts.*, people.name FROM posts INNER JOIN people ON people.id=posts.blog_id ORDER BY posts.post_date DESC;";
+    PGresult* res = PQexec(conn, query.c_str()); // РќР°С‚РёРІРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ
 
     if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-        PQclear(res);  // Очищаем результат запроса
+        PQclear(res);  // РћС‡РёС‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РїСЂРѕСЃР°
         db.disconnect();
         return posts;
     }
 
     int rows = PQntuples(res);
     for (int i = 0; i < rows; ++i) {
-        int id = std::stoi(PQgetvalue(res, i, 0));
-        std::string titleStr = PQgetvalue(res, i, 2);
-        std::string contentStr = PQgetvalue(res, i, 3);
-        std::string dateStr = PQgetvalue(res, i, 5);
-        std::string author = "Автор #" + std::to_string(std::stoi(PQgetvalue(res, i, 1))); // blog_id = user id
+        int id = std::stoi(PQgetvalue(res, i, 0));                     // posts.id
+        std::string titleStr = PQgetvalue(res, i, 2);                   // posts.title
+        std::string contentStr = PQgetvalue(res, i, 3);                 // posts.content
+        std::string dateStr = PQgetvalue(res, i, 5);                    // posts.post_date
+        std::string authorNameStr = "@" + std::string(PQgetvalue(res, i, 7));
         bool commentsEnabled = std::string(PQgetvalue(res, i, 6)) == "t";
 
-        // Преобразования из std::string в String^
+        // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РёР· std::string РІ String^
         String^ title = marshal_as<String^>(titleStr);
         String^ content = marshal_as<String^>(contentStr);
-        String^ authorName = marshal_as<String^>(author);
+        String^ authorName = marshal_as<String^>(authorNameStr);
         DateTime postDate = DateTime::Parse(marshal_as<String^>(dateStr));
 
-        // Обработка изображения из базы данных
+        // РћР±СЂР°Р±РѕС‚РєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…
         array<Byte>^ imageData = nullptr;
         int photoLength = PQgetlength(res, i, 4);
         if (photoLength > 0) {
@@ -64,7 +64,7 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
             }
         }
 
-        // Создание поста и добавление в список
+        // РЎРѕР·РґР°РЅРёРµ РїРѕСЃС‚Р° Рё РґРѕР±Р°РІР»РµРЅРёРµ РІ СЃРїРёСЃРѕРє
         QQ::Post^ post = gcnew QQ::Post(title, content, authorName, imageData, postDate);
         post->Date = postDate;
         post->CommentsAllowed = commentsEnabled;
@@ -72,8 +72,8 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
         posts->Add(post);
     }
 
-    PQclear(res);  // Очищаем результат запроса
-    db.disconnect();  // Отключаемся от базы данных
+    PQclear(res);  // РћС‡РёС‰Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РїСЂРѕСЃР°
+    db.disconnect();  // РћС‚РєР»СЋС‡Р°РµРјСЃСЏ РѕС‚ Р±Р°Р·С‹ РґР°РЅРЅС‹С…
     return posts;
 }
 

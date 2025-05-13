@@ -35,30 +35,19 @@ namespace QQ {
 			}
 		}
 
-	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
+	private: System::Windows::Forms::Panel^ Panel;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::TextBox^ textBox1;
-
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 	private: System::Windows::Forms::PictureBox^ pictureBox2;
-	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel3;
 	private: System::Windows::Forms::PictureBox^ pictureBoxAvatar;
-
-	private: System::Windows::Forms::ContextMenuStrip^ contextMenu;
-	private: System::Windows::Forms::Label^ labelUserName;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Label^ user_post;
 	private: System::Windows::Forms::Panel^ panel2;
-	private: System::Windows::Forms::Label^ title_post;
-	private: System::Windows::Forms::Label^ text_post;
-	private: System::Windows::Forms::Label^ date_post;
-	private: System::Windows::Forms::PictureBox^ image_post;
 	private: System::Windows::Forms::Label^ label1;
-	private: System::Windows::Forms::ContextMenuStrip^ svoistva_post;
-	private: System::Windows::Forms::GroupBox^ groupBox1;
-	private: System::Windows::Forms::Label^ label2;
-	private: System::Windows::Forms::Label^ comm_info;
 	private: System::Windows::Forms::FlowLayoutPanel^ mainflow;
+	private: System::Windows::Forms::Panel^ panel4;
+	private: System::Windows::Forms::Label^ labelUserName;
 	private: System::ComponentModel::IContainer^ components;
 
 	protected:
@@ -69,39 +58,76 @@ namespace QQ {
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
-			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyUserControl::typeid));
-			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->Panel = (gcnew System::Windows::Forms::Panel());
+			this->panel4 = (gcnew System::Windows::Forms::Panel());
+			this->labelUserName = (gcnew System::Windows::Forms::Label());
+			this->pictureBoxAvatar = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->flowLayoutPanel3 = (gcnew System::Windows::Forms::FlowLayoutPanel());
-			this->pictureBoxAvatar = (gcnew System::Windows::Forms::PictureBox());
-			this->labelUserName = (gcnew System::Windows::Forms::Label());
-			this->contextMenu = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->mainflow = (gcnew System::Windows::Forms::FlowLayoutPanel());
-			this->flowLayoutPanel1->SuspendLayout();
+			this->Panel->SuspendLayout();
+			this->panel4->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->flowLayoutPanel2->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
-			this->flowLayoutPanel3->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
-			// flowLayoutPanel1
+			// Panel
 			// 
-			this->flowLayoutPanel1->BackColor = System::Drawing::Color::SlateBlue;
-			this->flowLayoutPanel1->Controls->Add(this->pictureBox1);
-			this->flowLayoutPanel1->Controls->Add(this->flowLayoutPanel2);
-			this->flowLayoutPanel1->Controls->Add(this->flowLayoutPanel3);
-			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
-			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
-			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-			this->flowLayoutPanel1->Size = System::Drawing::Size(1540, 80);
-			this->flowLayoutPanel1->TabIndex = 0;
+			this->Panel->BackColor = System::Drawing::Color::SlateBlue;
+			this->Panel->Controls->Add(this->panel4);
+			this->Panel->Controls->Add(this->pictureBox1);
+			this->Panel->Controls->Add(this->flowLayoutPanel2);
+			this->Panel->Dock = System::Windows::Forms::DockStyle::Top;
+			this->Panel->Location = System::Drawing::Point(0, 0);
+			this->Panel->Name = L"Panel";
+			this->Panel->Size = System::Drawing::Size(1540, 80);
+			this->Panel->TabIndex = 0;
+			this->Panel->Resize += gcnew System::EventHandler(this, &MyUserControl::Panel_Resize);
+			// 
+			// panel4
+			// 
+			this->panel4->AutoSize = true;
+			this->panel4->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->panel4->Controls->Add(this->labelUserName);
+			this->panel4->Controls->Add(this->pictureBoxAvatar);
+			this->panel4->Dock = System::Windows::Forms::DockStyle::Right;
+			this->panel4->Location = System::Drawing::Point(1110, 0);
+			this->panel4->Name = L"panel4";
+			this->panel4->Size = System::Drawing::Size(430, 80);
+			this->panel4->TabIndex = 5;
+			// 
+			// labelUserName
+			// 
+			this->labelUserName->AutoSize = true;
+			this->labelUserName->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->labelUserName->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 18, System::Drawing::FontStyle::Bold));
+			this->labelUserName->ForeColor = System::Drawing::Color::White;
+			this->labelUserName->Location = System::Drawing::Point(111, 20);
+			this->labelUserName->Name = L"labelUserName";
+			this->labelUserName->Size = System::Drawing::Size(316, 41);
+			this->labelUserName->TabIndex = 2;
+			this->labelUserName->TabStop = true;
+			this->labelUserName->Text = L"Имя пользователя";
+			// 
+			// pictureBoxAvatar
+			// 
+			this->pictureBoxAvatar->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBoxAvatar.BackgroundImage")));
+			this->pictureBoxAvatar->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
+			this->pictureBoxAvatar->ErrorImage = nullptr;
+			this->pictureBoxAvatar->InitialImage = nullptr;
+			this->pictureBoxAvatar->Location = System::Drawing::Point(43, 8);
+			this->pictureBoxAvatar->Name = L"pictureBoxAvatar";
+			this->pictureBoxAvatar->Size = System::Drawing::Size(62, 62);
+			this->pictureBoxAvatar->TabIndex = 0;
+			this->pictureBoxAvatar->TabStop = false;
+			this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyUserControl::pictureBoxAvatar_Paint);
 			// 
 			// pictureBox1
 			// 
@@ -145,55 +171,6 @@ namespace QQ {
 			this->textBox1->Size = System::Drawing::Size(583, 41);
 			this->textBox1->TabIndex = 3;
 			// 
-			// flowLayoutPanel3
-			// 
-			this->flowLayoutPanel3->AutoSize = true;
-			this->flowLayoutPanel3->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			this->flowLayoutPanel3->Controls->Add(this->pictureBoxAvatar);
-			this->flowLayoutPanel3->Controls->Add(this->labelUserName);
-			this->flowLayoutPanel3->Dock = System::Windows::Forms::DockStyle::Right;
-			this->flowLayoutPanel3->Location = System::Drawing::Point(120, 90);
-			this->flowLayoutPanel3->Margin = System::Windows::Forms::Padding(120, 7, 3, 0);
-			this->flowLayoutPanel3->Name = L"flowLayoutPanel3";
-			this->flowLayoutPanel3->Size = System::Drawing::Size(390, 68);
-			this->flowLayoutPanel3->TabIndex = 4;
-			// 
-			// pictureBoxAvatar
-			// 
-			this->pictureBoxAvatar->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBoxAvatar.BackgroundImage")));
-			this->pictureBoxAvatar->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
-			this->pictureBoxAvatar->ErrorImage = nullptr;
-			this->pictureBoxAvatar->InitialImage = nullptr;
-			this->pictureBoxAvatar->Location = System::Drawing::Point(3, 3);
-			this->pictureBoxAvatar->Name = L"pictureBoxAvatar";
-			this->pictureBoxAvatar->Size = System::Drawing::Size(62, 62);
-			this->pictureBoxAvatar->TabIndex = 0;
-			this->pictureBoxAvatar->TabStop = false;
-			this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyUserControl::pictureBoxAvatar_Paint);
-			// 
-			// labelUserName
-			// 
-			this->labelUserName->AutoSize = true;
-			this->labelUserName->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->labelUserName->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->labelUserName->ForeColor = System::Drawing::Color::White;
-			this->labelUserName->Location = System::Drawing::Point(71, 12);
-			this->labelUserName->Margin = System::Windows::Forms::Padding(3, 12, 3, 0);
-			this->labelUserName->Name = L"labelUserName";
-			this->labelUserName->Size = System::Drawing::Size(316, 41);
-			this->labelUserName->TabIndex = 1;
-			this->labelUserName->TabStop = true;
-			this->labelUserName->Text = L"Имя пользователя";
-			this->labelUserName->Click += gcnew System::EventHandler(this, &MyUserControl::labelUserName_Click);
-			// 
-			// contextMenu
-			// 
-			this->contextMenu->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->contextMenu->Name = L"contextMenu";
-			this->contextMenu->ShowImageMargin = false;
-			this->contextMenu->Size = System::Drawing::Size(36, 4);
-			// 
 			// panel1
 			// 
 			this->panel1->AutoScroll = true;
@@ -203,14 +180,14 @@ namespace QQ {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1540, 720);
 			this->panel1->TabIndex = 1;
+			this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
 			// 
 			// mainflow
 			// 
-			this->mainflow->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->mainflow->AutoSize = true;
 			this->mainflow->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->mainflow->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
-			this->mainflow->Location = System::Drawing::Point(320, 0);
+			this->mainflow->Location = System::Drawing::Point(300, 0);
 			this->mainflow->Name = L"mainflow";
 			this->mainflow->Size = System::Drawing::Size(0, 0);
 			this->mainflow->TabIndex = 0;
@@ -221,18 +198,18 @@ namespace QQ {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->AutoSize = true;
 			this->Controls->Add(this->panel1);
-			this->Controls->Add(this->flowLayoutPanel1);
+			this->Controls->Add(this->Panel);
 			this->Name = L"MyUserControl";
 			this->Size = System::Drawing::Size(1540, 800);
-			this->flowLayoutPanel1->ResumeLayout(false);
-			this->flowLayoutPanel1->PerformLayout();
+			this->Panel->ResumeLayout(false);
+			this->Panel->PerformLayout();
+			this->panel4->ResumeLayout(false);
+			this->panel4->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->flowLayoutPanel2->ResumeLayout(false);
 			this->flowLayoutPanel2->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
-			this->flowLayoutPanel3->ResumeLayout(false);
-			this->flowLayoutPanel3->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->EndInit();
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
 			this->ResumeLayout(false);
@@ -252,26 +229,6 @@ namespace QQ {
 
 		void labelUserName_Click(Object^ sender, EventArgs^ e)
 		{
-			this->contextMenu->Show(this->labelUserName, Drawing::Point(0, this->labelUserName->Height));
-		}
-
-		void MenuMyBlog_Click(Object^ sender, EventArgs^ e)
-		{
-			// TODO: переход в блог
-		}
-
-		void MenuEditProfile_Click(Object^ sender, EventArgs^ e)
-		{
-			// TODO: открыть форму редактирования профиля
-		}
-
-		void MenuLogout_Click(Object^ sender, EventArgs^ e)
-		{
-			DialogResult result = MessageBox::Show("Вы уверены, что хотите выйти?", "Подтверждение", MessageBoxButtons::YesNo);
-			if (result == DialogResult::Yes)
-			{
-				Application::Exit();
-			}
 		}
 
 		private: void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
@@ -285,12 +242,24 @@ namespace QQ {
 					control->Margin = System::Windows::Forms::Padding(10);
 					this->mainflow->Controls->Add(control);
 				}
-				MessageBox::Show("Загружено постов: " + posts->Count);
+				//MessageBox::Show("Загружено постов: " + posts->Count);
 			}
 			catch (Exception^ ex) {
 				MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
 			}
 		}
+		void MyUserControl::panel1_Resize(Object^ sender, EventArgs^ e)
+		{
+			   int centerX = (this->panel1->ClientSize.Width - this->mainflow->Width) / 2;
+			   if (centerX < 0) {centerX = 0;}
+			   this->mainflow->Location = Point(centerX, this->mainflow->Location.Y);
+		}
+		void MyUserControl::Panel_Resize(Object^ sender, EventArgs^ e)
+		{
+			int centerX = (this->Panel->ClientSize.Width - this->flowLayoutPanel2->Width) / 2;
+			this->flowLayoutPanel2->Location = Point(centerX, this->flowLayoutPanel2->Location.Y);
+		}
+
 
 };
 }
