@@ -65,7 +65,7 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
         }
 
         // Создание поста и добавление в список
-        QQ::Post^ post = gcnew QQ::Post(title, content, authorName, imageData, postDate);
+        QQ::Post^ post = gcnew QQ::Post(id, title, content, authorName, imageData, postDate);
         post->Date = postDate;
         post->CommentsAllowed = commentsEnabled;
 
@@ -76,4 +76,3 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
     db.disconnect();  // Отключаемся от базы данных
     return posts;
 }
-

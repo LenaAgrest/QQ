@@ -5,7 +5,8 @@ using namespace System;
 namespace QQ {
     public ref class Post {
     public:
-        Post(String^ title, String^ content, String^ author, array<Byte>^ imageData, DateTime^ datetime) {
+        Post(int id, String^ title, String^ content, String^ author, array<Byte>^ imageData, DateTime^ datetime) {
+            ID = id;
             Title = title;
             Content = content;
             Author = author;
@@ -14,6 +15,7 @@ namespace QQ {
             CommentsAllowed = true;
         }
 
+        int ID;
         String^ Title;
         String^ Content;
         String^ Author;

@@ -10,6 +10,8 @@ using namespace System::Drawing;
 using namespace System::IO;
 using namespace System;
 
+int update_post(System::String^ title_post, System::String^ text_post, const int id);
+
 namespace QQ {
     public ref class PostControl : public UserControl
     {
@@ -42,6 +44,8 @@ namespace QQ {
         GroupBox^ groupBox1;
         TableLayoutPanel^ tableLayoutPanel1;
         TableLayoutPanel^ tableLayoutPanel2;
+        int postId;
+
 
         void Delete_Click(Object^ sender, EventArgs^ e);
         void Label1_Click(Object^ sender, EventArgs^ e);
