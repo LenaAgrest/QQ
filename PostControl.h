@@ -16,6 +16,8 @@ namespace QQ {
     public ref class PostControl : public UserControl
     {
     public: PostControl(Post^ post);
+    public:
+
     protected:
         ~PostControl();
 

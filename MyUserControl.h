@@ -4,6 +4,7 @@
 #include "PostRepository.h"
 #include "PostControl.h"
 #include "Post.h"
+#include "User.h"
 #include <msclr/marshal_cppstd.h>
 
 using namespace System;
@@ -20,10 +21,12 @@ namespace QQ {
 	public ref class MyUserControl : public System::Windows::Forms::UserControl
 	{
 	public:
-		MyUserControl(void)
+		MyUserControl(QQ::User^ u)
 		{
+			user = u;
+			this->Tag = u;
 			InitializeComponent();
-			this->Load += gcnew System::EventHandler(this, &MyUserControl::MainForm_Load);
+			SetUser(u);
 		}
 
 	protected:
@@ -49,10 +52,21 @@ namespace QQ {
 	private: System::Windows::Forms::Panel^ panel4;
 	private: System::Windows::Forms::Label^ labelUserName;
 	private: System::ComponentModel::IContainer^ components;
+	
+	public: QQ::User^ user;
+		  void SetUser(QQ::User^ u)
+		  {
+			  this->Tag = u;  // Сохраняем пользователя в Tag
 
-	protected:
+			  user = u;
+			  if (labelUserName != nullptr && user != nullptr)
+			  {
+				  labelUserName->Text = user->Username;
+			  }
+			  MainForm_Load();
+		  }
 
-	private:
+
 
 
 #pragma region Windows Form Designer generated code
@@ -98,9 +112,9 @@ namespace QQ {
 			this->panel4->Controls->Add(this->labelUserName);
 			this->panel4->Controls->Add(this->pictureBoxAvatar);
 			this->panel4->Dock = System::Windows::Forms::DockStyle::Right;
-			this->panel4->Location = System::Drawing::Point(1110, 0);
+			this->panel4->Location = System::Drawing::Point(1108, 0);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(430, 80);
+			this->panel4->Size = System::Drawing::Size(432, 80);
 			this->panel4->TabIndex = 5;
 			// 
 			// labelUserName
@@ -111,7 +125,7 @@ namespace QQ {
 			this->labelUserName->ForeColor = System::Drawing::Color::White;
 			this->labelUserName->Location = System::Drawing::Point(111, 20);
 			this->labelUserName->Name = L"labelUserName";
-			this->labelUserName->Size = System::Drawing::Size(316, 41);
+			this->labelUserName->Size = System::Drawing::Size(318, 43);
 			this->labelUserName->TabIndex = 2;
 			this->labelUserName->TabStop = true;
 			this->labelUserName->Text = L"Имя пользователя";
@@ -231,7 +245,9 @@ namespace QQ {
 		{
 		}
 
-		private: void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		void MainForm_Load() {
+			if (user == nullptr && this->Tag != nullptr)
+				user = dynamic_cast<QQ::User^>(this->Tag);
 			try {
 				// Загружаем все посты из базы
 				List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
@@ -242,12 +258,26 @@ namespace QQ {
 					control->Margin = System::Windows::Forms::Padding(10);
 					this->mainflow->Controls->Add(control);
 				}
-				//MessageBox::Show("Загружено постов: " + posts->Count);
+				
 			}
 			catch (Exception^ ex) {
 				MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
 			}
 		}
+
+		/*void SetUser(QQ::User^ u)
+		{
+			if (user == nullptr && this->Tag != nullptr)
+			{
+				user = dynamic_cast<QQ::User^>(this->Tag);
+			}
+			if (labelUserName != nullptr && user != nullptr)
+			{
+				labelUserName->Text = user->Username;
+			}
+		}*/
+
+
 		void MyUserControl::panel1_Resize(Object^ sender, EventArgs^ e)
 		{
 			   int centerX = (this->panel1->ClientSize.Width - this->mainflow->Width) / 2;

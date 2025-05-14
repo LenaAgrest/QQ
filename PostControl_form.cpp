@@ -250,25 +250,15 @@ using namespace QQ;
 
 
     void PostControl::save_Click(System::Object^ sender, System::EventArgs^ e) {
-        //this->currentPost = post;
         int post_id = postId;
         System::String^ newTitle = title_post->Text;
         System::String^ newContent = text_post_t->Text;
         
         int result = update_post(newTitle, newContent, post_id);
 
-        /*if (result == 0) {
+        if (result == 0) {
             MessageBox::Show("Ошибка при обновлении поста.", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
-        }*/
-
-        if (result == 3) {
-            MessageBox::Show("Ошибка экранирования", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
         }
-        else if(result == 0)
-        {
-            MessageBox::Show("Ошибка выполнения запроса", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
-        }
-        
         
         this->text_post->Text = this->text_post_t->Text;
         this->title_post_l->Text = this->title_post->Text;

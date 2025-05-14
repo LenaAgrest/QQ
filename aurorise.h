@@ -22,7 +22,6 @@ namespace QQ {
 		{
 			InitializeComponent();
 		}
-
 	protected:
 		/// <summary>
 		/// Освободить все используемые ресурсы.
@@ -280,8 +279,8 @@ private: System::Void vxod_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	if (isAuthenticated == 1) {
 		//MessageBox::Show("Успешный вход!", "Добро пожаловать", MessageBoxButtons::OK, MessageBoxIcon::Information);
-		QQ::MainForm^ mainForm = gcnew QQ::MainForm();
-		mainForm->Show();
+		//QQ::MainForm^ mainForm = gcnew QQ::MainForm(name);
+		//mainForm->Show();
 		this->Hide();
 	}
 	else if (isAuthenticated == 0) {
@@ -289,6 +288,9 @@ private: System::Void vxod_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	else if (isAuthenticated == 3) {
 		MessageBox::Show("Ошибка подключения к базе данных", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
+	else {
+		MessageBox::Show("Что-то пошло не так", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
 	}
 }
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
