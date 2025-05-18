@@ -6,6 +6,7 @@
 
 
 using namespace System::Windows::Forms;
+using namespace System::ComponentModel;
 using namespace System::Drawing;
 using namespace System::IO;
 using namespace System;
@@ -18,12 +19,15 @@ namespace QQ {
     public:
 
     protected:
+        
         ~UserPage();
 
     private:
         void InitializeComponent(void); // ← вот объявление
 
     private: System::ComponentModel::IContainer^ components;
+           System::ComponentModel::ComponentResourceManager^ resources;
+
     private:
         Label^ user_name;
         TextBox^ title_post;
@@ -31,6 +35,7 @@ namespace QQ {
         Panel^ panel;
         Panel^ panel4;
         Panel^ buttonsPanel;
+        Panel^ scrollHost;
         TableLayoutPanel^ about_user;
         Label^ o_sebe;
         Label^ o_sebe_text;
@@ -44,10 +49,14 @@ namespace QQ {
         Button^ user_red;
         Button^ reveal;
         int user_Id;
+    private:
+        bool isExpanded = true;
 
 
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
         void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e);
+        void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e);
+        void QQ::UserPage::post_Load(User^ user);
     };
 }

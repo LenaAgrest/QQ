@@ -206,6 +206,7 @@ namespace QQ {
 			this->mainflow->Size = System::Drawing::Size(0, 0);
 			this->mainflow->TabIndex = 0;
 			this->mainflow->WrapContents = false;
+			this->mainflow->SizeChanged += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
 			// 
 			// MyUserControl
 			// 
@@ -248,9 +249,9 @@ namespace QQ {
 				this->mainflow->Controls->Clear();
 				this->mainflow->Controls->Add(userpage);
 			}
-			//this->panel1->ResumeLayout(false);
-			//this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
-			//this->panel1->PerformLayout();
+			this->panel1->ResumeLayout(false);
+			this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
+			this->panel1->PerformLayout();
 		}
 
 		void MainForm_Load() {
@@ -271,19 +272,6 @@ namespace QQ {
 			}
 		}
 
-		/*void SetUser(QQ::User^ u)
-		{
-			if (user == nullptr && this->Tag != nullptr)
-			{
-				user = dynamic_cast<QQ::User^>(this->Tag);
-			}
-			if (labelUserName != nullptr && user != nullptr)
-			{
-				labelUserName->Text = user->Username;
-			}
-		}*/
-
-
 		void MyUserControl::panel1_Resize(Object^ sender, EventArgs^ e)
 		{
 			   int centerX = (this->panel1->ClientSize.Width - this->mainflow->Width) / 2;
@@ -298,6 +286,8 @@ namespace QQ {
 
 
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->mainflow->Controls->Clear();
+	MainForm_Load();
 }
 };
 }

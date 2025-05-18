@@ -171,7 +171,7 @@ using namespace QQ;
         this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 25.9042F)));
         this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
         this->tableLayoutPanel1->Controls->Add(this->groupBox1, 1, 0);
-        this->tableLayoutPanel1->Location = System::Drawing::Point(3, 3);
+        this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
         this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
         this->tableLayoutPanel1->RowCount = 1;
         this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
