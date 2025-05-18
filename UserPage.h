@@ -30,6 +30,7 @@ namespace QQ {
         PictureBox^ pictureBoxAvatar;
         Panel^ panel;
         Panel^ panel4;
+        Panel^ buttonsPanel;
         TableLayoutPanel^ about_user;
         Label^ o_sebe;
         Label^ o_sebe_text;

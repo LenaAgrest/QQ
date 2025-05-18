@@ -23,10 +23,10 @@ namespace QQ {
 	public ref class MyUserControl : public System::Windows::Forms::UserControl
 	{
 	public:
-		MyUserControl(QQ::User^ u)
+		MyUserControl()
 		{
 			InitializeComponent();
-			SetUser(u);
+			SetUser();
 		}
 
 	protected:
@@ -54,11 +54,12 @@ namespace QQ {
 	private: System::ComponentModel::IContainer^ components;
 	
 	public: QQ::User^ user;
-		  void SetUser(QQ::User^ u)
+		  void SetUser()
 		  {
-			  if (QQ::Session::CurrentUser != nullptr)
+			  if (QQ::Session::CurrentUser != nullptr) {
+				  user = QQ::Session::CurrentUser;
 				  labelUserName->Text = QQ::Session::CurrentUser->Username;
-
+			  }
 			  MainForm_Load();
 		  }
 
@@ -108,9 +109,9 @@ namespace QQ {
 			this->panel4->Controls->Add(this->labelUserName);
 			this->panel4->Controls->Add(this->pictureBoxAvatar);
 			this->panel4->Dock = System::Windows::Forms::DockStyle::Right;
-			this->panel4->Location = System::Drawing::Point(1110, 0);
+			this->panel4->Location = System::Drawing::Point(1310, 0);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(430, 80);
+			this->panel4->Size = System::Drawing::Size(230, 80);
 			this->panel4->TabIndex = 5;
 			// 
 			// labelUserName
@@ -121,10 +122,10 @@ namespace QQ {
 			this->labelUserName->ForeColor = System::Drawing::Color::White;
 			this->labelUserName->Location = System::Drawing::Point(111, 20);
 			this->labelUserName->Name = L"labelUserName";
-			this->labelUserName->Size = System::Drawing::Size(316, 41);
+			this->labelUserName->Size = System::Drawing::Size(116, 41);
 			this->labelUserName->TabIndex = 2;
 			this->labelUserName->TabStop = true;
-			this->labelUserName->Text = L"Имя пользователя";
+			this->labelUserName->Text = L"Войти";
 			this->labelUserName->Click += gcnew System::EventHandler(this, &MyUserControl::labelUserName_Click);
 			// 
 			// pictureBoxAvatar
@@ -201,6 +202,7 @@ namespace QQ {
 			this->mainflow->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 			this->mainflow->Location = System::Drawing::Point(300, 0);
 			this->mainflow->Name = L"mainflow";
+			this->mainflow->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->mainflow->Size = System::Drawing::Size(0, 0);
 			this->mainflow->TabIndex = 0;
 			this->mainflow->WrapContents = false;
@@ -241,17 +243,17 @@ namespace QQ {
 
 		void labelUserName_Click(Object^ sender, EventArgs^ e)
 		{
-			if (user == nullptr && this->Tag != nullptr)
-				user = dynamic_cast<QQ::User^>(this->Tag);
-
-			QQ::UserPage^ userpage = gcnew QQ::UserPage(user);
-			//userpage->Margin = System::Windows::Forms::Padding(10);
-			this->mainflow->Controls->Add(userpage);
+			if (user != nullptr) {
+				QQ::UserPage^ userpage = gcnew QQ::UserPage(user);
+				this->mainflow->Controls->Clear();
+				this->mainflow->Controls->Add(userpage);
+			}
+			//this->panel1->ResumeLayout(false);
+			//this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
+			//this->panel1->PerformLayout();
 		}
 
 		void MainForm_Load() {
-			if (user == nullptr && this->Tag != nullptr)
-				user = dynamic_cast<QQ::User^>(this->Tag);
 			try {
 				// Загружаем все посты из базы
 				List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();

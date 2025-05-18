@@ -14,11 +14,11 @@ namespace QQ {
 
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
-	private: QQ::User^ currentUser;
+	//private: QQ::User^ currentUser;
 	public:
-		MainForm(QQ::User^ user)
+		MainForm()
 		{
-			currentUser = user;
+			//currentUser = user;
 			InitializeComponent();
 		}
 
@@ -40,7 +40,7 @@ namespace QQ {
 
 	private: System::Void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
 
-		myControl = gcnew QQ::MyUserControl(currentUser);
+		myControl = gcnew QQ::MyUserControl();
 		myControl->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->Controls->Add(myControl);
 
