@@ -33,6 +33,9 @@
     <ClCompile Include="for_bd.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="UserPage.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
@@ -54,6 +57,12 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="PostRepository.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="UserPage.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

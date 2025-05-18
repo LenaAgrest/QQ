@@ -1,4 +1,5 @@
 #include "aurorise.h"
+#include "Session.h"
 #include "PostgresConnection.h"
 #include <stdio.h>
 #include <iostream>
@@ -80,6 +81,7 @@ int Check_сredentials(std::string username, std::string password) {
             else
             {
                 QQ::User^ user = gcnew QQ::User(id, name, interests, date_of_birth, about_me, contacts);
+                QQ::Session::CurrentUser = user;
                 MyUserControl^ control = gcnew MyUserControl(user);
                 control->SetUser(user); // вот это передаёт данные!
                 QQ::MainForm^ mainForm = gcnew QQ::MainForm(user);

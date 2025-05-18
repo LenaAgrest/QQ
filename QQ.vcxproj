@@ -144,6 +144,7 @@
     <ClCompile Include="PostControl_db.cpp" />
     <ClCompile Include="PostControl_form.cpp" />
     <ClCompile Include="reg.cpp" />
+    <ClCompile Include="UserPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
@@ -161,6 +162,10 @@
     <ClInclude Include="reg.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="UserPage.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="aurorise.resx">
@@ -174,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="reg.resx">
       <DependentUpon>reg.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserPage.resx">
+      <DependentUpon>UserPage.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

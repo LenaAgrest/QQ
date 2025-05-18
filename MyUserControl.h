@@ -5,6 +5,8 @@
 #include "PostControl.h"
 #include "Post.h"
 #include "User.h"
+#include "Session.h"
+#include "UserPage.h"
 #include <msclr/marshal_cppstd.h>
 
 using namespace System;
@@ -23,8 +25,6 @@ namespace QQ {
 	public:
 		MyUserControl(QQ::User^ u)
 		{
-			user = u;
-			this->Tag = u;
 			InitializeComponent();
 			SetUser(u);
 		}
@@ -56,13 +56,9 @@ namespace QQ {
 	public: QQ::User^ user;
 		  void SetUser(QQ::User^ u)
 		  {
-			  this->Tag = u;  // Сохраняем пользователя в Tag
+			  if (QQ::Session::CurrentUser != nullptr)
+				  labelUserName->Text = QQ::Session::CurrentUser->Username;
 
-			  user = u;
-			  if (labelUserName != nullptr && user != nullptr)
-			  {
-				  labelUserName->Text = user->Username;
-			  }
 			  MainForm_Load();
 		  }
 
@@ -112,9 +108,9 @@ namespace QQ {
 			this->panel4->Controls->Add(this->labelUserName);
 			this->panel4->Controls->Add(this->pictureBoxAvatar);
 			this->panel4->Dock = System::Windows::Forms::DockStyle::Right;
-			this->panel4->Location = System::Drawing::Point(1108, 0);
+			this->panel4->Location = System::Drawing::Point(1110, 0);
 			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(432, 80);
+			this->panel4->Size = System::Drawing::Size(430, 80);
 			this->panel4->TabIndex = 5;
 			// 
 			// labelUserName
@@ -125,10 +121,11 @@ namespace QQ {
 			this->labelUserName->ForeColor = System::Drawing::Color::White;
 			this->labelUserName->Location = System::Drawing::Point(111, 20);
 			this->labelUserName->Name = L"labelUserName";
-			this->labelUserName->Size = System::Drawing::Size(318, 43);
+			this->labelUserName->Size = System::Drawing::Size(316, 41);
 			this->labelUserName->TabIndex = 2;
 			this->labelUserName->TabStop = true;
 			this->labelUserName->Text = L"Имя пользователя";
+			this->labelUserName->Click += gcnew System::EventHandler(this, &MyUserControl::labelUserName_Click);
 			// 
 			// pictureBoxAvatar
 			// 
@@ -152,6 +149,7 @@ namespace QQ {
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Click += gcnew System::EventHandler(this, &MyUserControl::pictureBox1_Click);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -243,6 +241,12 @@ namespace QQ {
 
 		void labelUserName_Click(Object^ sender, EventArgs^ e)
 		{
+			if (user == nullptr && this->Tag != nullptr)
+				user = dynamic_cast<QQ::User^>(this->Tag);
+
+			QQ::UserPage^ userpage = gcnew QQ::UserPage(user);
+			//userpage->Margin = System::Windows::Forms::Padding(10);
+			this->mainflow->Controls->Add(userpage);
 		}
 
 		void MainForm_Load() {
@@ -291,5 +295,7 @@ namespace QQ {
 		}
 
 
+private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }
