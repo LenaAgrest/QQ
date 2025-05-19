@@ -192,23 +192,34 @@ void UserPage::InitializeComponent(void)
 	this->pictureBoxAvatar->ErrorImage = nullptr;
 	this->pictureBoxAvatar->InitialImage = nullptr;
 	this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UserPage::pictureBoxAvatar_Paint);
+	
+
+
+	this->create_post = gcnew Button();
+	this->create_post->Click += gcnew System::EventHandler(this, &UserPage::createPost_Click);
+	this->create_post->BackColor = System::Drawing::Color::MediumSlateBlue;
+	this->create_post->FlatAppearance->BorderSize = 0;
+	this->create_post->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+	this->create_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 20, System::Drawing::FontStyle::Bold));
+	this->create_post->ForeColor = System::Drawing::Color::White;
+	this->create_post->Size = System::Drawing::Size(190, 50);
+	this->create_post->Dock = DockStyle::Fill;
+	this->create_post->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+	this->create_post->Text = L"Создать пост";
+	
 	// 
 	// panel4
 	// 
 	this->panel4 = gcnew Panel();
 	this->panel4->BackColor = System::Drawing::Color::SlateBlue;
-	//this->panel4->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel4->Controls->Add(this->pictureBoxAvatar);
 	this->panel4->Controls->Add(this->user_name);
 	this->panel4->Controls->Add(this->buttonsPanel);
-	this->panel4->Dock = System::Windows::Forms::DockStyle::Fill;
+	this->panel4->Dock = System::Windows::Forms::DockStyle::Top;
 	this->panel4->Location = System::Drawing::Point(0, 0);
-	this->panel4->Margin = System::Windows::Forms::Padding(0);
+	this->panel4->Margin = System::Windows::Forms::Padding(2);
 	this->panel4->Name = L"panel4";
-	this->panel4->Size = System::Drawing::Size(1018, 140);
-	//this->panel4->AutoSize = true;
-	//this->panel4->MaximumSize = System::Drawing::Size(1013, 140);
-	//MessageBox::Show("dd" + this->panel4->AutoScrollPosition, "Добро пожаловать", MessageBoxButtons::OK, MessageBoxIcon::Information);
+	this->panel4->Size = System::Drawing::Size(1010, 140);
 
 
 
@@ -220,10 +231,10 @@ void UserPage::InitializeComponent(void)
 	this->about_user->ColumnCount = 1;
 	this->about_user->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 100));
 	this->about_user->Location = System::Drawing::Point(0, 0);
-	this->about_user->Margin = System::Windows::Forms::Padding(0,2,0,0);
+	this->about_user->Margin = System::Windows::Forms::Padding(2, 0, 2, 2);
 	this->about_user->RowCount = 8; // будет нарастать динамически
-	this->about_user->Size = System::Drawing::Size(1018, 434);
-	this->about_user->MaximumSize = System::Drawing::Size(1018, 0);
+	this->about_user->Size = System::Drawing::Size(1010, 434);
+	this->about_user->MaximumSize = System::Drawing::Size(1010, 0);
 	//this->about_user->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// user_table
@@ -237,11 +248,14 @@ void UserPage::InitializeComponent(void)
 	this->user_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,100)));
 	this->user_table->Controls->Add(this->panel4, 0, 0);
 	this->user_table->Controls->Add(this->about_user, 0, 1);
-	//this->user_table->ColumnStyles->Clear();
-	//this->user_table->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Absolute, 1018));
+	this->user_table->Controls->Add(this->create_post, 0, 2);
 	this->user_table->Location = System::Drawing::Point(0, 0);
 	this->user_table->RowCount = 4;
-	this->user_table->Size = System::Drawing::Size(1018, 500);
+	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
+	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
+	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
+	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
+	this->user_table->Size = System::Drawing::Size(1018, 720);
 	this->Controls->Add(this->user_table);
 }
 
@@ -310,6 +324,10 @@ void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 	isExpanded = !isExpanded;
 }
 
+void QQ::UserPage::createPost_Click(System::Object^ sender, System::EventArgs^ e)
+{
+
+}
 
 void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e)
 {

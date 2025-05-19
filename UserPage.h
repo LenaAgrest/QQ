@@ -48,6 +48,7 @@ namespace QQ {
         TableLayoutPanel^ user_table;
         Button^ user_red;
         Button^ reveal;
+        Button^ create_post;
         int user_Id;
     private:
         bool isExpanded = true;
@@ -57,6 +58,7 @@ namespace QQ {
         void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e);
+        void QQ::UserPage::createPost_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::post_Load(User^ user);
     };
 }
