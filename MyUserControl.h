@@ -8,6 +8,7 @@
 #include "Session.h"
 #include "UserPage.h"
 #include <msclr/marshal_cppstd.h>
+#include "red_user.h"
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -193,7 +194,8 @@ namespace QQ {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1540, 720);
 			this->panel1->TabIndex = 1;
-			this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
+			//this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
+			//this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
 			// 
 			// mainflow
 			// 
@@ -206,7 +208,7 @@ namespace QQ {
 			this->mainflow->Size = System::Drawing::Size(0, 0);
 			this->mainflow->TabIndex = 0;
 			this->mainflow->WrapContents = false;
-			this->mainflow->SizeChanged += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
+			this->mainflow->SizeChanged += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize2);
 			// 
 			// MyUserControl
 			// 
@@ -246,12 +248,20 @@ namespace QQ {
 		{
 			if (user != nullptr) {
 				QQ::UserPage^ userpage = gcnew QQ::UserPage(user);
+				userpage->OnEditRequested += gcnew QQ::UserPage::EditRequestedHandler(this, &MyUserControl::OpenEditProfile);
 				this->mainflow->Controls->Clear();
 				this->mainflow->Controls->Add(userpage);
 			}
 			this->panel1->ResumeLayout(false);
-			this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
+			//this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
 			this->panel1->PerformLayout();
+		}
+
+		void OpenEditProfile(User^ user)
+		{
+			this->mainflow->Controls->Clear();
+			QQ::UserPageRed^ editor = gcnew QQ::UserPageRed(user);
+			this->mainflow->Controls->Add(editor);
 		}
 
 		void MainForm_Load() {
@@ -274,16 +284,31 @@ namespace QQ {
 
 		void MyUserControl::panel1_Resize(Object^ sender, EventArgs^ e)
 		{
-			   int centerX = (this->panel1->ClientSize.Width - this->mainflow->Width) / 2;
-			   if (centerX < 0) {centerX = 0;}
-			   this->mainflow->Location = Point(centerX, this->mainflow->Location.Y);
+			int centerX = (this->panel1->ClientSize.Width - this->mainflow->Width) / 2;
+			if (centerX < 0) { centerX = 0; }
+			this->mainflow->Location = Point(centerX, this->mainflow->Location.Y);		
 		}
 		void MyUserControl::Panel_Resize(Object^ sender, EventArgs^ e)
 		{
 			int centerX = (this->Panel->ClientSize.Width - this->flowLayoutPanel2->Width) / 2;
 			this->flowLayoutPanel2->Location = Point(centerX, this->flowLayoutPanel2->Location.Y);
 		}
+		void MyUserControl::panel1_Resize2(Object^ sender, EventArgs^ e)
+		{
+			int i = panel1->Width;
+			if (mainflow->Height >= panel1->Height)
+			{
+				i = panel1->Width;
+				return;
+			}
+			 else if (mainflow->Height > panel1->Height || panel1->Width > i)
+			{
+				//panel1->Width = this->panel1->ClientSize.Width + 17;
+				this->mainflow->Location = Point(this->mainflow->Location.X + SystemInformation::VerticalScrollBarWidth, this->mainflow->Location.Y);
+				//this->mainflow->Location = Point(this->mainflow->Location.X + 17, this->mainflow->Location.Y);	
+			}
 
+		}
 
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
 	this->mainflow->Controls->Clear();

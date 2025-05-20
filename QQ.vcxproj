@@ -143,6 +143,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PostControl_db.cpp" />
     <ClCompile Include="PostControl_form.cpp" />
+    <ClCompile Include="red_user.cpp" />
     <ClCompile Include="reg.cpp" />
     <ClCompile Include="UserPage.cpp" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="Post.h" />
     <ClInclude Include="PostControl.h" />
     <ClInclude Include="PostRepository.h" />
+    <ClInclude Include="red_user.h" />
     <ClInclude Include="reg.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -287,7 +287,9 @@ void QQ::UserPage::post_Load(User^ user)
 
 void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
 {
+		this->OnEditRequested(gcnew User(user_Id, user_name->Text, interesi_text->Text, DateTime::Parse(birthday_text->Text), o_sebe_text->Text, contacts_text->Text));
 }
+
 
 void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 {
@@ -319,7 +321,8 @@ void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 	}
 	else {
 		this->user_table->Controls->Remove(about_user);
-		this->reveal->BackgroundImage = Image::FromFile("info_down.png");
+		//this->reveal->BackgroundImage = Image::FromFile("info_down.png");
+		//InitializeComponent();
 	}
 	isExpanded = !isExpanded;
 }

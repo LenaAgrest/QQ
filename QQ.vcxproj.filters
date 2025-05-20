@@ -36,6 +36,9 @@
     <ClCompile Include="UserPage.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="red_user.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
@@ -63,6 +66,9 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Session.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="red_user.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

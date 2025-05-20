@@ -30,7 +30,6 @@ namespace QQ {
 
     private:
         Label^ user_name;
-        TextBox^ title_post;
         PictureBox^ pictureBoxAvatar;
         Panel^ panel;
         Panel^ panel4;
@@ -52,6 +51,8 @@ namespace QQ {
         int user_Id;
     private:
         bool isExpanded = true;
+    public: delegate void EditRequestedHandler(User^ user);
+    public: event EditRequestedHandler^ OnEditRequested;
 
 
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
