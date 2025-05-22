@@ -1,23 +1,28 @@
 ﻿#include "UserPage.h"
 #include "User.h"
+#include "Session.h"
 #include "PostControl.h"
 #include "PostRepository.h"
 #include <ctime>
 #include <string>
+
 
 using namespace QQ;
 
 UserPage::UserPage(User^ user) {
 
     InitializeComponent();
-    user_Id = user->ID;
-    user_name->Text = user->Username;
+	Session::CurrentUser = user; // на всякий случай, если вдруг не обновлён
+	user_Id = user->ID;
+	user_name->Text = user->Username;
+	pswd = user->Password;
 	o_sebe_text->Text = user->About;
 	interesi_text->Text = user->Interests;
 	contacts_text->Text = user->Contacts;
 	birthday_text->Text = user->Date->ToString("dd.MM.yyyy hh:mm:ss");
-
+	image = user->Photo;
 	post_Load(user);
+
 }
 
 void UserPage::InitializeComponent(void)
@@ -181,7 +186,14 @@ void UserPage::InitializeComponent(void)
 	// 
 	this->pictureBoxAvatar = gcnew PictureBox();
 	//this->pictureBoxAvatar->Anchor = System::Windows::Forms::AnchorStyles::Left;
-	this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+	if (image != nullptr)
+	{
+		this->pictureBoxAvatar->BackgroundImage = image;
+	}
+	else
+	{
+		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+	}
 	this->pictureBoxAvatar->Location = System::Drawing::Point(40, 10);
 	this->pictureBoxAvatar->Margin = System::Windows::Forms::Padding(50, 10, 3, 10);
 	this->pictureBoxAvatar->Size = System::Drawing::Size(120, 120);
@@ -261,10 +273,12 @@ void UserPage::InitializeComponent(void)
 
 void QQ::UserPage::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 {
-    auto path = gcnew Drawing2D::GraphicsPath();
-    path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
-    this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
+	auto path = gcnew Drawing2D::GraphicsPath();
+	path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
+	this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
 }
+
+
 
 void QQ::UserPage::post_Load(User^ user)
 {
@@ -283,13 +297,20 @@ void QQ::UserPage::post_Load(User^ user)
 	catch (Exception^ ex) {
 		MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
 	}
+	if (image != nullptr)
+	{
+		this->pictureBoxAvatar->BackgroundImage = image;
+	}
+	else
+	{
+		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+	}
 }
 
 void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
 {
-		this->OnEditRequested(gcnew User(user_Id, user_name->Text, interesi_text->Text, DateTime::Parse(birthday_text->Text), o_sebe_text->Text, contacts_text->Text));
+	this->OnEditRequested(Session::CurrentUser);
 }
-
 
 void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 {
@@ -321,8 +342,6 @@ void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 	}
 	else {
 		this->user_table->Controls->Remove(about_user);
-		//this->reveal->BackgroundImage = Image::FromFile("info_down.png");
-		//InitializeComponent();
 	}
 	isExpanded = !isExpanded;
 }

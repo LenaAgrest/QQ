@@ -1,4 +1,4 @@
-#include "User.h"
+﻿#include "User.h"
 #include "red_user.h"
 #include <ctime>
 #include <string>
@@ -8,19 +8,20 @@ using namespace QQ;
 UserPageRed::UserPageRed(User^ user) {
 
 	InitializeComponent();
+	user_izm = user;
 	user_Id = user->ID;
 	user_name->Text = user->Username;
 	o_sebe_text->Text = user->About;
 	interesi_text->Text = user->Interests;
 	contacts_text->Text = user->Contacts;
 	birthday_text->Text = user->Date->ToString("dd.MM.yyyy hh:mm:ss");
+	img = user->Photo;
+	
 }
 
 void UserPageRed::InitializeComponent(void)
 {
 	this->AutoSize = true;
-
-
 	this->birthday_text = gcnew TextBox();
 	this->birthday_text->AutoSize = true;
 	this->birthday_text->TabIndex = 5;
@@ -35,7 +36,7 @@ void UserPageRed::InitializeComponent(void)
 	// birthday
 	// 
 	this->birthday = gcnew Label();
-	this->birthday->Text = L"���� ��������";
+	this->birthday->Text = L"День рождения";
 	this->birthday->AutoSize = true;
 	this->birthday->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->birthday->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 20, System::Drawing::FontStyle::Bold));
@@ -43,7 +44,6 @@ void UserPageRed::InitializeComponent(void)
 	this->birthday->Location = System::Drawing::Point(3, 3);
 	this->birthday->Margin = System::Windows::Forms::Padding(3);
 	this->birthday->Size = System::Drawing::Size(1004, 47);
-	//this->birthday->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// contacts_text
 	// 
@@ -61,7 +61,7 @@ void UserPageRed::InitializeComponent(void)
 	// contacts
 	// 
 	this->contacts = gcnew Label();
-	this->contacts->Text = L"��������";
+	this->contacts->Text = L"Контакты";
 	this->contacts->AutoSize = true;
 	this->contacts->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->contacts->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 20, System::Drawing::FontStyle::Bold));
@@ -87,7 +87,7 @@ void UserPageRed::InitializeComponent(void)
 	// interesi
 	// 
 	this->interesi = gcnew Label();
-	this->interesi->Text = L"��������";
+	this->interesi->Text = L"Интересы";
 	this->interesi->AutoSize = true;
 	this->interesi->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->interesi->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 20, System::Drawing::FontStyle::Bold));
@@ -113,7 +113,7 @@ void UserPageRed::InitializeComponent(void)
 	// o_sebe
 	// 
 	this->o_sebe = gcnew Label();
-	this->o_sebe->Text = L"� ����";
+	this->o_sebe->Text = L"О себе";
 	this->o_sebe->Dock = DockStyle::Fill;
 	this->o_sebe->Margin = System::Windows::Forms::Padding(3);
 	this->o_sebe->Font = gcnew System::Drawing::Font(L"Montserrat", 20, FontStyle::Bold);
@@ -123,7 +123,7 @@ void UserPageRed::InitializeComponent(void)
 	this->o_sebe->Size = System::Drawing::Size(1004, 47);
 	//this->o_sebe->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
-	//��� ����� � ������
+	//имя юзера в панели
 	// 
 	this->user_name = gcnew Label();
 	this->user_name->AutoSize = true;
@@ -146,7 +146,7 @@ void UserPageRed::InitializeComponent(void)
 	this->pswd->Margin = System::Windows::Forms::Padding(0);
 	this->pswd->Size = System::Drawing::Size(188, 69);
 	this->pswd->TabIndex = 1;
-	this->pswd->Text = L"�������� ������?";
+	this->pswd->Text = L"Изменить пароль?";
 	this->pswd->Click += gcnew System::EventHandler(this, &UserPageRed::update_pswd_Click);
 
 
@@ -161,7 +161,7 @@ void UserPageRed::InitializeComponent(void)
 	this->now_pswd->Margin = System::Windows::Forms::Padding(0);
 	this->now_pswd->Size = System::Drawing::Size(188, 69);
 	this->now_pswd->TabIndex = 1;
-	this->now_pswd->Text = L"������� ������";
+	this->now_pswd->Text = L"Текущий пароль";
 
 
 
@@ -187,7 +187,7 @@ void UserPageRed::InitializeComponent(void)
 	this->new_pswd->Margin = System::Windows::Forms::Padding(0);
 	this->new_pswd->Size = System::Drawing::Size(188, 69);
 	this->new_pswd->TabIndex = 1;
-	this->new_pswd->Text = L"����� ������";
+	this->new_pswd->Text = L"Новый пароль";
 
 
 
@@ -205,9 +205,14 @@ void UserPageRed::InitializeComponent(void)
 	// pictureBoxAvatar
 	// 
 	this->pictureBoxAvatar = gcnew PictureBox();
-	//this->pictureBoxAvatar->Anchor = System::Windows::Forms::AnchorStyles::Left;
-	this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
-	//this->pictureBoxAvatar->Location = System::Drawing::Point(65, 5);
+	if (img != nullptr)
+	{
+		this->pictureBoxAvatar->BackgroundImage = img;
+	}
+	else
+	{
+		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+	}
 	this->pictureBoxAvatar->Margin = System::Windows::Forms::Padding(33, 10, 3, 5);
 	this->pictureBoxAvatar->Size = System::Drawing::Size(95, 95);
 	this->pictureBoxAvatar->TabIndex = 0;
@@ -219,8 +224,8 @@ void UserPageRed::InitializeComponent(void)
 	this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UserPageRed::pictureBoxAvatar_Paint);
 
 	this->openFileDialog1 = gcnew OpenFileDialog();
-	this->openFileDialog1->Title = "�������� �����������";
-	this->openFileDialog1->Filter = "����� ����������� (*.png;*.jpg)|*.png;*.jpg";
+	this->openFileDialog1->Title = "Выберите изображение";
+	this->openFileDialog1->Filter = "Файлы изображений (*.png;*.jpg)|*.png;*.jpg";
 
 
 	this->save = gcnew Button();
@@ -234,7 +239,7 @@ void UserPageRed::InitializeComponent(void)
 	this->save->Dock = DockStyle::Fill;
 	this->save->TabIndex = 6;
 	this->save->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-	this->save->Text = L"���������";
+	this->save->Text = L"Сохранить";
 
 	this->upd_photo = gcnew Button();
 	this->upd_photo->Click += gcnew System::EventHandler(this, &UserPageRed::UpdatePhoto_Click);
@@ -248,7 +253,7 @@ void UserPageRed::InitializeComponent(void)
 	this->upd_photo->TabIndex = 0;
 	//this->upd_photo->Location = System::Drawing::Point(30, 102);
 	this->upd_photo->Margin = System::Windows::Forms::Padding(3, 3, 3, 3);
-	this->upd_photo->Text = L"��������";
+	this->upd_photo->Text = L"Изменить";
 
 
 	this->flowLayoutPanel4 = gcnew FlowLayoutPanel();
@@ -288,7 +293,7 @@ void UserPageRed::InitializeComponent(void)
 	this->about_user->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 100));
 	this->about_user->Location = System::Drawing::Point(0, 0);
 	this->about_user->Margin = System::Windows::Forms::Padding(2, 0, 2, 2);
-	this->about_user->RowCount = 0; // ����� ��������� �����������
+	this->about_user->RowCount = 0; // будет нарастать динамически
 	this->about_user->Controls->Add(this->o_sebe);
 	this->about_user->Controls->Add(this->o_sebe_text);
 	this->about_user->Controls->Add(this->interesi);
@@ -328,6 +333,8 @@ void UserPageRed::InitializeComponent(void)
 	this->Controls->Add(this->user_table);
 }
 
+
+
 void QQ::UserPageRed::pictureBoxAvatar_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
 {
 	if (this->pictureBoxAvatar->BackgroundImage == nullptr)
@@ -343,7 +350,7 @@ void QQ::UserPageRed::pictureBoxAvatar_Paint(System::Object^ sender, System::Win
 	float imgWidth = static_cast<float>(img->Width);
 	float imgHeight = static_cast<float>(img->Height);
 
-	// ��������������� ��� cover
+	// Масштабирование как cover
 	float scale = Math::Max(boxWidth / imgWidth, boxHeight / imgHeight);
 	SizeF scaledSize(imgWidth * scale, imgHeight * scale);
 	PointF offset((boxWidth - scaledSize.Width) / 2, (boxHeight - scaledSize.Height) / 2);
@@ -352,19 +359,15 @@ void QQ::UserPageRed::pictureBoxAvatar_Paint(System::Object^ sender, System::Win
 	path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
 	this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
 
-	// �������� �� �� �����
+	// Обрезаем всё по кругу
 	g->SetClip(path);
 
-	// ���������
+	// Отрисовка
 	g->DrawImage(img, RectangleF(offset, scaledSize));
 }
 
+
 void QQ::UserPageRed::username(System::Object^ sender, System::EventArgs^ e)
-{
-
-}
-
-void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 {
 
 }
@@ -375,46 +378,131 @@ void QQ::UserPageRed::UpdatePhoto_Click(System::Object^ sender, System::EventArg
 	{
 		try
 		{
-			// ��� ���������� ����� � ������ ����� �����
-			MemoryStream^ ms = gcnew MemoryStream(File::ReadAllBytes(openFileDialog1->FileName));
-			Image^ img = Image::FromStream(ms);
+			// Загружаем изображение во временный файл
+			String^ filePath = openFileDialog1->FileName;
+			img = Image::FromFile(filePath);
 
-			// ��������� ������� �������� ���������� (ID 0x0112)
+			// Корректируем ориентацию если нужно
 			const int OrientationId = 0x0112;
 			if (Array::IndexOf(img->PropertyIdList, OrientationId) >= 0)
 			{
 				System::Drawing::Imaging::PropertyItem^ prop = img->GetPropertyItem(OrientationId);
 				int orientationValue = prop->Value[0];
 
+				// Применяем корректировку ориентации
+				RotateFlipType rotateType = RotateFlipType::RotateNoneFlipNone;
 				switch (orientationValue)
 				{
-				case 1: break; // Normal
-				case 2: img->RotateFlip(RotateFlipType::RotateNoneFlipX); break;
-				case 3: img->RotateFlip(RotateFlipType::Rotate180FlipNone); break;
-				case 4: img->RotateFlip(RotateFlipType::RotateNoneFlipY); break;
-				case 5: img->RotateFlip(RotateFlipType::Rotate90FlipX); break;
-				case 6: img->RotateFlip(RotateFlipType::Rotate90FlipNone); break;
-				case 7: img->RotateFlip(RotateFlipType::Rotate270FlipX); break;
-				case 8: img->RotateFlip(RotateFlipType::Rotate270FlipNone); break;
-				default: break; // �������������� ��������
+				case 2: rotateType = RotateFlipType::RotateNoneFlipX; break;
+				case 3: rotateType = RotateFlipType::Rotate180FlipNone; break;
+				case 4: rotateType = RotateFlipType::RotateNoneFlipY; break;
+				case 5: rotateType = RotateFlipType::Rotate90FlipX; break;
+				case 6: rotateType = RotateFlipType::Rotate90FlipNone; break;
+				case 7: rotateType = RotateFlipType::Rotate270FlipX; break;
+				case 8: rotateType = RotateFlipType::Rotate270FlipNone; break;
 				}
-
+				if (rotateType != RotateFlipType::RotateNoneFlipNone)
+					img->RotateFlip(rotateType);
 			}
-			// ���������� �������� � PictureBox
-			this->pictureBoxAvatar->BackgroundImage = img;
-			this->pictureBoxAvatar->BackgroundImageLayout = ImageLayout::None;
 
-			// ��������� ����� (��� �������� � ��)
-			MemoryStream^ saveStream = gcnew MemoryStream();
-			img->Save(saveStream, System::Drawing::Imaging::ImageFormat::Png); // ��� .Jpeg
-			this->imageBytes = saveStream->ToArray();
+			// Конвертируем в PNG и сохраняем в imageBytes
+			array<Byte>^ imageBytes;
+			try {
+				MemoryStream^ ms = gcnew MemoryStream();
+				img->Save(ms, System::Drawing::Imaging::ImageFormat::Png);
+				imageBytes = ms->ToArray();
+				ms->Close(); // на всякий случай
+			}
+			catch (Exception^ ex) {
+				MessageBox::Show("Ошибка при сохранении изображения: " + ex->Message);
+				return;
+			}
+
+			System::Text::StringBuilder^ hexOutput = gcnew System::Text::StringBuilder();
+
+			int limit = Math::Min(32, imageBytes->Length); // не больше 32 байт, иначе MessageBox взорвётся
+			for (int i = 0; i < limit; ++i) {
+				hexOutput->Append(imageBytes[i].ToString("X2")); // байт в HEX, например "AF"
+				hexOutput->Append(" ");
+			}
+
+			MessageBox::Show("imageBytes (" + imageBytes->Length + " байт):\n" + hexOutput->ToString());
+
+
+			// Отображаем в PictureBox
+			this->pictureBoxAvatar->BackgroundImage = img;
 		}
 		catch (Exception^ ex)
 		{
-			MessageBox::Show("������ �������� �����������: " + ex->Message);
+			MessageBox::Show("Ошибка загрузки изображения: " + ex->Message);
+			img = nullptr;
+			imageBytes = nullptr;
 		}
 	}
 }
+
+void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	// Обновляем данные пользователя
+	user_izm->About = o_sebe_text->Text;
+	user_izm->Interests = interesi_text->Text;
+	user_izm->Contacts = contacts_text->Text;
+	user_izm->Photo = img;
+
+	// Обрабатываем дату рождения
+	try {
+		user_izm->Date = DateTime::Parse(birthday_text->Text);
+	}
+	catch (...) {
+		MessageBox::Show("Некорректный формат даты. Используйте формат ДД.ММ.ГГГГ");
+		return;
+	}
+
+	// Обновляем пароль если нужно
+	if (isExpanded2 && !String::IsNullOrEmpty(new_pswd_text->Text))
+	{
+		if (new_pswd_text->Text != now_pswd_text->Text)
+		{
+			user_izm->Password = new_pswd_text->Text;
+		}
+		else
+		{
+			MessageBox::Show("Новый пароль должен отличаться от старого!");
+			return;
+		}
+	}
+	/*MemoryStream^ debugMs = gcnew MemoryStream(this->imageBytes);
+	try {
+		Image^ debugImg = Image::FromStream(debugMs);
+		MessageBox::Show("✅ Картинка успешно читается из imageBytes");
+	}
+	catch (Exception^ ex) {
+		MessageBox::Show("❌ Ошибка при чтении imageBytes: " + ex->Message);
+	}*/
+
+	// Сохраняем в БД
+	if (this->imageBytes != nullptr && this->imageBytes->Length > 0) {
+		// Присвоим картинку из imageBytes, а не img напрямую
+		try {
+			MemoryStream^ ms = gcnew MemoryStream(this->imageBytes);
+			Image^ parsedImage = Image::FromStream(ms);
+			user_izm->Photo = parsedImage;
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Ошибка при подготовке изображения для БД: " + ex->Message);
+			user_izm->Photo = nullptr;
+		}
+	}
+
+	if (UpdateUserFull(user_izm)) {
+		MessageBox::Show("Профиль обновлён!");
+		this->OnProfileSaved(user_izm);
+	}
+	else {
+		MessageBox::Show("Ошибка при обновлении профиля!");
+	}
+}
+
 
 void QQ::UserPageRed::update_pswd_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (isExpanded2) {
@@ -432,7 +520,6 @@ void QQ::UserPageRed::update_pswd_Click(System::Object^ sender, System::EventArg
 	}
 	isExpanded2 = !isExpanded2;
 }
-
 
 UserPageRed::~UserPageRed()
 {

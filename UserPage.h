@@ -16,7 +16,7 @@ namespace QQ {
     public ref class UserPage : public UserControl
     {
     public: UserPage(User^ user);
-    public:
+    public: User^ user2;
 
     protected:
         
@@ -49,8 +49,9 @@ namespace QQ {
         Button^ reveal;
         Button^ create_post;
         int user_Id;
-    private:
         bool isExpanded = true;
+        String^ pswd;
+        Image^ image;
     public: delegate void EditRequestedHandler(User^ user);
     public: event EditRequestedHandler^ OnEditRequested;
 

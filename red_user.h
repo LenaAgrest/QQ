@@ -4,7 +4,6 @@
 #include <string>
 #include <ctime>
 
-
 using namespace System::Windows::Forms;
 using namespace System::ComponentModel;
 using namespace System::Drawing;
@@ -16,7 +15,7 @@ namespace QQ {
     public ref class UserPageRed : public UserControl
     {
     public: UserPageRed(User^ user);
-    public:
+    public: User^ user_izm;
 
     protected:
 
@@ -53,9 +52,17 @@ namespace QQ {
         FlowLayoutPanel^ flowLayoutPanel4;
         OpenFileDialog^ openFileDialog1;
         int user_Id;
-    private:
+        MemoryStream^ ms;
+        Image^ img;
+
+    private: 
         bool isExpanded2 = true;
     private: array<Byte>^ imageBytes;
+    public: delegate void ProfileSavedHandler(User^ updatedUser);
+    public: event ProfileSavedHandler^ OnProfileSaved;
+        
+    public: bool UpdateUserData(User^ user, array<Byte>^ imageData);
+          bool UpdateUserFull(QQ::User^ user);
 
 
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);

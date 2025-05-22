@@ -59,12 +59,15 @@ namespace QQ {
 		  {
 			  if (QQ::Session::CurrentUser != nullptr) {
 				  user = QQ::Session::CurrentUser;
-				  labelUserName->Text = QQ::Session::CurrentUser->Username;
+				  labelUserName->Text = user->Username;
+
+				  if (user->Photo != nullptr)
+					  pictureBoxAvatar->BackgroundImage = user->Photo;
+				  else
+					  pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
 			  }
 			  MainForm_Load();
 		  }
-
-
 
 
 #pragma region Windows Form Designer generated code
@@ -260,8 +263,31 @@ namespace QQ {
 		void OpenEditProfile(User^ user)
 		{
 			this->mainflow->Controls->Clear();
-			QQ::UserPageRed^ editor = gcnew QQ::UserPageRed(user);
+			UserPageRed^ editor = gcnew UserPageRed(user);
+			editor->OnProfileSaved += gcnew UserPageRed::ProfileSavedHandler(this, &MyUserControl::ReturnToUserPage);
 			this->mainflow->Controls->Add(editor);
+		}
+
+		void ReturnToUserPage(User^ updatedUser)
+		{
+			this->user = updatedUser;
+			QQ::Session::CurrentUser = updatedUser;
+
+			this->labelUserName->Text = updatedUser->Username;
+
+			// ≈сли есть фото Ч показать, иначе Ч оставить заглушку
+			if (updatedUser->Photo != nullptr) {
+				this->pictureBoxAvatar->BackgroundImage = updatedUser->Photo;
+			}
+			else {
+				this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+			}
+
+			this->mainflow->Controls->Clear();
+			UserPage^ page = gcnew UserPage(updatedUser);
+			page->OnEditRequested += gcnew UserPage::EditRequestedHandler(this, &MyUserControl::OpenEditProfile);
+			this->mainflow->Controls->Add(page);
+
 		}
 
 		void MainForm_Load() {
@@ -303,9 +329,7 @@ namespace QQ {
 			}
 			 else if (mainflow->Height > panel1->Height || panel1->Width > i)
 			{
-				//panel1->Width = this->panel1->ClientSize.Width + 17;
 				this->mainflow->Location = Point(this->mainflow->Location.X + SystemInformation::VerticalScrollBarWidth, this->mainflow->Location.Y);
-				//this->mainflow->Location = Point(this->mainflow->Location.X + 17, this->mainflow->Location.Y);	
 			}
 
 		}
