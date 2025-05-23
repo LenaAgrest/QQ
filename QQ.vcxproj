@@ -139,7 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aurorise.cpp" />
-    <ClCompile Include="PostOpen_form .cpp" />
     <ClCompile Include="update.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PostControl_db.cpp" />
@@ -160,7 +159,6 @@
     </ClInclude>
     <ClInclude Include="Post.h" />
     <ClInclude Include="PostControl.h" />
-    <ClInclude Include="PostOpen.h" />
     <ClInclude Include="PostRepository.h" />
     <ClInclude Include="red_user.h" />
     <ClInclude Include="reg.h">
