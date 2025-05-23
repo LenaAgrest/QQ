@@ -61,7 +61,7 @@ namespace QQ {
     public: delegate void ProfileSavedHandler(User^ updatedUser);
     public: event ProfileSavedHandler^ OnProfileSaved;
         
-    public: bool UpdateUserData(User^ user, array<Byte>^ imageData);
+    public: 
           bool UpdateUserFull(QQ::User^ user);
 
 

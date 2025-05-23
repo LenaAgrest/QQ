@@ -471,14 +471,6 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 			return;
 		}
 	}
-	/*MemoryStream^ debugMs = gcnew MemoryStream(this->imageBytes);
-	try {
-		Image^ debugImg = Image::FromStream(debugMs);
-		MessageBox::Show("✅ Картинка успешно читается из imageBytes");
-	}
-	catch (Exception^ ex) {
-		MessageBox::Show("❌ Ошибка при чтении imageBytes: " + ex->Message);
-	}*/
 
 	// Сохраняем в БД
 	if (this->imageBytes != nullptr && this->imageBytes->Length > 0) {
