@@ -4,7 +4,6 @@
 #include <string>
 #include <ctime>
 
-
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
 using namespace System::IO;
@@ -13,16 +12,23 @@ using namespace System;
 int update_post(System::String^ title_post, System::String^ text_post, const int id);
 
 namespace QQ {
+
     public ref class PostControl : public UserControl
     {
-    public: PostControl(Post^ post);
     public:
+        PostControl(Post^ post);
+        void QQ::PostControl::AttachClickHandlers(Control^ parent);
 
-    protected:
         ~PostControl();
+
+        Post^ PostData;
+
+        delegate void PostSelectedHandler(Post^ post);
+        PostSelectedHandler^ OnPostSelected; 
 
     private:
         void InitializeComponent(void);
+        
 
     private: System::ComponentModel::IContainer^ components;
     private:
@@ -39,5 +45,6 @@ namespace QQ {
         TableLayoutPanel^ tableLayoutPanel1;
         TableLayoutPanel^ tableLayoutPanel2;
         int postId;
+        System::Void HandleClick(System::Object^ sender, System::EventArgs^ e);
     };
 }

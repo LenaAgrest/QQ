@@ -9,6 +9,7 @@
 #include "UserPage.h"
 #include <msclr/marshal_cppstd.h>
 #include "red_user.h"
+#include "PostOpen.h"
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -268,6 +269,14 @@ namespace QQ {
 			this->mainflow->Controls->Add(editor);
 		}
 
+		void OpenPost(QQ::Post^ post)
+		{
+			this->mainflow->Controls->Clear();
+			PostOpen^ postPage = gcnew PostOpen(post);
+			this->mainflow->Controls->Add(postPage);
+		}
+
+
 		void ReturnToUserPage(User^ updatedUser)
 		{
 			this->user = updatedUser;
@@ -299,6 +308,7 @@ namespace QQ {
 				for each (QQ::Post ^ post in posts) {
 					QQ::PostControl^ control = gcnew QQ::PostControl(post);
 					control->Margin = System::Windows::Forms::Padding(10);
+					control->OnPostSelected += gcnew PostControl::PostSelectedHandler(this, &MyUserControl::OpenPost);
 					this->mainflow->Controls->Add(control);
 				}
 				

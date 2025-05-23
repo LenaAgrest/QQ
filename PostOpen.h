@@ -13,13 +13,13 @@ using namespace System;
 int update_post(System::String^ title_post, System::String^ text_post, const int id);
 
 namespace QQ {
-    public ref class PostControl : public UserControl
+    public ref class PostOpen : public UserControl
     {
-    public: PostControl(Post^ post);
+    public: PostOpen(Post^ post);
     public:
 
     protected:
-        ~PostControl();
+        ~PostOpen();
 
     private:
         void InitializeComponent(void); // ← вот объявление
@@ -41,12 +41,18 @@ namespace QQ {
         Label^ label2;
         Panel^ panel2;
         Panel^ panel3;
+        Panel^ panel1;
         Button^ save;
         Button^ otmena;
-        GroupBox^ groupBox1;
+        TextBox^ comm_tb;
+        Button^ comm_send;
         TableLayoutPanel^ tableLayoutPanel1;
         TableLayoutPanel^ tableLayoutPanel2;
+        TableLayoutPanel^ tableLayoutPanel3;
         int postId;
+
+    public: delegate void PostOpenHandler(Post^ SelectPost);
+    public: event PostOpenHandler^ OpenPost;
 
 
         void Delete_Click(Object^ sender, EventArgs^ e);

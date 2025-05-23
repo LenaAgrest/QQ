@@ -366,12 +366,6 @@ void QQ::UserPageRed::pictureBoxAvatar_Paint(System::Object^ sender, System::Win
 	g->DrawImage(img, RectangleF(offset, scaledSize));
 }
 
-
-void QQ::UserPageRed::username(System::Object^ sender, System::EventArgs^ e)
-{
-
-}
-
 void QQ::UserPageRed::UpdatePhoto_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	if (this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
@@ -494,7 +488,6 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 		MessageBox::Show("Ошибка при обновлении профиля!");
 	}
 }
-
 
 void QQ::UserPageRed::update_pswd_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (isExpanded2) {

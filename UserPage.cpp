@@ -1,4 +1,5 @@
 ﻿#include "UserPage.h"
+#include "PostOpen.h"
 #include "User.h"
 #include "Session.h"
 #include "PostControl.h"
@@ -289,6 +290,7 @@ void QQ::UserPage::post_Load(User^ user)
 		for each (QQ::Post ^ post in posts) {
 			QQ::PostControl^ control = gcnew QQ::PostControl(post);
 			//control->Margin = System::Windows::Forms::Padding(0,10,0,0);
+			control->OnPostSelected = gcnew QQ::PostControl::PostSelectedHandler(this, &UserPage::OpenPost);
 			this->user_table->Controls->Add(control, 0, 3);
 			control->Dock = DockStyle::Left;
 		}
@@ -306,6 +308,15 @@ void QQ::UserPage::post_Load(User^ user)
 		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
 	}
 }
+
+void QQ::UserPage::OpenPost(QQ::Post^ post)
+{
+	this->user_table->Controls->Clear();
+
+	QQ::PostOpen^ open = gcnew QQ::PostOpen(post);
+	this->user_table->Controls->Add(open);
+}
+
 
 void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
 {

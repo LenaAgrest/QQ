@@ -66,7 +66,7 @@ namespace QQ {
 
 
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
-        void QQ::UserPageRed::username(System::Object^ sender, System::EventArgs^ e);
+        //void QQ::UserPageRed::username(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPageRed::UpdatePhoto_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPageRed::update_pswd_Click(System::Object^ sender, System::EventArgs^ e);

@@ -8,6 +8,7 @@ using namespace QQ;
     PostControl::PostControl(Post^ post) {
 
         InitializeComponent();
+        PostData = post;
         postId = post->ID;
         user_post->Text = post->Author;
         title_post_l->Text = post->Title;
@@ -26,7 +27,12 @@ using namespace QQ;
         {
             this->tableLayoutPanel2->Controls->Remove(this->image_post);
             this->image_post = nullptr;
-        }        
+        }    
+        this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostControl::HandleClick);
+        for each (Control ^ ctrl in this->Controls) {
+            ctrl->Click += gcnew EventHandler(this, &PostControl::HandleClick);
+        }
+        AttachClickHandlers(this); // Рекурсивно добавляем обработчик клика на всё содержимое
     }
 
     void PostControl::InitializeComponent(void)
@@ -55,7 +61,7 @@ using namespace QQ;
         this->text_post->Location = System::Drawing::Point(4, 90);
         this->text_post->Name = L"this->text_post";
         this->text_post->Dock = DockStyle::Fill;
-        //this->text_post->MaximumSize = System::Drawing::Size(730, 0);
+        this->text_post->MaximumSize = System::Drawing::Size(1010, 0);
 
 
         this->image_post = gcnew PictureBox();
@@ -68,14 +74,12 @@ using namespace QQ;
         this->image_post->SizeMode = PictureBoxSizeMode::Zoom;
 
 
-
         this->panel2 = gcnew Panel();
         this->panel2->AutoSize = true;
         this->panel2->Dock = DockStyle::Top;
         this->panel2->TabIndex = 4;
         this->panel2->Controls->Add(label1);
         this->panel2->Controls->Add(user_post);
-
 
 
         this->date_post = gcnew Label();
@@ -85,31 +89,32 @@ using namespace QQ;
         this->date_post->AutoSize = true;
 
 
-
         this->tableLayoutPanel2 = gcnew TableLayoutPanel();
         this->tableLayoutPanel2->Dock = DockStyle::Fill;
         this->tableLayoutPanel2->AutoSize = true;
         this->tableLayoutPanel2->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
         this->tableLayoutPanel2->ColumnCount = 1;
+        this->tableLayoutPanel2->BackColor = System::Drawing::Color::White;
         this->tableLayoutPanel2->RowCount = 0;
-        this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 20));
-        this->tableLayoutPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+        this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+        this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
+        this->tableLayoutPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
         this->tableLayoutPanel2->Controls->Add(this->panel2);
         this->tableLayoutPanel2->Controls->Add(this->title_post_l);
         this->tableLayoutPanel2->Controls->Add(this->text_post);
         this->tableLayoutPanel2->Controls->Add(this->image_post);
         this->tableLayoutPanel2->Controls->Add(this->date_post);
-        this->tableLayoutPanel2->Location = System::Drawing::Point(3, 3);
+        this->tableLayoutPanel2->Location = System::Drawing::Point(0, 0);
         this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
+        this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
+        this->Controls->Add(tableLayoutPanel2);
 
-
-
-
+        /*
         this->tableLayoutPanel1 = gcnew TableLayoutPanel();
         this->tableLayoutPanel1->ColumnCount = 1;
         this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
         this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
-        this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+        this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::AutoSize)));
         this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
         this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
         this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
@@ -119,14 +124,30 @@ using namespace QQ;
         this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
         this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
         this->tableLayoutPanel1->Size = System::Drawing::Size(1018, 410);
-        this->Controls->Add(tableLayoutPanel1);
-
+        */
+        
         
         //this->tableLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Fill;
         //this->tableLayoutPanel1->Location = System::Drawing::Point(3, 255);
         // */
-
     }
+    void QQ::PostControl::AttachClickHandlers(Control^ parent)
+    {
+        parent->Click += gcnew EventHandler(this, &PostControl::HandleClick);
+        for each (Control ^ child in parent->Controls)
+        {
+            AttachClickHandlers(child);
+        }
+    }
+
+
+    void QQ::PostControl::HandleClick(System::Object^ sender, System::EventArgs^ e)
+    {
+        if (this->OnPostSelected != nullptr) {
+            this->OnPostSelected(PostData);
+        }
+    }
+    
 
     PostControl::~PostControl()
     {
