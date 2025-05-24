@@ -7,6 +7,7 @@ using namespace QQ;
 PostOpen::PostOpen(Post^ post) {
 
 	InitializeComponent();
+	PostData = post;
 	postId = post->ID;
 	user_post->Text = post->Author;
 	title_post_l->Text = post->Title;
@@ -26,8 +27,13 @@ PostOpen::PostOpen(Post^ post) {
 		this->tableLayoutPanel2->Controls->Remove(this->image_post);
 		this->image_post = nullptr;
 	}
+	this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostOpen::HandleClick);
+	for each(Control ^ ctrl in this->Controls) {
+		ctrl->Click += gcnew EventHandler(this, &PostOpen::HandleClick);
+	}
+	AttachClickHandlers(this);
 
-	comm_info->Text = post->CommentsAllowed ? L"Отсутствуют" : L"Запрещены";
+	//comm_info->Text = post->CommentsAllowed ? L"Отсутствуют" : L"Запрещены";
 }
 
 void PostOpen::InitializeComponent(void)
@@ -56,7 +62,6 @@ void PostOpen::InitializeComponent(void)
 	this->text_post->AutoSize = true;
 	this->text_post->Font = (gcnew System::Drawing::Font(L"Montserrat", 13.8F, System::Drawing::FontStyle::Regular));
 	this->text_post->Location = System::Drawing::Point(4, 90);
-	this->text_post->Name = L"this->text_post";
 	this->text_post->Dock = DockStyle::Fill;
 	this->text_post->MaximumSize = System::Drawing::Size(1010, 0);
 
@@ -65,11 +70,11 @@ void PostOpen::InitializeComponent(void)
 	this->image_post = gcnew PictureBox();
 	this->image_post->InitialImage = nullptr;
 	this->image_post->Location = System::Drawing::Point(11, 133);
-	this->image_post->Name = L"image_post";
 	this->image_post->Size = System::Drawing::Size(200, 200);
 	this->image_post->TabIndex = 6;
 	this->image_post->TabStop = false;
 	this->image_post->SizeMode = PictureBoxSizeMode::Zoom;
+
 
 
 	this->svoistva_post = gcnew System::Windows::Forms::ContextMenuStrip();
@@ -94,7 +99,7 @@ void PostOpen::InitializeComponent(void)
 	this->label1->Click += gcnew System::EventHandler(this, &PostOpen::Label1_Click);
 
 
-	this->comm_info = gcnew Label();
+	/*this->comm_info = gcnew Label();
 	this->comm_info->AutoSize = true;
 	this->comm_info->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 14.8F, System::Drawing::FontStyle::Bold));
 	this->comm_info->ForeColor = System::Drawing::SystemColors::ControlDark;
@@ -109,7 +114,7 @@ void PostOpen::InitializeComponent(void)
 	this->label2->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
 	this->label2->Location = System::Drawing::Point(0, 5);
 	this->label2->TabIndex = 9;
-	this->label2->Text = L"Комментарии";
+	this->label2->Text = L"Комментарии";*/
 
 
 	this->panel2 = gcnew Panel();
@@ -137,7 +142,18 @@ void PostOpen::InitializeComponent(void)
 	this->date_post->AutoSize = true;
 
 	
-	
+
+
+
+
+
+
+
+
+
+
+
+	/*
 	// 
 	// comm_send
 	// 
@@ -176,14 +192,17 @@ void PostOpen::InitializeComponent(void)
 	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
 	this->panel1->Location = System::Drawing::Point(3, 115);
 	this->panel1->Size = System::Drawing::Size(468, 34);
-	this->panel1->TabIndex = 1;
+	this->panel1->TabIndex = 1;*/
 	
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
 	this->tableLayoutPanel2->AutoSize = true;
 	this->tableLayoutPanel2->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->tableLayoutPanel2->ColumnCount = 1;
+	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
+	this->tableLayoutPanel2->BackColor = System::Drawing::Color::White;
 	this->tableLayoutPanel2->RowCount = 5;
+	this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); // Автор + ...
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); // Фото
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); // Заголовок
@@ -194,6 +213,11 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->Controls->Add(this->image_post, 0, 3);
 	this->tableLayoutPanel2->Controls->Add(this->text_post, 0, 2);
 	this->tableLayoutPanel2->Controls->Add(this->title_post_l,0, 1);
+	this->tableLayoutPanel2->Location = System::Drawing::Point(0, 0);
+	this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
+	this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
+	this->Controls->Add(tableLayoutPanel2);
+
 
 	/*
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
@@ -210,7 +234,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->Controls->Add(this->image_post);
 	this->tableLayoutPanel2->Controls->Add(this->date_post);
 	//this->tableLayoutPanel2->Location = System::Drawing::Point(3, 3);
-	//this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);*/
+	//this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
 
 
 
@@ -239,62 +263,8 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel1->MaximumSize = System::Drawing::Size(1018, 0);
 	this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-	this->Controls->Add(tableLayoutPanel1);
+	this->Controls->Add(tableLayoutPanel1);*/
 }
-
-/*void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
-{
-	this->title_post->Multiline = true;
-	this->title_post->BackColor = System::Drawing::Color::White;
-	this->title_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
-	this->title_post->WordWrap = true;
-	this->title_post->Dock = DockStyle::Top;
-	this->title_post->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left));
-	this->title_post->MaximumSize = System::Drawing::Size(1010, 0);
-	this->tableLayoutPanel2->Controls->Remove(this->title_post_l);
-	this->tableLayoutPanel2->Controls->Add(this->title_post);
-
-
-	this->text_post_t->Multiline = true;
-	this->text_post_t->BackColor = System::Drawing::Color::White;
-	this->text_post_t->Font = (gcnew System::Drawing::Font(L"Montserrat", 13.8F, System::Drawing::FontStyle::Regular));
-	this->text_post_t->Location = System::Drawing::Point(3, 90);
-	this->text_post_t->WordWrap = true;
-	this->text_post_t->Dock = DockStyle::Fill;
-	this->text_post_t->MaximumSize = System::Drawing::Size(1010, 0);
-	this->text_post_t->ScrollBars = ScrollBars::None;
-	this->tableLayoutPanel2->Controls->Remove(this->text_post);
-	this->tableLayoutPanel2->Controls->Add(this->text_post_t);
-
-
-	this->save->BackColor = System::Drawing::Color::SlateBlue;
-	this->save->FlatAppearance->BorderSize = 0;
-	this->save->Font = (gcnew System::Drawing::Font(L"Montserrat", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
-	this->save->ForeColor = System::Drawing::Color::White;
-	this->save->Location = System::Drawing::Point(3, 0);
-	this->save->AutoSize = true;
-	this->save->TabIndex = 10;
-	this->save->Text = L"Сохранить";
-	this->save->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-	this->save->UseVisualStyleBackColor = false;
-	this->save->Click += gcnew System::EventHandler(this, &PostOpen::save_Click);
-
-
-	this->otmena->BackColor = System::Drawing::Color::SlateBlue;
-	this->otmena->FlatAppearance->BorderSize = 0;
-	this->otmena->Font = (gcnew System::Drawing::Font(L"Montserrat", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
-	this->otmena->ForeColor = System::Drawing::Color::White;
-	this->otmena->Location = System::Drawing::Point(save->Width + 50, 0);
-	this->otmena->AutoSize = true;
-	this->otmena->TabIndex = 10;
-	this->otmena->Text = L"Отменить";
-	this->otmena->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-	this->otmena->UseVisualStyleBackColor = false;
-	this->otmena->Click += gcnew System::EventHandler(this, &PostOpen::otmena_Click);
-
-	this->panel3->Controls->Add(this->save);
-	this->panel3->Controls->Add(this->otmena);
-}*/
 
 void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
 
@@ -372,6 +342,22 @@ void PostOpen::Label1_Click(Object^ sender, EventArgs^ e)
 	}
 }
 
+void QQ::PostOpen::AttachClickHandlers(Control^ parent)
+{
+	parent->Click += gcnew EventHandler(this, &PostOpen::HandleClick);
+	for each(Control ^ child in parent->Controls)
+	{
+		AttachClickHandlers(child);
+	}
+}
+
+
+void QQ::PostOpen::HandleClick(System::Object^ sender, System::EventArgs^ e)
+{
+	if (this->OnPostSelected != nullptr) {
+		this->OnPostSelected(PostData);
+	}
+}
 
 void PostOpen::save_Click(System::Object^ sender, System::EventArgs^ e) {
 	int post_id = postId;

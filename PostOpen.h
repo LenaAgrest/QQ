@@ -17,12 +17,18 @@ namespace QQ {
     {
     public: PostOpen(Post^ post);
     public:
+        void QQ::PostOpen::AttachClickHandlers(Control^ parent);
+
+        Post^ PostData;
+
+        delegate void PostSelectedHandler(Post^ post);
+        PostSelectedHandler^ OnPostSelected;
 
     protected:
         ~PostOpen();
 
     private:
-        void InitializeComponent(void); // ← вот объявление
+        void InitializeComponent(void);
 
     private: System::ComponentModel::IContainer^ components;
     private:
@@ -53,6 +59,7 @@ namespace QQ {
 
     public: delegate void PostOpenHandler(Post^ SelectPost);
     public: event PostOpenHandler^ OpenPost;
+    private: System::Void HandleClick(System::Object^ sender, System::EventArgs^ e);
 
 
         void Delete_Click(Object^ sender, EventArgs^ e);

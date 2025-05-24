@@ -27,9 +27,6 @@
     <ClCompile Include="PostControl_db.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="PostControl_form.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="update.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -40,6 +37,12 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="PostOpen_form .cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Comment.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CommRepository.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,9 +62,6 @@
     <ClInclude Include="Post.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="PostControl.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="PostRepository.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
@@ -78,6 +78,15 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="PostOpen.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Comment.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="CommRepository.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Comm.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

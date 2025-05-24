@@ -198,8 +198,6 @@ namespace QQ {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1540, 720);
 			this->panel1->TabIndex = 1;
-			//this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
-			//this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
 			// 
 			// mainflow
 			// 
@@ -284,7 +282,6 @@ namespace QQ {
 
 			this->labelUserName->Text = updatedUser->Username;
 
-			// Если есть фото — показать, иначе — оставить заглушку
 			if (updatedUser->Photo != nullptr) {
 				this->pictureBoxAvatar->BackgroundImage = updatedUser->Photo;
 			}
@@ -301,14 +298,12 @@ namespace QQ {
 
 		void MainForm_Load() {
 			try {
-				// Загружаем все посты из базы
 				List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
 
-				// Добавляем каждый пост как элемент управления
 				for each (QQ::Post ^ post in posts) {
-					QQ::PostControl^ control = gcnew QQ::PostControl(post);
+					QQ::PostOpen^ control = gcnew QQ::PostOpen(post);
 					control->Margin = System::Windows::Forms::Padding(10);
-					control->OnPostSelected += gcnew PostControl::PostSelectedHandler(this, &MyUserControl::OpenPost);
+					control->OnPostSelected += gcnew PostOpen::PostSelectedHandler(this, &MyUserControl::OpenPost);
 					this->mainflow->Controls->Add(control);
 				}
 				
