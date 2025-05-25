@@ -1,29 +1,31 @@
 #pragma once
 
 using namespace System;
-using namespace System::Drawing;
+using namespace System::Collections::Generic;
 
 namespace QQ {
     public ref class Comm {
     public:
-        Comm(int id, int id_post, String^ user, String^ otv_user, String^ text, DateTime^ date, Boolean^ its_otvet, int serial_otvet) {    //
+        Comm(int id, int postId, String^ author, String^ replyTo, String^ text, DateTime date, int parentId)
+        {
             ID = id;
-            ID_post = id_post;
-            User = user;
-            Otv_user = otv_user;
-            Text_comm = text;
+            PostID = postId;
+            Author = author;
+            ReplyTo = replyTo;
+            Text = text;
             Date = date;
-            Its_otvet = its_otvet;
-            Serial_otvet = serial_otvet;
+            ParentID = parentId;
+            Children = gcnew List<Comm^>();
         }
 
         int ID;
-        int ID_post;
-        String^ User;
-        String^ Otv_user;
-        String^ Text_comm;
-        DateTime^ Date;
-        Boolean^ Its_otvet;
-        int Serial_otvet;
+        int PostID;
+        String^ Author;
+        String^ ReplyTo;
+        String^ Text;
+        DateTime Date;
+        int ParentID; // -1 если корневой
+        List<Comm^>^ Children;
+
     };
 }

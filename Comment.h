@@ -11,14 +11,16 @@ using namespace System::Drawing;
 using namespace System::IO;
 using namespace System;
 
-int update_post(System::String^ title_post, System::String^ text_post, const int id);
-
 namespace QQ {
     public ref class Comment : public UserControl
     {
     public: Comment(Post^ post, Comm^ comm);
     public:
+        property int ID;
+        property int ParentId;
+        property List<Comment^>^ Replies;
 
+        void AddReply(Comment^ child);
     protected:
         ~Comment();
 
@@ -50,6 +52,8 @@ namespace QQ {
         int commId;
         Boolean^ its_otvet;
         int serial_otvet;
+    private: FlowLayoutPanel^ repliesPanel;
+
 
            void Delete_Click(Object^ sender, EventArgs^ e);
            void Label1_Click(Object^ sender, EventArgs^ e);

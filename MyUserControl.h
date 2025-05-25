@@ -2,8 +2,8 @@
 
 #include "PostgresConnection.h"
 #include "PostRepository.h"
-#include "PostControl.h"
 #include "Post.h"
+#include "PostControl.h"
 #include "User.h"
 #include "Session.h"
 #include "UserPage.h"
@@ -301,9 +301,9 @@ namespace QQ {
 				List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
 
 				for each (QQ::Post ^ post in posts) {
-					QQ::PostOpen^ control = gcnew QQ::PostOpen(post);
+					QQ::PostControl^ control = gcnew QQ::PostControl(post);
 					control->Margin = System::Windows::Forms::Padding(10);
-					control->OnPostSelected += gcnew PostOpen::PostSelectedHandler(this, &MyUserControl::OpenPost);
+					control->OnPostSelected += gcnew PostControl::PostSelectedHandler(this, &MyUserControl::OpenPost);
 					this->mainflow->Controls->Add(control);
 				}
 				

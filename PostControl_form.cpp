@@ -28,6 +28,7 @@ using namespace QQ;
             this->tableLayoutPanel2->Controls->Remove(this->image_post);
             this->image_post = nullptr;
         }    
+
         this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostControl::HandleClick);
         for each (Control ^ ctrl in this->Controls) {
             ctrl->Click += gcnew EventHandler(this, &PostControl::HandleClick);
@@ -109,27 +110,6 @@ using namespace QQ;
         this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
         this->Controls->Add(tableLayoutPanel2);
 
-        /*
-        this->tableLayoutPanel1 = gcnew TableLayoutPanel();
-        this->tableLayoutPanel1->ColumnCount = 1;
-        this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
-        this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
-        this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::AutoSize)));
-        this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
-        this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
-        this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
-        this->tableLayoutPanel1->RowCount = 1;
-        this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-        this->tableLayoutPanel1->AutoSize = true;
-        this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-        this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-        this->tableLayoutPanel1->Size = System::Drawing::Size(1018, 410);
-        */
-        
-        
-        //this->tableLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Fill;
-        //this->tableLayoutPanel1->Location = System::Drawing::Point(3, 255);
-        // */
     }
     void QQ::PostControl::AttachClickHandlers(Control^ parent)
     {

@@ -1,8 +1,10 @@
 ﻿#pragma once
 
 #include "Post.h"
+#include "Comm.h"
 #include <string>
 #include <ctime>
+#include "Comment.h"
 
 
 using namespace System::Windows::Forms;
@@ -17,12 +19,13 @@ namespace QQ {
     {
     public: PostOpen(Post^ post);
     public:
-        void QQ::PostOpen::AttachClickHandlers(Control^ parent);
-
         Post^ PostData;
 
+        /*void QQ::PostOpen::AttachClickHandlers(Control^ parent);
+
+
         delegate void PostSelectedHandler(Post^ post);
-        PostSelectedHandler^ OnPostSelected;
+        PostSelectedHandler^ OnPostSelected;*/
 
     protected:
         ~PostOpen();
@@ -56,10 +59,11 @@ namespace QQ {
         TableLayoutPanel^ tableLayoutPanel2;
         TableLayoutPanel^ tableLayoutPanel3;
         int postId;
+    private: FlowLayoutPanel^ repliesPanel;
 
-    public: delegate void PostOpenHandler(Post^ SelectPost);
-    public: event PostOpenHandler^ OpenPost;
-    private: System::Void HandleClick(System::Object^ sender, System::EventArgs^ e);
+    //public: delegate void PostOpenHandler(Post^ SelectPost);
+    //public: event PostOpenHandler^ OpenPost;
+    //private: System::Void HandleClick(System::Object^ sender, System::EventArgs^ e);
 
 
         void Delete_Click(Object^ sender, EventArgs^ e);
@@ -67,5 +71,8 @@ namespace QQ {
         void save_Click(System::Object^ sender, System::EventArgs^ e);
         void otmena_Click(System::Object^ sender, System::EventArgs^ e);
         void Edit_Click(Object^ sender, EventArgs^ e);
+        void RenderComments();
+        void RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idToUI);
+
     };
 }

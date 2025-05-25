@@ -50,7 +50,7 @@ namespace QQ {
 
 			// Добавляем каждый пост как элемент управления
 			for each (QQ::Post ^ post in posts) {
-				QQ::PostControl^ control = gcnew QQ::PostControl(post);
+				QQ::PostOpen^ control = gcnew QQ::PostOpen(post);
 				control->Margin = System::Windows::Forms::Padding(10);
 			}
 		}

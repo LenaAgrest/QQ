@@ -4,7 +4,6 @@
 #define IDataObject IDataObject_WINAPI
 
 #include "CommRepository.h"
-#include "Post.h"
 #include <msclr/marshal_cppstd.h>
 #include <string>
 
@@ -15,66 +14,63 @@ extern "C" {
 
 #undef IDataObject
 
-
 using namespace msclr::interop;
 using namespace System;
+using namespace System::Windows::Forms;
 using namespace QQ;
 
 
-List<QQ::Comm^>^ CommRepository::PostsComm(Post^ post)
+List<QQ::Comm^>^ CommRepository::LoadTree(QQ::Post^ post)
 {
-    List<QQ::Comm^>^ comms = gcnew List<QQ::Comm^>();
+    List<QQ::Comm^>^ flatList = gcnew List<QQ::Comm^>();
+    Dictionary<int, QQ::Comm^>^ commentMap = gcnew Dictionary<int, QQ::Comm^>();
 
     PostgresConnection& db = PostgresConnection::getInstance();
     if (!db.connect()) {
-        return comms;
+        MessageBox::Show("Не удалось подключиться к БД.");
+        return flatList;
     }
 
-    PGconn* conn = db.get(); // Нативный указатель
-    std::string query = "SELECT id, blog_id, title, content, photo, post_date, comments_enabled FROM posts ORDER BY post_date DESC";
-    PGresult* res = PQexec(conn, query.c_str()); // Нативный указатель
+    PGconn* conn = db.get();
+    std::string query = "SELECT c.id, c.id_post, u1.name, COALESCE(u2.name, '') AS reply_to, c.text, c.date, COALESCE(c.parent_comm, -1)"
+        "FROM public.commenti c JOIN people u1 ON c.id_user = u1.id LEFT JOIN people u2 ON c.id_otvet_user = u2.id WHERE c.id_post = " + std::to_string(post->ID) + " "
+        "ORDER BY c.date DESC;";
 
+
+    PGresult* res = PQexec(conn, query.c_str());
     if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-        PQclear(res);  // Очищаем результат запроса
+        MessageBox::Show("Ошибка запроса комментариев.");
+        PQclear(res);
         db.disconnect();
-        return comms;
+        return flatList;
     }
 
     int rows = PQntuples(res);
     for (int i = 0; i < rows; ++i) {
         int id = std::stoi(PQgetvalue(res, i, 0));
-        std::string titleStr = PQgetvalue(res, i, 2);
-        std::string contentStr = PQgetvalue(res, i, 3);
-        std::string dateStr = PQgetvalue(res, i, 5);
-        std::string author = "Автор #" + std::to_string(std::stoi(PQgetvalue(res, i, 1))); // blog_id = user id
-        bool commentsEnabled = std::string(PQgetvalue(res, i, 6)) == "t";
+        int id_post = std::stoi(PQgetvalue(res, i, 1));
+        String^ author = marshal_as<String^>(PQgetvalue(res, i, 2));
+        String^ replyTo = marshal_as<String^>(PQgetvalue(res, i, 3));
+        String^ text = marshal_as<String^>(PQgetvalue(res, i, 4));
+        DateTime date = DateTime::Parse(marshal_as<String^>(PQgetvalue(res, i, 5)));
+        int parentId = std::stoi(PQgetvalue(res, i, 6));
 
-        // Преобразования из std::string в String^
-        String^ title = marshal_as<String^>(titleStr);
-        String^ content = marshal_as<String^>(contentStr);
-        String^ authorName = marshal_as<String^>(author);
-        DateTime postDate = DateTime::Parse(marshal_as<String^>(dateStr));
-
-        // Обработка изображения из базы данных
-        array<Byte>^ imageData = nullptr;
-        int photoLength = PQgetlength(res, i, 4);
-        if (photoLength > 0) {
-            const char* photoData = PQgetvalue(res, i, 4);
-            imageData = gcnew array<Byte>(photoLength);
-            for (int j = 0; j < photoLength; ++j) {
-                imageData[j] = photoData[j];
-            }
-        }
-
-        // Создание поста и добавление в список
-        QQ::Post^ post = gcnew QQ::Post(title, content, authorName, imageData);
-        post->Date = postDate;
-        post->CommentsAllowed = commentsEnabled;
-
-        comms->Add(comm);
+        QQ::Comm^ comm = gcnew QQ::Comm(id, id_post, author, replyTo, text, date, parentId);
+        commentMap->Add(id, comm);
     }
 
-    PQclear(res);  // Очищаем результат запроса
-    db.disconnect();  // Отключаемся от базы данных
-    return comms;
+    // Строим дерево
+    for each (KeyValuePair<int, QQ::Comm^> kvp in commentMap) {
+        int parentId = kvp.Value->ParentID;
+        if (parentId == -1) {
+            flatList->Add(kvp.Value);
+        }
+        else if (commentMap->ContainsKey(parentId)) {
+            commentMap[parentId]->Children->Add(kvp.Value);
+        }
+    }
+
+    PQclear(res);
+    db.disconnect();
+    return flatList;
 }
