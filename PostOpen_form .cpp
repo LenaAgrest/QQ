@@ -209,7 +209,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->Controls->Add(this->panel3, 0, 4);
 	this->tableLayoutPanel2->Controls->Add(this->label2, 0, 5);
 	this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
-	this->tableLayoutPanel2->Controls->Add(this->panel1, 0, 7);
+	//this->tableLayoutPanel2->Controls->Add(this->panel1, 0, 7);
 	this->tableLayoutPanel2->Location = System::Drawing::Point(0, 0);
 	this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
 	this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
@@ -217,19 +217,20 @@ void PostOpen::InitializeComponent(void)
 
 
 	
-	this->tableLayoutPanel3 = gcnew TableLayoutPanel();
-	this->tableLayoutPanel3->Dock = DockStyle::Fill;
-	this->tableLayoutPanel3->AutoSize = true;
-	this->tableLayoutPanel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	//this->tableLayoutPanel3->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
-	this->tableLayoutPanel3->ColumnCount = 1;
-	this->tableLayoutPanel3->RowCount = 0;
-	this->tableLayoutPanel3->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
-	this->tableLayoutPanel3->Location = System::Drawing::Point(0, 0);
-	this->tableLayoutPanel3->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-	this->tableLayoutPanel3->MaximumSize = System::Drawing::Size(1018, 0);
+	this->commentsLayout = gcnew TableLayoutPanel();
+	this->commentsLayout->AutoSize = true;
+	this->commentsLayout->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->commentsLayout->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
+	this->commentsLayout->ColumnCount = 1;
+	this->commentsLayout->RowCount = 0;
+	this->commentsLayout->Dock = DockStyle::Top;
+	/*this->commentsLayout->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
+	this->commentsLayout->Location = System::Drawing::Point(0, 0);
+	this->commentsLayout->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+	this->commentsLayout->MaximumSize = System::Drawing::Size(1018, 0);*/
+	this->commentsLayout->BackColor = Color::White;
 
-	
+
 
 	this->tableLayoutPanel1 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel1->ColumnCount = 1;
@@ -237,7 +238,7 @@ void PostOpen::InitializeComponent(void)
 	//this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
 	this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100)));
 	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
-	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel3, 0, 1);
+	this->tableLayoutPanel1->Controls->Add(this->commentsLayout, 0, 1);
 	this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
 	this->tableLayoutPanel1->RowCount = 2;
 	this->tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
@@ -327,43 +328,45 @@ void PostOpen::Label1_Click(Object^ sender, EventArgs^ e)
 
 	// Рекурсивно рендерит один узел дерева
 void PostOpen::RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idToUI)
-	{
-		// Создаём UI для этого комм-та
-		Comment^ ui = gcnew Comment(this->PostData, comm);
-		idToUI[comm->ID] = ui;
+{
+	Comment^ ui = gcnew Comment(this->PostData, comm);
+	idToUI[comm->ID] = ui;
 
-		if (comm->ParentID == -1) {
-			// корневой — в основную панель
-			this->tableLayoutPanel3->Controls->Add(ui);
-		}
-		else {
-			// ответ — внутрь repliesPanel родителя
-			Comment^ parentUI = idToUI[comm->ParentID];
-			parentUI->AddReply(ui);
-		}
+	ui->Dock = DockStyle::Top;
+	ui->AutoSize = true;
 
-		// рекурсивно для всех детей
-		for each(QQ::Comm ^ child in comm->Children) {
-			RenderCommentNode(child, idToUI);
-		}
+	if (comm->ParentID == -1) {
+		ui->Margin = System::Windows::Forms::Padding(0, 10, 0, 0);
+		ui->MaximumSize = System::Drawing::Size(1018, 0); // ширина формы
+	}
+	else {
+		ui->Margin = System::Windows::Forms::Padding(50, 10, 0, 0);
+		ui->MaximumSize = System::Drawing::Size(980, 0); // чуть меньше
 	}
 
-	// И перепишите RenderComments так:
-void PostOpen::RenderComments()
-	{
-		List<QQ::Comm^>^ roots = CommRepository::LoadTree(this->PostData);
-		Dictionary<int, Comment^>^ idToUI = gcnew Dictionary<int, Comment^>();
+	commentsLayout->Controls->Add(ui);
 
-		// для каждого корня спускаемся по дереву
-		for each(QQ::Comm ^ root in roots) {
-			RenderCommentNode(root, idToUI);
-		}
+	for each (Comm ^ child in comm->Children) {
+		RenderCommentNode(child, idToUI);
+	}
+}
+
+
+void PostOpen::RenderComments() {
+	List<Comm^>^ rootComments = CommRepository::LoadTree(this->PostData);
+	Dictionary<int, Comment^>^ idToUI = gcnew Dictionary<int, Comment^>();
+
+	for each (Comm ^ root in rootComments) {
+		RenderCommentNode(root, idToUI);
 	}
 
-void Comment::AddReply(Comment^ reply)
-	{
-		this->repliesPanel->Controls->Add(reply);
-	}
+	// добавляем поле для нового комментария
+	commentsLayout->Controls->Add(this->panel1);
+	commentsLayout->SetRow(this->panel1, commentsLayout->RowCount);
+	commentsLayout->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+}
+
+
 
 
 void PostOpen::save_Click(System::Object^ sender, System::EventArgs^ e) {

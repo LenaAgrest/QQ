@@ -20,7 +20,6 @@ namespace QQ {
         property int ParentId;
         property List<Comment^>^ Replies;
 
-        void AddReply(Comment^ child);
     protected:
         ~Comment();
 
@@ -52,8 +51,7 @@ namespace QQ {
         int commId;
         Boolean^ its_otvet;
         int serial_otvet;
-    private: FlowLayoutPanel^ repliesPanel;
-    //private: FlowLayoutPanel^ kornevoi;
+        bool isExpanded = true;
 
 
            void Delete_Click(Object^ sender, EventArgs^ e);

@@ -57,7 +57,7 @@ namespace QQ {
         Button^ comm_send;
         TableLayoutPanel^ tableLayoutPanel1;
         TableLayoutPanel^ tableLayoutPanel2;
-        TableLayoutPanel^ tableLayoutPanel3;
+        TableLayoutPanel^ commentsLayout;
         int postId;
     private: FlowLayoutPanel^ repliesPanel;
 

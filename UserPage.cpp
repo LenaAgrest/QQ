@@ -312,7 +312,6 @@ void QQ::UserPage::post_Load(User^ user)
 void QQ::UserPage::OpenPost(QQ::Post^ post)
 {
 	this->user_table->Controls->Clear();
-
 	QQ::PostOpen^ open = gcnew QQ::PostOpen(post);
 	this->user_table->Controls->Add(open);
 }
