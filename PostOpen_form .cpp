@@ -221,7 +221,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel3->Dock = DockStyle::Fill;
 	this->tableLayoutPanel3->AutoSize = true;
 	this->tableLayoutPanel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->tableLayoutPanel3->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
+	//this->tableLayoutPanel3->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->tableLayoutPanel3->ColumnCount = 1;
 	this->tableLayoutPanel3->RowCount = 0;
 	this->tableLayoutPanel3->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
@@ -240,6 +240,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel3, 0, 1);
 	this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
 	this->tableLayoutPanel1->RowCount = 2;
+	this->tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel1->AutoSize = true;
 	this->tableLayoutPanel1->MaximumSize = System::Drawing::Size(1018, 0);

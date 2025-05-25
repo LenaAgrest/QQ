@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Post.h"
 #include "Comm.h"
@@ -53,6 +53,7 @@ namespace QQ {
         Boolean^ its_otvet;
         int serial_otvet;
     private: FlowLayoutPanel^ repliesPanel;
+    //private: FlowLayoutPanel^ kornevoi;
 
 
            void Delete_Click(Object^ sender, EventArgs^ e);

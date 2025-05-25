@@ -31,7 +31,7 @@ void Comment::InitializeComponent(void)
 	this->otvet_user_name->AutoSize = true;
 	this->otvet_user_name->Font = (gcnew System::Drawing::Font(L"Montserrat", 12, System::Drawing::FontStyle::Regular));
 	this->otvet_user_name->ForeColor = System::Drawing::SystemColors::ControlDark;
-	this->otvet_user_name->Location = System::Drawing::Point(35, 0);
+	this->otvet_user_name->Location = System::Drawing::Point(user_comm->Width + 2, 0);
 	this->otvet_user_name->Size = System::Drawing::Size(183, 35);
 
 
@@ -67,7 +67,7 @@ void Comment::InitializeComponent(void)
 
 	this->panel2 = gcnew Panel();
 	this->panel2->AutoSize = true;
-	this->panel2->Dock = DockStyle::Top;
+	this->panel2->Dock = DockStyle::Fill;
 	this->panel2->Location = System::Drawing::Point(0, 0);
 	this->panel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel2->Controls->Add(user_comm);
@@ -82,22 +82,24 @@ void Comment::InitializeComponent(void)
 	this->date_post->AutoSize = true;
 	this->date_post->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 
+
 	this->otvet = gcnew Button();
 	this->otvet->Click += gcnew System::EventHandler(this, &Comment::otvet_Click);
 	//this->otvet->BackColor = System::Drawing::Color::SlateBlue;
-	this->otvet->Dock = DockStyle::Left;
+	//this->otvet->Dock = DockStyle::Left;
 	this->otvet->FlatAppearance->BorderSize = 0;
 	this->otvet->BackgroundImage = Image::FromFile("ответить.png");
 	this->otvet->BackgroundImageLayout = ImageLayout::Zoom;
 	this->otvet->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-	this->otvet->Size = System::Drawing::Size(30, 30);
+	this->otvet->Size = System::Drawing::Size(date_post->Height, date_post->Height);
 	this->otvet->Location = System::Drawing::Point(0, 0);
 
 
 	this->panel3 = gcnew Panel();
-	this->panel3->Size = System::Drawing::Size(988, 30);
+	//this->panel3->Size = System::Drawing::Size(988, 30);
 	this->panel3->Dock = DockStyle::Fill;
 	this->panel3->Location = System::Drawing::Point(0, 0);
+	this->panel3->AutoSize = true;
 	this->panel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel3->Controls->Add(this->date_post);
 	this->panel3->Controls->Add(this->otvet);
@@ -105,13 +107,53 @@ void Comment::InitializeComponent(void)
 
 	this->repliesPanel = gcnew FlowLayoutPanel();
 	this->repliesPanel->FlowDirection = FlowDirection::TopDown;
-	this->repliesPanel->WrapContents = false;
+	//this->repliesPanel->WrapContents = true;
 	this->repliesPanel->AutoSize = true;
-	this->repliesPanel->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
+	this->repliesPanel->BackColor = System::Drawing::Color::Green;
+	//this->repliesPanel->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->repliesPanel->Dock = DockStyle::Fill;
-	//this->repliesPanel->MaximumSize = System::Drawing::Size(988, 0);
+	//this->repliesPanel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+	this->repliesPanel->MaximumSize = System::Drawing::Size(988, 0);
 	this->repliesPanel->Margin = System::Windows::Forms::Padding(30, 0, 0, 0); // отступ слева
 
+
+	this->comm_send = gcnew Button();
+	this->comm_tb = gcnew TextBox();
+	this->panel1 = gcnew Panel();
+
+	this->comm_send->AutoSize = true;
+	this->comm_send->BackColor = System::Drawing::Color::MediumSlateBlue;
+	this->comm_send->Dock = System::Windows::Forms::DockStyle::Right;
+	this->comm_send->FlatAppearance->BorderSize = 0;
+	this->comm_send->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+	this->comm_send->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 10, System::Drawing::FontStyle::Bold));
+	this->comm_send->ForeColor = System::Drawing::Color::White;
+	this->comm_send->Location = System::Drawing::Point(438, 0);
+	this->comm_send->Margin = System::Windows::Forms::Padding(30, 7, 3, 3);
+	this->comm_send->Name = L"comm_send";
+	this->comm_send->Size = System::Drawing::Size(30, 34);
+	this->comm_send->TabIndex = 6;
+	this->comm_send->Text = L">";
+	this->comm_send->UseVisualStyleBackColor = false;
+	// 
+	// comm_tb
+	// 
+	this->comm_tb->Dock = System::Windows::Forms::DockStyle::Fill;
+	this->comm_tb->Location = System::Drawing::Point(0, 0);
+	this->comm_tb->Margin = System::Windows::Forms::Padding(3);
+	this->comm_tb->MaximumSize = System::Drawing::Size(1000 - comm_send->Width, 0);
+	this->comm_tb->Multiline = true;
+	this->comm_tb->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 14.8F, System::Drawing::FontStyle::Bold));
+	this->comm_tb->Size = System::Drawing::Size(435, 34);
+	this->comm_tb->TabIndex = 0;
+
+
+	this->panel1->Controls->Add(this->comm_send);
+	this->panel1->Controls->Add(this->comm_tb);
+	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
+	this->panel1->Location = System::Drawing::Point(0, 0);
+	this->panel1->MaximumSize = System::Drawing::Size(1010, 34);
+	this->panel1->TabIndex = 1;
 
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
@@ -122,7 +164,7 @@ void Comment::InitializeComponent(void)
 	this->tableLayoutPanel2->BackColor = System::Drawing::Color::White;
 	this->tableLayoutPanel2->RowCount = 4;
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); 
+	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->Controls->Add(this->panel2, 0, 0);
@@ -131,55 +173,8 @@ void Comment::InitializeComponent(void)
 	this->tableLayoutPanel2->Controls->Add(this->repliesPanel, 0, 3);
 	this->tableLayoutPanel2->Location = System::Drawing::Point(0, 0);
 	//this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
-	//this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
+	this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
 	this->Controls->Add(tableLayoutPanel2);
-
-
-	/*
-	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
-	this->tableLayoutPanel2->Dock = DockStyle::Fill;
-	this->tableLayoutPanel2->AutoSize = true;
-	this->tableLayoutPanel2->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
-	this->tableLayoutPanel2->ColumnCount = 1;
-	this->tableLayoutPanel2->RowCount = 0;
-	//this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
-	this->tableLayoutPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(SizeType::AutoSize)));
-	this->tableLayoutPanel2->Controls->Add(this->panel2);
-	this->tableLayoutPanel2->Controls->Add(this->title_post_l);
-	this->tableLayoutPanel2->Controls->Add(this->text_post);
-	this->tableLayoutPanel2->Controls->Add(this->image_post);
-	this->tableLayoutPanel2->Controls->Add(this->date_post);
-	//this->tableLayoutPanel2->Location = System::Drawing::Point(3, 3);
-	//this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
-
-
-
-	this->tableLayoutPanel3 = gcnew TableLayoutPanel();
-	this->tableLayoutPanel3->Dock = DockStyle::Fill;
-	this->tableLayoutPanel3->AutoSize = true;
-	this->tableLayoutPanel3->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
-	this->tableLayoutPanel3->ColumnCount = 1;
-	this->tableLayoutPanel3->RowCount = 0;
-	this->tableLayoutPanel3->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-	this->tableLayoutPanel3->Controls->Add(this->label2);
-	this->tableLayoutPanel3->Controls->Add(this->comm_info);
-	this->tableLayoutPanel3->Controls->Add(this->panel1);
-
-
-	this->tableLayoutPanel1 = gcnew TableLayoutPanel();
-	this->tableLayoutPanel1->ColumnCount = 1;
-	this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
-	this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100)));
-	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
-	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel3, 0, 1);
-	this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
-	this->tableLayoutPanel1->RowCount = 1;
-	this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
-	this->tableLayoutPanel1->AutoSize = true;
-	this->tableLayoutPanel1->MaximumSize = System::Drawing::Size(1018, 0);
-	this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-	this->Controls->Add(tableLayoutPanel1);*/
 }
 
 
@@ -190,7 +185,7 @@ void Comment::Delete_Click(Object^ sender, EventArgs^ e)
 
 void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 {
-	// TODO: переход в блог
+	this->tableLayoutPanel2->Controls->Add(this->panel1);
 }
 
 void Comment::Label1_Click(Object^ sender, EventArgs^ e)
