@@ -2,6 +2,8 @@
 #include <ctime>
 #include <string>
 #include "Comm.h"
+#include "Session.h"
+#include "CommRepository.h"
 
 using namespace QQ;
 
@@ -9,10 +11,25 @@ Comment::Comment(Post^ post, Comm^ comm) {
 
 	InitializeComponent();
 	postId = post->ID;
+	comm_allowed = post->CommentsAllowed;
 	commId = comm->ID;
-	user_comm->Text = comm->Author;
-	otvet_user_name->Text = comm->ReplyTo != "" ? "(в ответ " + comm->ReplyTo + ")" : "";
-	text_comm->Text = comm->Text;
+	parentId = comm->ParentID;
+	if (comm->Text == "Комментарий был удалён")
+	{
+		this->BackColor = Color::LightGray;
+		user_comm->Text = "@" + comm->Author;
+		otvet_user_name->Text = comm->ReplyTo != "" ? "(в ответ " + comm->ReplyTo + ")" : "";
+		text_comm->Text = "Комментарий был удалён";
+		otvet->Visible = false;
+		label1->Visible = false; // скрываем кнопку удаления тоже
+	}
+	else
+	{
+		user_comm->Text = "@" + comm->Author;
+		otvet_user_name->Text = comm->ReplyTo != "" ? "(в ответ @" + comm->ReplyTo + ")" : "";
+		text_comm->Text = comm->Text;
+	}
+
 	date_post->Text = comm->Date.ToString("dd.MM.yyyy HH:mm");
 
 	// ограничение по ширине и поведение
@@ -20,6 +37,12 @@ Comment::Comment(Post^ post, Comm^ comm) {
 	this->Dock = DockStyle::Top;
 	this->Margin = System::Windows::Forms::Padding(0, 10, 0, 0);
 	this->BackColor = System::Drawing::Color::White;
+
+	if (!comm_allowed)
+	{
+		this->otvet->BackgroundImage = Image::FromFile("ответить_нет.png");
+		this->otvet->Enabled = false;
+	}
 }
 
 void Comment::InitializeComponent(void)
@@ -41,7 +64,6 @@ void Comment::InitializeComponent(void)
 	this->text_comm->AutoSize = true;
 	this->text_comm->Font = (gcnew System::Drawing::Font(L"Montserrat", 14));
 	this->text_comm->Location = System::Drawing::Point(0, 0);
-	this->text_comm->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->text_comm->MaximumSize = System::Drawing::Size(960, 0);
 
 	this->svoistva_post = gcnew System::Windows::Forms::ContextMenuStrip();
@@ -60,7 +82,6 @@ void Comment::InitializeComponent(void)
 	this->panel2 = gcnew Panel();
 	this->panel2->AutoSize = true;
 	this->panel2->Dock = DockStyle::Top;
-	this->panel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel2->Controls->Add(user_comm);
 	this->panel2->Controls->Add(otvet_user_name);
 	this->panel2->Controls->Add(label1);
@@ -70,7 +91,7 @@ void Comment::InitializeComponent(void)
 	this->date_post->TextAlign = ContentAlignment::BottomRight;
 	this->date_post->Dock = DockStyle::Right;
 	this->date_post->AutoSize = true;
-	this->date_post->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+
 
 	this->otvet = gcnew Button();
 	this->otvet->Click += gcnew System::EventHandler(this, &Comment::otvet_Click);
@@ -78,12 +99,11 @@ void Comment::InitializeComponent(void)
 	this->otvet->BackgroundImage = Image::FromFile("ответить.png");
 	this->otvet->BackgroundImageLayout = ImageLayout::Zoom;
 	this->otvet->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-	this->otvet->Size = System::Drawing::Size(30, 30);
+	this->otvet->Size = System::Drawing::Size(date_post->Height, date_post->Height);
 
 	this->panel3 = gcnew Panel();
 	this->panel3->AutoSize = true;
 	this->panel3->Dock = DockStyle::Top;
-	this->panel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel3->Controls->Add(this->date_post);
 	this->panel3->Controls->Add(this->otvet);
 
@@ -101,7 +121,7 @@ void Comment::InitializeComponent(void)
 	this->comm_send->ForeColor = System::Drawing::Color::White;
 	this->comm_send->Location = System::Drawing::Point(438, 0);
 	this->comm_send->Margin = System::Windows::Forms::Padding(30, 7, 3, 3);
-	this->comm_send->Name = L"comm_send";
+	this->comm_send->Click += gcnew System::EventHandler(this, &Comment::comm_send_Click);
 	this->comm_send->Size = System::Drawing::Size(30, 34);
 	this->comm_send->Text = L">";
 	this->comm_send->UseVisualStyleBackColor = false;
@@ -120,8 +140,7 @@ void Comment::InitializeComponent(void)
 	this->panel1->Controls->Add(this->comm_send);
 	this->panel1->Controls->Add(this->comm_tb);
 	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
-	//this->panel1->AutoSize = true;
-	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
+	this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel1->Location = System::Drawing::Point(0, 0);
 	this->panel1->MaximumSize = System::Drawing::Size(980, 34);
 
@@ -143,18 +162,41 @@ void Comment::InitializeComponent(void)
 
 void Comment::Delete_Click(Object^ sender, EventArgs^ e)
 {
-	// TODO: переход в блог
+	auto result = MessageBox::Show("Удалить комментарий?", "Подтверждение", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+
+	if (result == DialogResult::Yes)
+	{
+		// Обновляем поле is_deleted у текущего комментария
+		bool success = CommRepository::MarkAsDeleted(this->commId);
+
+		// Если это корневой комментарий — удаляем его ответы
+		if (this->parentId == -1)
+			success = success && CommRepository::DeleteReplies(this->commId);
+
+		if (success)
+		{
+			// Вызываем событие для перерисовки всех комментариев
+			if (OnCommentsUpdated != nullptr)
+				OnCommentsUpdated();
+		}
+		else
+		{
+			MessageBox::Show("Ошибка при удалении комментария.", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+	}
 }
 
 void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 {
-	if (isExpanded)
+	if (isExpanded && comm_allowed)
 	{
 		this->tableLayoutPanel2->Controls->Add(this->panel1);
+		this->otvet->BackgroundImage = Image::FromFile("ответить_переверн.png");
 	}
 	else
 	{
 		this->tableLayoutPanel2->Controls->Remove(this->panel1);
+		this->otvet->BackgroundImage = Image::FromFile("ответить.png");
 	}
 	isExpanded = !isExpanded;
 }
@@ -167,6 +209,39 @@ void Comment::Label1_Click(Object^ sender, EventArgs^ e)
 		
 	}
 }
+
+void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
+{
+	String^ text = comm_tb->Text->Trim();
+	if (String::IsNullOrWhiteSpace(text)) {
+		MessageBox::Show("Комментарий не может быть пустым.");
+		return;
+	}
+
+	bool success = CommRepository::AddComment(
+		this->postId,
+		Session::CurrentUser->ID,
+		this->commId,        // id_otvet_user
+		text,
+		DateTime::Now,
+		true,                // its_otvet
+		this->commId         // parent_comm
+	);
+
+	if (success) {
+		MessageBox::Show("Ответ добавлен!");
+		comm_tb->Clear();
+
+		if (OnReplySent != nullptr)
+			OnReplySent(this, EventArgs::Empty);
+	}
+
+	else {
+		MessageBox::Show("Ошибка при добавлении ответа.");
+	}
+
+}
+
 
 Comment::~Comment()
 {

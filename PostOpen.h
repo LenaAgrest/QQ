@@ -60,10 +60,7 @@ namespace QQ {
         TableLayoutPanel^ commentsLayout;
         int postId;
     private: FlowLayoutPanel^ repliesPanel;
-
-    //public: delegate void PostOpenHandler(Post^ SelectPost);
-    //public: event PostOpenHandler^ OpenPost;
-    //private: System::Void HandleClick(System::Object^ sender, System::EventArgs^ e);
+           
 
 
         void Delete_Click(Object^ sender, EventArgs^ e);
@@ -73,6 +70,8 @@ namespace QQ {
         void Edit_Click(Object^ sender, EventArgs^ e);
         void RenderComments();
         void RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idToUI);
+        void RefreshComments(Object^ sender, EventArgs^ e);
+        void comm_send_Click(System::Object^ sender, System::EventArgs^ e);
 
     };
 }

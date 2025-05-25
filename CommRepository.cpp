@@ -34,7 +34,7 @@ List<QQ::Comm^>^ CommRepository::LoadTree(QQ::Post^ post)
     PGconn* conn = db.get();
     std::string query = "SELECT c.id, c.id_post, u1.name, COALESCE(u2.name, '') AS reply_to, c.text, c.date, COALESCE(c.parent_comm, -1)"
         "FROM public.commenti c JOIN people u1 ON c.id_user = u1.id LEFT JOIN people u2 ON c.id_otvet_user = u2.id WHERE c.id_post = " + std::to_string(post->ID) + " "
-        "ORDER BY c.date DESC;";
+        "ORDER BY c.date ASC;";
 
 
     PGresult* res = PQexec(conn, query.c_str());
@@ -73,4 +73,63 @@ List<QQ::Comm^>^ CommRepository::LoadTree(QQ::Post^ post)
     PQclear(res);
     db.disconnect();
     return flatList;
+}
+
+bool CommRepository::AddComment(int id_post, int id_user, int id_otvet_user,
+    System::String^ text, System::DateTime date,
+    bool its_otvet, int parent_comm)
+{
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) return false;
+
+    PGconn* conn = db.get();
+    std::string query = "INSERT INTO public.commenti (id_post, id_user, id_otvet_user, text, date, its_otvet, parent_comm) VALUES (";
+
+    query += std::to_string(id_post) + ",";
+    query += std::to_string(id_user) + ",";
+
+    query += (id_otvet_user == 0 ? "NULL" : std::to_string(id_otvet_user)) + ",";
+    query += "'" + marshal_as<std::string>(text) + "',";
+    query += "'" + marshal_as<std::string>(date.ToString("yyyy-MM-dd")) + "',";
+    query += its_otvet ? "true," : "false,";
+    query += (parent_comm == 0 ? "NULL" : std::to_string(parent_comm)) + ");";
+
+    PGresult* res = PQexec(conn, query.c_str());
+
+    bool success = PQresultStatus(res) == PGRES_COMMAND_OK;
+    PQclear(res);
+    db.disconnect();
+    return success;
+}
+
+bool CommRepository::MarkAsDeleted(int commentId)
+{
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) return false;
+
+    PGconn* conn = db.get();
+    std::string query = "UPDATE public.commenti SET text = 'Комментарий был удалён' WHERE id = " + std::to_string(commentId) + ";";
+
+    PGresult* res = PQexec(conn, query.c_str());
+    bool success = PQresultStatus(res) == PGRES_COMMAND_OK;
+
+    PQclear(res);
+    db.disconnect();
+    return success;
+}
+
+bool CommRepository::DeleteReplies(int parentId)
+{
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) return false;
+
+    PGconn* conn = db.get();
+    std::string query = "DELETE FROM public.commenti WHERE parent_comm = " + std::to_string(parentId) + ";";
+
+    PGresult* res = PQexec(conn, query.c_str());
+    bool success = PQresultStatus(res) == PGRES_COMMAND_OK;
+
+    PQclear(res);
+    db.disconnect();
+    return success;
 }

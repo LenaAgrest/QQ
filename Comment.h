@@ -17,8 +17,12 @@ namespace QQ {
     public: Comment(Post^ post, Comm^ comm);
     public:
         property int ID;
-        property int ParentId;
+        property int parentId;
         property List<Comment^>^ Replies;
+        EventHandler^ OnReplySent;
+        delegate void CommentsUpdatedHandler();
+        CommentsUpdatedHandler^ OnCommentsUpdated;
+
 
     protected:
         ~Comment();
@@ -52,11 +56,13 @@ namespace QQ {
         Boolean^ its_otvet;
         int serial_otvet;
         bool isExpanded = true;
+        bool comm_allowed;
 
 
            void Delete_Click(Object^ sender, EventArgs^ e);
            void Label1_Click(Object^ sender, EventArgs^ e);
            void Comment::otvet_Click(Object^ sender, EventArgs^ e);
+           void comm_send_Click(System::Object^ sender, System::EventArgs^ e);
 
     };
 }

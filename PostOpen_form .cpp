@@ -3,6 +3,7 @@
 #include <string>
 #include "Comm.h"
 #include "CommRepository.h"
+#include "Session.h"
 #include "Comment.h"
 
 using namespace QQ;
@@ -30,15 +31,12 @@ PostOpen::PostOpen(Post^ post) {
 		this->tableLayoutPanel2->Controls->Remove(this->image_post);
 		this->image_post = nullptr;
 	}
-	comm_info->Text = post->CommentsAllowed ? L"Отсутствуют" : L"Запрещены";
-
-	/*this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostOpen::HandleClick);
-	for each(Control ^ ctrl in this->Controls) {
-		ctrl->Click += gcnew EventHandler(this, &PostOpen::HandleClick);
+	comm_info->Text = post->CommentsAllowed ? L"" : L"Запрещены";
+	if (comm_info->Text == "")
+	{
+		this->tableLayoutPanel2->Controls->Remove(this->comm_info);
 	}
 
-	AttachClickHandlers(this);
-	*/
 	RenderComments();
 }
 
@@ -161,7 +159,7 @@ void PostOpen::InitializeComponent(void)
 	this->comm_send->Margin = System::Windows::Forms::Padding(30, 7, 3, 3);
 	this->comm_send->Name = L"comm_send";
 	this->comm_send->Size = System::Drawing::Size(30, 34);
-	this->comm_send->TabIndex = 6;
+	this->comm_send->Click += gcnew System::EventHandler(this, &PostOpen::comm_send_Click);
 	this->comm_send->Text = L">";
 	this->comm_send->UseVisualStyleBackColor = false;
 	// 
@@ -170,12 +168,11 @@ void PostOpen::InitializeComponent(void)
 	this->comm_tb = gcnew TextBox();
 	this->comm_tb->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->comm_tb->Location = System::Drawing::Point(0, 0);
-	this->comm_tb->Margin = System::Windows::Forms::Padding(3);
+	this->comm_tb->Margin = System::Windows::Forms::Padding(3,0,0,0);
 	this->comm_tb->MaximumSize = System::Drawing::Size(1000 - comm_send->Width, 0);
 	this->comm_tb->Multiline = true;
 	this->comm_tb->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 14.8F, System::Drawing::FontStyle::Bold));
 	this->comm_tb->Size = System::Drawing::Size(435, 34);
-	this->comm_tb->TabIndex = 0;
 
 
 	this->panel1 = gcnew Panel();
@@ -184,7 +181,7 @@ void PostOpen::InitializeComponent(void)
 	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
 	this->panel1->Location = System::Drawing::Point(0, 0);
 	this->panel1->MaximumSize = System::Drawing::Size(1010, 34);
-	this->panel1->TabIndex = 1;
+	this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
@@ -194,7 +191,6 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
 	this->tableLayoutPanel2->BackColor = System::Drawing::Color::White;
 	this->tableLayoutPanel2->RowCount = 7;
-	this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); // Автор + ...
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); // Фото
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize)); // Заголовок
@@ -209,25 +205,18 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->Controls->Add(this->panel3, 0, 4);
 	this->tableLayoutPanel2->Controls->Add(this->label2, 0, 5);
 	this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
-	//this->tableLayoutPanel2->Controls->Add(this->panel1, 0, 7);
 	this->tableLayoutPanel2->Location = System::Drawing::Point(0, 0);
 	this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
 	this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
-	//this->Controls->Add(tableLayoutPanel2);
 
 
 	
 	this->commentsLayout = gcnew TableLayoutPanel();
 	this->commentsLayout->AutoSize = true;
-	this->commentsLayout->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->commentsLayout->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->commentsLayout->ColumnCount = 1;
 	this->commentsLayout->RowCount = 0;
 	this->commentsLayout->Dock = DockStyle::Top;
-	/*this->commentsLayout->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
-	this->commentsLayout->Location = System::Drawing::Point(0, 0);
-	this->commentsLayout->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-	this->commentsLayout->MaximumSize = System::Drawing::Size(1018, 0);*/
 	this->commentsLayout->BackColor = Color::White;
 
 
@@ -245,7 +234,6 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel1->AutoSize = true;
 	this->tableLayoutPanel1->MaximumSize = System::Drawing::Size(1018, 0);
-	this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->Controls->Add(tableLayoutPanel1);
 }
@@ -349,24 +337,39 @@ void PostOpen::RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idTo
 	for each (Comm ^ child in comm->Children) {
 		RenderCommentNode(child, idToUI);
 	}
+	ui->OnReplySent += gcnew EventHandler(this, &PostOpen::RefreshComments);
+	ui->OnCommentsUpdated += gcnew Comment::CommentsUpdatedHandler(this, &PostOpen::RenderComments);
+
+
 }
 
 
+
+
 void PostOpen::RenderComments() {
+	commentsLayout->Controls->Clear();
+	commentsLayout->RowStyles->Clear();
+	commentsLayout->RowCount = 0;
 	List<Comm^>^ rootComments = CommRepository::LoadTree(this->PostData);
 	Dictionary<int, Comment^>^ idToUI = gcnew Dictionary<int, Comment^>();
 
 	for each (Comm ^ root in rootComments) {
 		RenderCommentNode(root, idToUI);
 	}
-
-	// добавляем поле для нового комментария
-	commentsLayout->Controls->Add(this->panel1);
-	commentsLayout->SetRow(this->panel1, commentsLayout->RowCount);
-	commentsLayout->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+	
+	if (comm_info->Text == "") {
+		// добавляем поле для нового комментария
+		commentsLayout->Controls->Add(this->panel1);
+		commentsLayout->SetRow(this->panel1, commentsLayout->RowCount);
+		commentsLayout->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+	}
 }
 
-
+void PostOpen::RefreshComments(Object^ sender, EventArgs^ e)
+{
+	this->commentsLayout->Controls->Clear();
+	RenderComments();
+}
 
 
 void PostOpen::save_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -399,6 +402,37 @@ void PostOpen::otmena_Click(System::Object^ sender, System::EventArgs^ e) {
 	this->panel3->Controls->Remove(this->save);
 	this->panel3->Controls->Remove(this->otmena);
 }
+
+
+void PostOpen::comm_send_Click(Object^ sender, EventArgs^ e)
+{
+	System::String^ text = comm_tb->Text->Trim();
+	if (String::IsNullOrEmpty(text)) {
+		MessageBox::Show("Комментарий не может быть пустым.");
+		return;
+	}
+
+	bool success = CommRepository::AddComment(
+		this->PostData->ID,
+		Session::CurrentUser->ID,
+		0,
+		text,
+		DateTime::Now,
+		false, // its_otvet
+		0      // parent_comm
+	);
+
+	if (success) {
+		comm_tb->Clear();
+		commentsLayout->Controls->Clear();
+		RenderComments(); // перерисовать все
+	}
+	else {
+		MessageBox::Show("Ошибка при добавлении комментария.");
+	}
+}
+
+
 
 PostOpen::~PostOpen()
 {
