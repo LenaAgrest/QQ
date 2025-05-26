@@ -53,6 +53,9 @@ namespace QQ {
         TableLayoutPanel^ tableLayoutPanel3;
         int postId;
         int commId;
+        int idReplyUser;
+        int ID_user; 
+
         Boolean^ its_otvet;
         int serial_otvet;
         bool isExpanded = true;

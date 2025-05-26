@@ -1,4 +1,4 @@
-#include "Comment.h"
+п»ї#include "Comment.h"
 #include <ctime>
 #include <string>
 #include "Comm.h"
@@ -13,26 +13,30 @@ Comment::Comment(Post^ post, Comm^ comm) {
 	postId = post->ID;
 	comm_allowed = post->CommentsAllowed;
 	commId = comm->ID;
+	ID_user = comm->ID_user;
+	idReplyUser = comm->IdReplyUser;
 	parentId = comm->ParentID;
-	if (comm->Text == "Комментарий был удалён")
+	if (comm->Text == "РљРѕРјРјРµРЅС‚Р°СЂРёР№ Р±С‹Р» СѓРґР°Р»С‘РЅ")
 	{
 		this->BackColor = Color::LightGray;
 		user_comm->Text = "@" + comm->Author;
-		otvet_user_name->Text = comm->ReplyTo != "" ? "(в ответ " + comm->ReplyTo + ")" : "";
-		text_comm->Text = "Комментарий был удалён";
+		otvet_user_name->Text = comm->ReplyTo != "" ? "(РІ РѕС‚РІРµС‚ " + comm->ReplyTo + ")" : "";
+		otvet_user_name->Location = System::Drawing::Point(user_comm->PreferredSize.Width + 10, 0);
+		text_comm->Text = "РљРѕРјРјРµРЅС‚Р°СЂРёР№ Р±С‹Р» СѓРґР°Р»С‘РЅ";
 		otvet->Visible = false;
-		label1->Visible = false; // скрываем кнопку удаления тоже
+		label1->Visible = false; // СЃРєСЂС‹РІР°РµРј РєРЅРѕРїРєСѓ СѓРґР°Р»РµРЅРёСЏ С‚РѕР¶Рµ
 	}
 	else
 	{
 		user_comm->Text = "@" + comm->Author;
-		otvet_user_name->Text = comm->ReplyTo != "" ? "(в ответ @" + comm->ReplyTo + ")" : "";
+		otvet_user_name->Text = comm->ReplyTo != "" ? "(РІ РѕС‚РІРµС‚ @" + comm->ReplyTo + ")" : "";
+		otvet_user_name->Location = System::Drawing::Point(user_comm->PreferredSize.Width + 10, 0);
 		text_comm->Text = comm->Text;
 	}
 
 	date_post->Text = comm->Date.ToString("dd.MM.yyyy HH:mm");
 
-	// ограничение по ширине и поведение
+	// РѕРіСЂР°РЅРёС‡РµРЅРёРµ РїРѕ С€РёСЂРёРЅРµ Рё РїРѕРІРµРґРµРЅРёРµ
 	this->MaximumSize = System::Drawing::Size(1018, 0);
 	this->Dock = DockStyle::Top;
 	this->Margin = System::Windows::Forms::Padding(0, 10, 0, 0);
@@ -40,7 +44,7 @@ Comment::Comment(Post^ post, Comm^ comm) {
 
 	if (!comm_allowed)
 	{
-		this->otvet->BackgroundImage = Image::FromFile("ответить_нет.png");
+		this->otvet->BackgroundImage = Image::FromFile("РѕС‚РІРµС‚РёС‚СЊ_РЅРµС‚.png");
 		this->otvet->Enabled = false;
 	}
 }
@@ -58,7 +62,6 @@ void Comment::InitializeComponent(void)
 	this->otvet_user_name->AutoSize = true;
 	this->otvet_user_name->Font = (gcnew System::Drawing::Font(L"Montserrat", 12));
 	this->otvet_user_name->ForeColor = System::Drawing::SystemColors::ControlDark;
-	this->otvet_user_name->Location = System::Drawing::Point(user_comm->Width + 5, 0);
 
 	this->text_comm = gcnew Label();
 	this->text_comm->AutoSize = true;
@@ -69,7 +72,7 @@ void Comment::InitializeComponent(void)
 	this->svoistva_post = gcnew System::Windows::Forms::ContextMenuStrip();
 	this->svoistva_post->ImageScalingSize = System::Drawing::Size(20, 20);
 	this->svoistva_post->ShowImageMargin = false;
-	this->svoistva_post->Items->Add(L"Удалить", nullptr, gcnew EventHandler(this, &Comment::Delete_Click));
+	this->svoistva_post->Items->Add(L"РЈРґР°Р»РёС‚СЊ", nullptr, gcnew EventHandler(this, &Comment::Delete_Click));
 
 	this->label1 = gcnew Label();
 	this->label1->Font = (gcnew System::Drawing::Font(L"Montserrat ExtraBold", 19.8F, System::Drawing::FontStyle::Bold));
@@ -96,7 +99,7 @@ void Comment::InitializeComponent(void)
 	this->otvet = gcnew Button();
 	this->otvet->Click += gcnew System::EventHandler(this, &Comment::otvet_Click);
 	this->otvet->FlatAppearance->BorderSize = 0;
-	this->otvet->BackgroundImage = Image::FromFile("ответить.png");
+	this->otvet->BackgroundImage = Image::FromFile("РѕС‚РІРµС‚РёС‚СЊ.png");
 	this->otvet->BackgroundImageLayout = ImageLayout::Zoom;
 	this->otvet->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 	this->otvet->Size = System::Drawing::Size(date_post->Height, date_post->Height);
@@ -162,26 +165,26 @@ void Comment::InitializeComponent(void)
 
 void Comment::Delete_Click(Object^ sender, EventArgs^ e)
 {
-	auto result = MessageBox::Show("Удалить комментарий?", "Подтверждение", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+	auto result = MessageBox::Show("РЈРґР°Р»РёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№?", "РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 
 	if (result == DialogResult::Yes)
 	{
-		// Обновляем поле is_deleted у текущего комментария
+		// РћР±РЅРѕРІР»СЏРµРј РїРѕР»Рµ is_deleted Сѓ С‚РµРєСѓС‰РµРіРѕ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ
 		bool success = CommRepository::MarkAsDeleted(this->commId);
 
-		// Если это корневой комментарий — удаляем его ответы
+		// Р•СЃР»Рё СЌС‚Рѕ РєРѕСЂРЅРµРІРѕР№ РєРѕРјРјРµРЅС‚Р°СЂРёР№ вЂ” СѓРґР°Р»СЏРµРј РµРіРѕ РѕС‚РІРµС‚С‹
 		if (this->parentId == -1)
 			success = success && CommRepository::DeleteReplies(this->commId);
 
 		if (success)
 		{
-			// Вызываем событие для перерисовки всех комментариев
+			// Р’С‹Р·С‹РІР°РµРј СЃРѕР±С‹С‚РёРµ РґР»СЏ РїРµСЂРµСЂРёСЃРѕРІРєРё РІСЃРµС… РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ
 			if (OnCommentsUpdated != nullptr)
 				OnCommentsUpdated();
 		}
 		else
 		{
-			MessageBox::Show("Ошибка при удалении комментария.", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			MessageBox::Show("РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё РєРѕРјРјРµРЅС‚Р°СЂРёСЏ.", "РћС€РёР±РєР°", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		}
 	}
 }
@@ -191,12 +194,12 @@ void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 	if (isExpanded && comm_allowed)
 	{
 		this->tableLayoutPanel2->Controls->Add(this->panel1);
-		this->otvet->BackgroundImage = Image::FromFile("ответить_переверн.png");
+		this->otvet->BackgroundImage = Image::FromFile("РѕС‚РІРµС‚РёС‚СЊ_РїРµСЂРµРІРµСЂРЅ.png");
 	}
 	else
 	{
 		this->tableLayoutPanel2->Controls->Remove(this->panel1);
-		this->otvet->BackgroundImage = Image::FromFile("ответить.png");
+		this->otvet->BackgroundImage = Image::FromFile("РѕС‚РІРµС‚РёС‚СЊ.png");
 	}
 	isExpanded = !isExpanded;
 }
@@ -214,22 +217,24 @@ void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
 {
 	String^ text = comm_tb->Text->Trim();
 	if (String::IsNullOrWhiteSpace(text)) {
-		MessageBox::Show("Комментарий не может быть пустым.");
+		MessageBox::Show("РљРѕРјРјРµРЅС‚Р°СЂРёР№ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј.");
 		return;
 	}
 
 	bool success = CommRepository::AddComment(
 		this->postId,
 		Session::CurrentUser->ID,
-		this->commId,        // id_otvet_user
+		this->ID_user,  // <-- РїРµСЂРµРґР°С‘Рј ID Р°РІС‚РѕСЂР° РєРѕРјРјРµРЅС‚Р°СЂРёСЏ, РЅР° РєРѕС‚РѕСЂС‹Р№ РѕС‚РІРµС‡Р°РµРј
 		text,
 		DateTime::Now,
-		true,                // its_otvet
-		this->commId         // parent_comm
+		true,
+		this->commId
 	);
 
+
+
 	if (success) {
-		MessageBox::Show("Ответ добавлен!");
+		MessageBox::Show("РћС‚РІРµС‚ РґРѕР±Р°РІР»РµРЅ!");
 		comm_tb->Clear();
 
 		if (OnReplySent != nullptr)
@@ -237,7 +242,7 @@ void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
 	}
 
 	else {
-		MessageBox::Show("Ошибка при добавлении ответа.");
+		MessageBox::Show("РћС€РёР±РєР° РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё РѕС‚РІРµС‚Р°.");
 	}
 
 }

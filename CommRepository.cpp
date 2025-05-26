@@ -32,10 +32,15 @@ List<QQ::Comm^>^ CommRepository::LoadTree(QQ::Post^ post)
     }
 
     PGconn* conn = db.get();
-    std::string query = "SELECT c.id, c.id_post, u1.name, COALESCE(u2.name, '') AS reply_to, c.text, c.date, COALESCE(c.parent_comm, -1)"
-        "FROM public.commenti c JOIN people u1 ON c.id_user = u1.id LEFT JOIN people u2 ON c.id_otvet_user = u2.id WHERE c.id_post = " + std::to_string(post->ID) + " "
+    std::string query =
+        "SELECT c.id, c.id_post, u1.name, COALESCE(u2.name, '') AS reply_to, "
+        "c.text, c.date, COALESCE(c.parent_comm, -1), "
+        "COALESCE(c.id_otvet_user, -1), c.id_user "
+        "FROM public.commenti c "
+        "JOIN public.people u1 ON c.id_user = u1.id "
+        "LEFT JOIN public.people u2 ON c.id_otvet_user = u2.id "
+        "WHERE c.id_post = " + std::to_string(post->ID) + " "
         "ORDER BY c.date ASC;";
-
 
     PGresult* res = PQexec(conn, query.c_str());
     if (PQresultStatus(res) != PGRES_TUPLES_OK) {
@@ -48,14 +53,17 @@ List<QQ::Comm^>^ CommRepository::LoadTree(QQ::Post^ post)
     int rows = PQntuples(res);
     for (int i = 0; i < rows; ++i) {
         int id = std::stoi(PQgetvalue(res, i, 0));
-        int id_post = std::stoi(PQgetvalue(res, i, 1));
+        int postId = std::stoi(PQgetvalue(res, i, 1));
         String^ author = marshal_as<String^>(PQgetvalue(res, i, 2));
         String^ replyTo = marshal_as<String^>(PQgetvalue(res, i, 3));
         String^ text = marshal_as<String^>(PQgetvalue(res, i, 4));
         DateTime date = DateTime::Parse(marshal_as<String^>(PQgetvalue(res, i, 5)));
         int parentId = std::stoi(PQgetvalue(res, i, 6));
+        int idReplyUser = std::stoi(PQgetvalue(res, i, 7));
+        int id_user = std::stoi(PQgetvalue(res, i, 8));
 
-        QQ::Comm^ comm = gcnew QQ::Comm(id, id_post, author, replyTo, text, date, parentId);
+        Comm^ comm = gcnew Comm(id, postId, author, replyTo, text, date, parentId, idReplyUser);
+        comm->ID_user = id_user;  // сохраняем ID автора
         commentMap->Add(id, comm);
     }
 
@@ -75,6 +83,7 @@ List<QQ::Comm^>^ CommRepository::LoadTree(QQ::Post^ post)
     return flatList;
 }
 
+
 bool CommRepository::AddComment(int id_post, int id_user, int id_otvet_user,
     System::String^ text, System::DateTime date,
     bool its_otvet, int parent_comm)
@@ -90,7 +99,7 @@ bool CommRepository::AddComment(int id_post, int id_user, int id_otvet_user,
 
     query += (id_otvet_user == 0 ? "NULL" : std::to_string(id_otvet_user)) + ",";
     query += "'" + marshal_as<std::string>(text) + "',";
-    query += "'" + marshal_as<std::string>(date.ToString("yyyy-MM-dd")) + "',";
+    query += "'" + marshal_as<std::string>(date.ToString("yyyy-MM-dd HH:mm:ss")) + "',";
     query += its_otvet ? "true," : "false,";
     query += (parent_comm == 0 ? "NULL" : std::to_string(parent_comm)) + ");";
 

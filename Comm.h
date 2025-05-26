@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -6,7 +6,7 @@ using namespace System::Collections::Generic;
 namespace QQ {
     public ref class Comm {
     public:
-        Comm(int id, int postId, String^ author, String^ replyTo, String^ text, DateTime date, int parentId)
+        Comm(int id, int postId, String^ author, String^ replyTo, String^ text, DateTime date, int parentId, int idReplyUser)
         {
             ID = id;
             PostID = postId;
@@ -15,8 +15,10 @@ namespace QQ {
             Text = text;
             Date = date;
             ParentID = parentId;
+            IdReplyUser = idReplyUser;
             Children = gcnew List<Comm^>();
         }
+
 
         int ID;
         int PostID;
@@ -24,8 +26,11 @@ namespace QQ {
         String^ ReplyTo;
         String^ Text;
         DateTime Date;
-        int ParentID; // -1 ���� ��������
+        int ParentID; // -1 если корневой
+        int IdReplyUser;
         List<Comm^>^ Children;
+
+        int ID_user; // ID автора этого комментария
 
     };
 }
