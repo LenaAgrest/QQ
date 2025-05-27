@@ -275,9 +275,33 @@ void UserPage::InitializeComponent(void)
 
 void QQ::UserPage::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 {
+	if (this->pictureBoxAvatar->BackgroundImage == nullptr)
+		return;
+
+	Graphics^ g = e->Graphics;
+	g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
+
+	Image^ img = this->pictureBoxAvatar->BackgroundImage;
+
+	float boxWidth = static_cast<float>(this->pictureBoxAvatar->Width);
+	float boxHeight = static_cast<float>(this->pictureBoxAvatar->Height);
+	float imgWidth = static_cast<float>(img->Width);
+	float imgHeight = static_cast<float>(img->Height);
+
+	// Масштабирование как cover
+	float scale = Math::Max(boxWidth / imgWidth, boxHeight / imgHeight);
+	SizeF scaledSize(imgWidth * scale, imgHeight * scale);
+	PointF offset((boxWidth - scaledSize.Width) / 2, (boxHeight - scaledSize.Height) / 2);
+
 	auto path = gcnew Drawing2D::GraphicsPath();
 	path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
 	this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
+
+	// Обрезаем всё по кругу
+	g->SetClip(path);
+
+	// Отрисовка
+	g->DrawImage(img, RectangleF(offset, scaledSize));
 }
 
 
@@ -294,6 +318,7 @@ void QQ::UserPage::post_Load(User^ user)
 			control->OnPostSelected = gcnew QQ::PostControl::PostSelectedHandler(this, &UserPage::OpenPost);
 			this->user_table->Controls->Add(control, 0, 3);
 			control->Dock = DockStyle::Left;
+
 		}
 
 	}

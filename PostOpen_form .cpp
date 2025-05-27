@@ -20,17 +20,16 @@ PostOpen::PostOpen(Post^ post) {
 	text_post_t->Text = post->Content;
 	date_post->Text = post->Date->ToString("dd.MM.yyyy hh:mm:ss");
 
-	if (post->ImageData != nullptr)
+	if (post->Image != nullptr)
 	{
-		MemoryStream^ ms = gcnew MemoryStream(post->ImageData);
-		image_post->Image = Image::FromStream(ms);
-		this->image_post->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+		image_post->Image = post->Image;
 	}
 	else
 	{
 		this->tableLayoutPanel2->Controls->Remove(this->image_post);
 		this->image_post = nullptr;
 	}
+
 	comm_info->Text = post->CommentsAllowed ? L"" : L"Запрещены";
 	if (comm_info->Text == "")
 	{

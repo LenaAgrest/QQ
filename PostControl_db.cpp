@@ -79,8 +79,8 @@ List<QQ::Post^>^ PostRepository::LoadAllPosts()
             }
         }
 
-        QQ::Post^ post = gcnew QQ::Post(id, title, content, authorName, imageData, postDate);
-        post->ImageData = imageData;
+        QQ::Post^ post = gcnew QQ::Post(id, title, content, authorName, image, postDate);
+        post->Image = image;
         post->Date = postDate;
         post->CommentsAllowed = commentsEnabled;
 
@@ -127,19 +127,34 @@ List<QQ::Post^>^ PostRepository::LoadPostsUser(User^ user)
         String^ authorName = marshal_as<String^>(authorNameStr);
         DateTime postDate = DateTime::Parse(marshal_as<String^>(dateStr));
 
-        // Обработка изображения из базы данных
         array<Byte>^ imageData = nullptr;
-        int photoLength = PQgetlength(res, i, 4);
-        if (photoLength > 0) {
-            const char* photoData = PQgetvalue(res, i, 4);
-            imageData = gcnew array<Byte>(photoLength);
-            for (int j = 0; j < photoLength; ++j) {
-                imageData[j] = photoData[j];
+        System::Drawing::Image^ image = nullptr;
+
+        // Обработка изображения из базы данных
+        if (!PQgetisnull(res, i, 4)) {
+            size_t unescapedLength = 0;
+            const char* escaped = PQgetvalue(res, i, 4);  // column 'photo'
+            unsigned char* unescaped = PQunescapeBytea((const unsigned char*)escaped, &unescapedLength);
+
+            if (unescaped && unescapedLength > 0) {
+                imageData = gcnew array<Byte>((int)unescapedLength);
+                Marshal::Copy((IntPtr)(void*)unescaped, imageData, 0, (int)unescapedLength);
+
+                try {
+                    MemoryStream^ ms = gcnew MemoryStream(imageData);
+                    image = Image::FromStream(ms);
+                }
+                catch (...) {
+                    image = nullptr;
+                }
+
+                PQfreemem(unescaped);
             }
         }
 
         // Создание поста и добавление в список
-        QQ::Post^ post = gcnew QQ::Post(id, title, content, authorName, imageData, postDate);
+        QQ::Post^ post = gcnew QQ::Post(id, title, content, authorName, image, postDate);
+        post->Image = image;
         post->Date = postDate;
         post->CommentsAllowed = commentsEnabled;
 

@@ -16,17 +16,16 @@ using namespace QQ;
         text_post->Text = post->Content;
         text_post_t->Text = post->Content;
         date_post->Text = post->Date->ToString("dd.MM.yyyy hh:mm:ss");
-        
-        if (post->ImageData != nullptr)
+
+        if (post->Image != nullptr)
         {
-            MemoryStream^ ms = gcnew MemoryStream(post->ImageData);
-            image_post->Image = Image::FromStream(ms);
+            image_post->Image = post->Image;
         }
         else
         {
             this->tableLayoutPanel2->Controls->Remove(this->image_post);
             this->image_post = nullptr;
-        }    
+        }
 
         this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostControl::HandleClick);
         for each (Control ^ ctrl in this->Controls) {
@@ -68,8 +67,8 @@ using namespace QQ;
         this->image_post->InitialImage = nullptr;
         this->image_post->Location = System::Drawing::Point(11, 133);
         this->image_post->Name = L"image_post";
-        this->image_post->MaximumSize = System::Drawing::Size(500, 200);
-        this->image_post->TabIndex = 6;
+        this->image_post->Size = System::Drawing::Size(500, 500);
+        this->image_post->Dock = DockStyle::Fill;
         this->image_post->TabStop = false;
         this->image_post->SizeMode = PictureBoxSizeMode::Zoom;
 
@@ -77,7 +76,6 @@ using namespace QQ;
         this->panel2 = gcnew Panel();
         this->panel2->AutoSize = true;
         this->panel2->Dock = DockStyle::Top;
-        this->panel2->TabIndex = 4;
         this->panel2->Controls->Add(label1);
         this->panel2->Controls->Add(user_post);
 
