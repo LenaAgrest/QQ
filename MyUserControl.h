@@ -204,7 +204,6 @@ namespace QQ {
 			  // 
 			  this->mainflow->AutoSize = true;
 			  this->mainflow->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			  this->mainflow->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			  this->mainflow->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 			  this->mainflow->Location = System::Drawing::Point(300, 0);
 			  this->mainflow->Name = L"mainflow";
@@ -302,6 +301,7 @@ namespace QQ {
 			this->mainflow->Controls->Clear();
 			PostOpen^ postPage = gcnew PostOpen(post);
 			this->mainflow->Controls->Add(postPage);
+			postPage->OnPostDeleted += gcnew QQ::PostOpen::PostDeletedHandler(this, &MyUserControl::RefreshHomeAfterDeletion);
 		}
 
 		void OpenCreatePost(User^ user)
@@ -348,6 +348,12 @@ namespace QQ {
 			catch (Exception^ ex) {
 				MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
 			}
+		}
+
+		void QQ::MyUserControl::RefreshHomeAfterDeletion()
+		{
+			this->mainflow->Controls->Clear();
+			MainForm_Load();
 		}
 
 		void MyUserControl::panel1_Resize(Object^ sender, EventArgs^ e)

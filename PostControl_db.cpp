@@ -226,3 +226,26 @@ bool PostRepository::AddPost(int user_id, String^ title, String^ content, DateTi
     return success;
 }
 
+
+bool PostRepository::DeletePost(int postId)
+{
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) return false;
+
+    PGconn* conn = db.get();
+
+    // Удалим сначала комментарии к посту, если есть (если нужна такая логика)
+    std::string deleteComments = "DELETE FROM public.commenti WHERE post_id = " + std::to_string(postId) + ";";
+    PQexec(conn, deleteComments.c_str());
+
+    // Удаляем сам пост
+    std::string query = "DELETE FROM public.posts WHERE id = " + std::to_string(postId) + ";";
+    PGresult* res = PQexec(conn, query.c_str());
+
+    bool success = PQresultStatus(res) == PGRES_COMMAND_OK;
+    PQclear(res);
+    db.disconnect();
+    return success;
+}
+
+

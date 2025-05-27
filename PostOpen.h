@@ -20,12 +20,9 @@ namespace QQ {
     public: PostOpen(Post^ post);
     public:
         Post^ PostData;
+        delegate void PostDeletedHandler();
+        PostDeletedHandler^ OnPostDeleted;
 
-        /*void QQ::PostOpen::AttachClickHandlers(Control^ parent);
-
-
-        delegate void PostSelectedHandler(Post^ post);
-        PostSelectedHandler^ OnPostSelected;*/
 
     protected:
         ~PostOpen();

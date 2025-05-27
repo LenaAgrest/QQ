@@ -15,4 +15,5 @@ public:
     static List<QQ::Post^>^ LoadAllPosts();
     static List<QQ::Post^>^ LoadPostsUser(User^ user);
     static bool AddPost(int user_id, String^ title, String^ content, DateTime date, array<Byte>^ imageData);
+    static bool DeletePost(int postId);
 };

@@ -12,20 +12,11 @@ using namespace QQ;
         postId = post->ID;
         user_post->Text = post->Author;
         title_post_l->Text = post->Title;
-        title_post->Text = post->Title;
-        text_post->Text = post->Content;
-        text_post_t->Text = post->Content;
+        
         date_post->Text = post->Date->ToString("dd.MM.yyyy hh:mm:ss");
 
-        if (post->Image != nullptr)
-        {
-            image_post->Image = post->Image;
-        }
-        else
-        {
-            this->tableLayoutPanel2->Controls->Remove(this->image_post);
-            this->image_post = nullptr;
-        }
+        post->Content != "" ? text_post->Text = post->Content : this->tableLayoutPanel2->Controls->Remove(this->text_post);
+        post->Image ? image_post->Image = post->Image : this->tableLayoutPanel2->Controls->Remove(this->image_post);
 
         this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostControl::HandleClick);
         for each (Control ^ ctrl in this->Controls) {
@@ -50,9 +41,6 @@ using namespace QQ;
         this->title_post_l->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
         this->title_post_l->Location = System::Drawing::Point(4, 90);
         this->title_post_l->Dock = DockStyle::Fill;
-
-        this->title_post = gcnew TextBox();
-        this->text_post_t = gcnew TextBox();
 
         this->text_post = gcnew Label();
         this->text_post->AutoSize = true;
@@ -108,6 +96,7 @@ using namespace QQ;
         this->Controls->Add(tableLayoutPanel2);
 
     }
+
     void QQ::PostControl::AttachClickHandlers(Control^ parent)
     {
         parent->Click += gcnew EventHandler(this, &PostControl::HandleClick);

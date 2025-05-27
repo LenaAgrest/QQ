@@ -420,9 +420,6 @@ void QQ::UserPageRed::UpdatePhoto_Click(System::Object^ sender, System::EventArg
 				hexOutput->Append(" ");
 			}
 
-			MessageBox::Show("imageBytes (" + imageBytes->Length + " байт):\n" + hexOutput->ToString());
-
-
 			// Отображаем в PictureBox
 			this->pictureBoxAvatar->BackgroundImage = img;
 		}
@@ -481,7 +478,6 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 	}
 
 	if (UpdateUserFull(user_izm)) {
-		MessageBox::Show("Профиль обновлён!");
 		this->OnProfileSaved(user_izm);
 	}
 	else {

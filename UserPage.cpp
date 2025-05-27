@@ -273,6 +273,14 @@ void UserPage::InitializeComponent(void)
 	this->Controls->Add(this->user_table);
 }
 
+
+void QQ::UserPage::RefreshUserPageAfterDeletion()
+{
+	this->user_table->Controls->Clear();
+	post_Load(Session::CurrentUser);
+}
+
+
 void QQ::UserPage::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 {
 	if (this->pictureBoxAvatar->BackgroundImage == nullptr)
@@ -382,6 +390,7 @@ void QQ::UserPage::OpenPost(QQ::Post^ post)
 {
 	this->user_table->Controls->Clear();
 	QQ::PostOpen^ open = gcnew QQ::PostOpen(post);
+	open->OnPostDeleted += gcnew QQ::PostOpen::PostDeletedHandler(this, &UserPage::RefreshUserPageAfterDeletion);
 	this->user_table->Controls->Add(open);
 }
 

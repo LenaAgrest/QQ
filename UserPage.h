@@ -55,6 +55,8 @@ namespace QQ {
         bool isExpanded = true;
         String^ pswd;
         Image^ image;
+        void RefreshUserPageAfterDeletion();
+
     public: delegate void EditRequestedHandler(User^ user);
     public: event EditRequestedHandler^ OnEditRequested;
     public: delegate void CreatePostRequestedHandler(User^ user);
