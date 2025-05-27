@@ -18,6 +18,8 @@ namespace QQ {
     {
     public: UserPage(User^ user);
     public: User^ user2;
+         
+
 
     protected:
         
@@ -55,6 +57,8 @@ namespace QQ {
         Image^ image;
     public: delegate void EditRequestedHandler(User^ user);
     public: event EditRequestedHandler^ OnEditRequested;
+    public: delegate void CreatePostRequestedHandler(User^ user);
+    public: CreatePostRequestedHandler^ OnCreatePost;
 
     private:
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);

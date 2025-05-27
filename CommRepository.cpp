@@ -133,12 +133,29 @@ bool CommRepository::DeleteReplies(int parentId)
     if (!db.connect()) return false;
 
     PGconn* conn = db.get();
-    std::string query = "DELETE FROM public.commenti WHERE parent_comm = " + std::to_string(parentId) + ";";
 
+    // 1. Получаем id всех комментариев, у которых parent_comm = parentId
+    std::string query = "SELECT id FROM public.commenti WHERE parent_comm = " + std::to_string(parentId) + ";";
     PGresult* res = PQexec(conn, query.c_str());
-    bool success = PQresultStatus(res) == PGRES_COMMAND_OK;
+    if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+        PQclear(res);
+        db.disconnect();
+        return false;
+    }
 
+    int rows = PQntuples(res);
+    for (int i = 0; i < rows; ++i) {
+        int childId = std::stoi(PQgetvalue(res, i, 0));
+        DeleteReplies(childId);  // рекурсивно удаляем вложенные ответы
+    }
     PQclear(res);
+
+    // 2. Удаляем все комментарии, где parent_comm = parentId
+    std::string deleteQuery = "DELETE FROM public.commenti WHERE parent_comm = " + std::to_string(parentId) + ";";
+    PGresult* delRes = PQexec(conn, deleteQuery.c_str());
+    bool success = PQresultStatus(delRes) == PGRES_COMMAND_OK;
+    PQclear(delRes);
+
     db.disconnect();
     return success;
 }

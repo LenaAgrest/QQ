@@ -1,4 +1,5 @@
-﻿#include "UserPage.h"
+﻿#include "CreatePost.h"
+#include "UserPage.h"
 #include "PostOpen.h"
 #include "PostControl.h"
 #include "User.h"
@@ -309,18 +310,7 @@ void QQ::UserPage::post_Load(User^ user)
 	}
 }
 
-void QQ::UserPage::OpenPost(QQ::Post^ post)
-{
-	this->user_table->Controls->Clear();
-	QQ::PostOpen^ open = gcnew QQ::PostOpen(post);
-	this->user_table->Controls->Add(open);
-}
 
-
-void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
-{
-	this->OnEditRequested(Session::CurrentUser);
-}
 
 void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 {
@@ -358,7 +348,21 @@ void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 
 void QQ::UserPage::createPost_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	if (OnCreatePost != nullptr)
+		OnCreatePost(Session::CurrentUser);
+}
 
+
+void QQ::UserPage::OpenPost(QQ::Post^ post)
+{
+	this->user_table->Controls->Clear();
+	QQ::PostOpen^ open = gcnew QQ::PostOpen(post);
+	this->user_table->Controls->Add(open);
+}
+
+void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	this->OnEditRequested(Session::CurrentUser);
 }
 
 void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e)

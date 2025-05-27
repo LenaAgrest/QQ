@@ -141,6 +141,7 @@
     <ClCompile Include="aurorise.cpp" />
     <ClCompile Include="Comment.cpp" />
     <ClCompile Include="CommRepository.cpp" />
+    <ClCompile Include="CreatePost.cpp" />
     <ClCompile Include="PostControl_form.cpp" />
     <ClCompile Include="PostOpen_form .cpp" />
     <ClCompile Include="update.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Comm.h" />
     <ClInclude Include="Comment.h" />
     <ClInclude Include="CommRepository.h" />
+    <ClInclude Include="CreatePost.h" />
     <ClInclude Include="MainForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>

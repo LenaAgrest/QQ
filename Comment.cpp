@@ -44,7 +44,7 @@ Comment::Comment(Post^ post, Comm^ comm) {
 
 	if (!comm_allowed)
 	{
-		this->otvet->BackgroundImage = Image::FromFile("ответить_нет.png");
+		this->otvet->BackgroundImage = Image::FromFile("answer_disable.png");
 		this->otvet->Enabled = false;
 	}
 }
@@ -99,7 +99,7 @@ void Comment::InitializeComponent(void)
 	this->otvet = gcnew Button();
 	this->otvet->Click += gcnew System::EventHandler(this, &Comment::otvet_Click);
 	this->otvet->FlatAppearance->BorderSize = 0;
-	this->otvet->BackgroundImage = Image::FromFile("ответить.png");
+	this->otvet->BackgroundImage = Image::FromFile("answer.png");
 	this->otvet->BackgroundImageLayout = ImageLayout::Zoom;
 	this->otvet->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 	this->otvet->Size = System::Drawing::Size(date_post->Height, date_post->Height);
@@ -169,16 +169,13 @@ void Comment::Delete_Click(Object^ sender, EventArgs^ e)
 
 	if (result == DialogResult::Yes)
 	{
-		// Обновляем поле is_deleted у текущего комментария
 		bool success = CommRepository::MarkAsDeleted(this->commId);
 
-		// Если это корневой комментарий — удаляем его ответы
 		if (this->parentId == -1)
 			success = success && CommRepository::DeleteReplies(this->commId);
 
 		if (success)
 		{
-			// Вызываем событие для перерисовки всех комментариев
 			if (OnCommentsUpdated != nullptr)
 				OnCommentsUpdated();
 		}
@@ -194,12 +191,12 @@ void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 	if (isExpanded && comm_allowed)
 	{
 		this->tableLayoutPanel2->Controls->Add(this->panel1);
-		this->otvet->BackgroundImage = Image::FromFile("ответить_переверн.png");
+		this->otvet->BackgroundImage = Image::FromFile("answer_enable.png");
 	}
 	else
 	{
 		this->tableLayoutPanel2->Controls->Remove(this->panel1);
-		this->otvet->BackgroundImage = Image::FromFile("ответить.png");
+		this->otvet->BackgroundImage = Image::FromFile("answer.png");
 	}
 	isExpanded = !isExpanded;
 }
@@ -234,7 +231,6 @@ void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
 
 
 	if (success) {
-		MessageBox::Show("Ответ добавлен!");
 		comm_tb->Clear();
 
 		if (OnReplySent != nullptr)

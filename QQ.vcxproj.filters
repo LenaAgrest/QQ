@@ -48,6 +48,9 @@
     <ClCompile Include="PostControl_form.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="CreatePost.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aurorise.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="PostControl.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatePost.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
