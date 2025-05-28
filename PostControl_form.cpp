@@ -13,7 +13,7 @@ using namespace QQ;
         user_post->Text = post->Author;
         title_post_l->Text = post->Title;
         
-        date_post->Text = post->Date->ToString("dd.MM.yyyy hh:mm:ss");
+        date_post->Text = post->Date->ToString("dd.MM.yyyy HH:mm:ss");
 
         post->Content != "" ? text_post->Text = post->Content : this->tableLayoutPanel2->Controls->Remove(this->text_post);
         post->Image ? image_post->Image = post->Image : this->tableLayoutPanel2->Controls->Remove(this->image_post);

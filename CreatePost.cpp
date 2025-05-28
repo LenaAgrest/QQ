@@ -253,7 +253,7 @@ void QQ::CreatePost::save_Click(System::Object^ sender, System::EventArgs^ e)
 		MessageBox::Show("Поля заголовка и текста не должны быть пустыми.");
 		return;
 	}*/
-
+	DateTime^ s = DateTime::Now;
 	// сохранение
 	bool success = PostRepository::AddPost(
 		this->user_Id,

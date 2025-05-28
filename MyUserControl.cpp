@@ -6,6 +6,7 @@
 #include "Session.h"
 #include "UserPage.h"
 #include "red_user.h"
+#include <ctime>
 #include "PostOpen.h"
 
 using namespace QQ;

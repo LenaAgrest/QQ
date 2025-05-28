@@ -248,4 +248,31 @@ bool PostRepository::DeletePost(int postId)
     return success;
 }
 
+bool PostRepository::UpdateCommentsAllowed(int postId, bool allowed)
+{
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) return false;
+
+    PGconn* conn = db.get();
+    const char* paramValues[2];
+    int paramFormats[2] = { 0, 0 };
+    int paramLengths[2] = { 0, 0 };
+
+    std::string idStr = std::to_string(postId);
+    std::string allowedStr = allowed ? "true" : "false";
+    paramValues[0] = idStr.c_str();
+    paramValues[1] = allowedStr.c_str();
+
+    PGresult* res = PQexecParams(
+        conn,
+        "UPDATE public.posts SET comment_enable = $2 WHERE id = $1",
+        2, nullptr, paramValues, paramLengths, paramFormats, 0
+    );
+
+    bool ok = PQresultStatus(res) == PGRES_COMMAND_OK;
+    PQclear(res);
+    db.disconnect();
+    return ok;
+}
+
 

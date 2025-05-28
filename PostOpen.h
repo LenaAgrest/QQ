@@ -41,6 +41,8 @@ namespace QQ {
         PictureBox^ image_post;
         ToolStripMenuItem^ editItem;
         ToolStripMenuItem^ deleteItem;
+        ToolStripMenuItem^ toggleCommentsItem;
+        String^ comm_en;
         System::Windows::Forms::ContextMenuStrip^ svoistva_post;
         Label^ label1;
         Label^ comm_info;
@@ -57,8 +59,6 @@ namespace QQ {
         TableLayoutPanel^ commentsLayout;
         int postId;
     private: FlowLayoutPanel^ repliesPanel;
-           
-
 
         void Delete_Click(Object^ sender, EventArgs^ e);
         void Label1_Click(Object^ sender, EventArgs^ e);
@@ -69,6 +69,8 @@ namespace QQ {
         void RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idToUI);
         void RefreshComments(Object^ sender, EventArgs^ e);
         void comm_send_Click(System::Object^ sender, System::EventArgs^ e);
+
+        void ToggleComments_Click(Object^ sender, EventArgs^ e);
 
     };
 }

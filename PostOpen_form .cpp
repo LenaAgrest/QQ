@@ -11,24 +11,34 @@ using namespace QQ;
 
 PostOpen::PostOpen(Post^ post) {
 
+	this->PostData = post;
 	InitializeComponent();
-	PostData = post;
 	postId = post->ID;
 	user_post->Text = post->Author;
 	title_post_l->Text = post->Title;
-	//title_post->Text = post->Title;
 	text_post->Text = post->Content;
-	date_post->Text = post->Date->ToString("dd.MM.yyyy hh:mm:ss");
+	date_post->Text = post->Date->ToString("dd.MM.yyyy HH:mm:ss");
 
 	post->Content != "" ? text_post->Text = post->Content : this->tableLayoutPanel2->Controls->Remove(this->text_post);
 	post->Image ? image_post->Image = post->Image : this->tableLayoutPanel2->Controls->Remove(this->image_post);
 
 	comm_info->Text = post->CommentsAllowed ? L"" : L"Запрещены";
-	if (comm_info->Text == "Запрещены")
+	/*comm_en = "Запретить комментарии";
+	if (post->CommentsAllowed)
 	{
-		this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
+		comm_en = L"Запретить комментарии";
 	}
+	else {
+		comm_en = L"Разрешить комментарии";
+	}*/
 
+	this->toggleCommentsItem = gcnew ToolStripMenuItem(
+		post->CommentsAllowed ? L"Запретить комментарии" : L"Разрешить комментарии",
+		nullptr,
+		gcnew EventHandler(this, &PostOpen::ToggleComments_Click)
+	);
+	this->svoistva_post->Items->Add(this->toggleCommentsItem);
+	//comm_en = post->CommentsAllowed ? L"Запретить комментарии" : L"Разрешить комментарии";
 	RenderComments();
 }
 
@@ -71,13 +81,16 @@ void PostOpen::InitializeComponent(void)
 	this->image_post->SizeMode = PictureBoxSizeMode::Zoom;
 
 
-
 	this->svoistva_post = gcnew System::Windows::Forms::ContextMenuStrip();
 	this->svoistva_post->ImageScalingSize = System::Drawing::Size(20, 20);
 	this->svoistva_post->ShowImageMargin = false;
 	this->svoistva_post->Size = System::Drawing::Size(61, 4);
 	this->svoistva_post->Items->Add(L"Редактировать", nullptr, gcnew EventHandler(this, &PostOpen::Edit_Click));
 	this->svoistva_post->Items->Add(L"Удалить", nullptr, gcnew EventHandler(this, &PostOpen::Delete_Click));
+	//this->svoistva_post->Items->Add(this->toggleCommentsItem);
+
+	//this->svoistva_post->Items->Add(L"" + this->comm_en, nullptr, gcnew EventHandler(this, &PostOpen::Delete_Click));
+
 
 
 	this->label1 = gcnew Label();
@@ -212,7 +225,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel1 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel1->ColumnCount = 1;
 	this->tableLayoutPanel1->Dock = DockStyle::Fill;
-	this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	//this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
 	this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100)));
 	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
@@ -224,11 +237,15 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel1->MaximumSize = System::Drawing::Size(1018, 0);
 	this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 
+
 	this->Controls->Add(tableLayoutPanel1);
 }
 
 void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
 {
+	this-> title_post->Text = this-> title_post_l->Text;
+	this->text_post_t->Text = this->text_post->Text;
+
 	this->title_post->Multiline = true;
 	this->title_post->BackColor = System::Drawing::Color::White;
 	this->title_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold));
@@ -285,6 +302,7 @@ void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
 
 	this->panel3->Controls->Add(this->save);
 	this->panel3->Controls->Add(this->otmena);
+
 
 }
 
@@ -426,6 +444,44 @@ void PostOpen::comm_send_Click(Object^ sender, EventArgs^ e)
 	}
 	else {
 		MessageBox::Show("Ошибка при добавлении комментария.");
+	}
+}
+
+void PostOpen::ToggleComments_Click(Object^ sender, EventArgs^ e)
+{
+	bool newStatus = !this->PostData->CommentsAllowed;
+	bool success = PostRepository::UpdateCommentsAllowed(this->PostData->ID, newStatus);
+
+	if (success) {
+		this->PostData->CommentsAllowed = newStatus;
+
+		// Обновим надпись кнопки
+		this->toggleCommentsItem->Text = newStatus ? L"Запретить комментарии" : L"Разрешить комментарии";
+
+		// Обновим интерфейс
+		comm_info->Text = newStatus ? L"" : L"Запрещены";
+
+		if (newStatus) {
+			if (!commentsLayout->Controls->Contains(panel1)) {
+				commentsLayout->Controls->Add(panel1);
+				commentsLayout->SetRow(panel1, commentsLayout->RowCount);
+				commentsLayout->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+			}
+			if (tableLayoutPanel2->Controls->Contains(comm_info)) {
+				tableLayoutPanel2->Controls->Remove(comm_info);
+			}
+		}
+		else {
+			if (commentsLayout->Controls->Contains(panel1)) {
+				commentsLayout->Controls->Remove(panel1);
+			}
+			if (!tableLayoutPanel2->Controls->Contains(comm_info)) {
+				tableLayoutPanel2->Controls->Add(comm_info, 0, 6);
+			}
+		}
+	}
+	else {
+		MessageBox::Show("Ошибка при обновлении статуса комментариев.");
 	}
 }
 

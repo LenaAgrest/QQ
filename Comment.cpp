@@ -8,10 +8,10 @@
 using namespace QQ;
 
 Comment::Comment(Post^ post, Comm^ comm) {
-
+	this->PostData = post;
 	InitializeComponent();
 	postId = post->ID;
-	comm_allowed = post->CommentsAllowed;
+	//comm_allowed = post->CommentsAllowed;
 	commId = comm->ID;
 	ID_user = comm->ID_user;
 	idReplyUser = comm->IdReplyUser;
@@ -42,10 +42,15 @@ Comment::Comment(Post^ post, Comm^ comm) {
 	this->Margin = System::Windows::Forms::Padding(0, 0, 0, 0);
 	this->BackColor = System::Drawing::Color::White;
 
-	if (!comm_allowed)
+	if (this->PostData->CommentsAllowed == false)
 	{
 		this->otvet->BackgroundImage = Image::FromFile("answer_disable.png");
 		this->otvet->Enabled = false;
+	}
+	else
+	{
+		this->otvet->BackgroundImage = Image::FromFile("answer.png");
+		this->otvet->Enabled = true;
 	}
 }
 
@@ -149,18 +154,18 @@ void Comment::InitializeComponent(void)
 
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
-	this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	//this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel2->AutoSize = true;
-	this->tableLayoutPanel2->ColumnCount = 2;
-	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 1));
-	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 99));
+	this->tableLayoutPanel2->ColumnCount = 1;
+	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
+	//this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 99));
 	this->tableLayoutPanel2->RowCount = 3;
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-	this->tableLayoutPanel2->Controls->Add(this->panel2, 1, 0);
-	this->tableLayoutPanel2->Controls->Add(this->text_comm, 1, 1);
-	this->tableLayoutPanel2->Controls->Add(this->panel3, 1, 2);
+	this->tableLayoutPanel2->Controls->Add(this->panel2, 0, 0);
+	this->tableLayoutPanel2->Controls->Add(this->text_comm, 0, 1);
+	this->tableLayoutPanel2->Controls->Add(this->panel3, 0, 2);
 	this->Controls->Add(tableLayoutPanel2);
 }
 
@@ -189,7 +194,7 @@ void Comment::Delete_Click(Object^ sender, EventArgs^ e)
 
 void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 {
-	if (isExpanded && comm_allowed)
+	if (isExpanded && this->PostData->CommentsAllowed)
 	{
 		this->tableLayoutPanel2->Controls->Add(this->panel1);
 		this->otvet->BackgroundImage = Image::FromFile("answer_enable.png");
@@ -241,6 +246,7 @@ void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
 	}
 
 }
+
 
 Comment::~Comment()
 {

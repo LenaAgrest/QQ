@@ -22,7 +22,7 @@ namespace QQ {
         EventHandler^ OnReplySent;
         delegate void CommentsUpdatedHandler();
         CommentsUpdatedHandler^ OnCommentsUpdated;
-
+    public:
 
     protected:
         ~Comment();
@@ -55,11 +55,12 @@ namespace QQ {
         int commId;
         int idReplyUser;
         int ID_user; 
+        Post^ PostData;
 
         Boolean^ its_otvet;
         int serial_otvet;
         bool isExpanded = true;
-        bool comm_allowed;
+        //bool comm_allowed;
 
 
            void Delete_Click(Object^ sender, EventArgs^ e);

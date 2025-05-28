@@ -21,7 +21,7 @@ UserPage::UserPage(User^ user) {
 	o_sebe_text->Text = user->About;
 	interesi_text->Text = user->Interests;
 	contacts_text->Text = user->Contacts;
-	birthday_text->Text = user->Date->ToString("dd.MM.yyyy hh:mm:ss");
+	birthday_text->Text = user->Date->ToString("dd.MM.yyyy HH:mm:ss");
 	image = user->Photo;
 	post_Load(user);
 
