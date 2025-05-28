@@ -5,6 +5,8 @@
 
 #include "PostRepository.h"
 #include "Post.h"
+#include "Session.h"
+#include "PostControl.h"
 #include <iostream>
 #include <msclr/marshal_cppstd.h>
 #include <string>
@@ -12,6 +14,8 @@
 
 extern "C" {
 #include <libpq-fe.h>
+#include "MyUserControl.h"
+#include "UserPage.h"
 using namespace System::IO;
 }
 
@@ -275,4 +279,216 @@ bool PostRepository::UpdateCommentsAllowed(int postId, bool allowed)
     return ok;
 }
 
+void PostControl::OnAuthorClick(System::Object^ sender, System::EventArgs^ e)
+{
+    System::String^ name = this->user_post->Text->TrimStart('@'); // убираем @
 
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) {
+        MessageBox::Show("Не удалось подключиться к базе данных.");
+        return;
+    }
+
+    PGconn* conn = db.get();
+    std::string nameStr = marshal_as<std::string>(name);
+    std::string query = "SELECT * FROM people WHERE name = '" + nameStr + "' LIMIT 1;";
+    PGresult* res = PQexec(conn, query.c_str());
+
+    if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0) {
+        MessageBox::Show("Пользователь не найден.");
+        PQclear(res);
+        db.disconnect();
+        return;
+    }
+
+    QQ::User^ u = QQ::User::CreateEmpty();
+
+    u->ID = Convert::ToInt32(gcnew String(PQgetvalue(res, 0, 0)));
+    u->Username = gcnew String(PQgetvalue(res, 0, 1));
+    u->Password = gcnew String(PQgetvalue(res, 0, 2));
+    u->Interests = gcnew String(PQgetvalue(res, 0, 3));
+    u->Date = DateTime::ParseExact(gcnew String(PQgetvalue(res, 0, 4)), "yyyy-MM-dd", System::Globalization::CultureInfo::InvariantCulture);
+    u->About = gcnew String(PQgetvalue(res, 0, 5));
+    u->Contacts = gcnew String(PQgetvalue(res, 0, 7));
+
+    if (!PQgetisnull(res, 0, 6)) {
+        size_t unescapedLength = 0;
+        const char* escaped = PQgetvalue(res, 0, 6);
+        unsigned char* unescaped = PQunescapeBytea((const unsigned char*)escaped, &unescapedLength);
+
+        if (unescaped && unescapedLength > 0) {
+            array<Byte>^ bytes = gcnew array<Byte>((int)unescapedLength);
+            Marshal::Copy((IntPtr)(void*)unescaped, bytes, 0, (int)unescapedLength);
+            try {
+                MemoryStream^ ms = gcnew MemoryStream(bytes);
+                u->Photo = Image::FromStream(ms);
+            }
+            catch (...) {
+                u->Photo = nullptr;
+            }
+            PQfreemem(unescaped);
+        }
+    }
+
+
+    PQclear(res);
+    db.disconnect();
+
+    Session::SelectUser = u;
+
+    // вызываем переход на UserPage
+    Control^ parent = this->Parent;
+    while (parent != nullptr && parent->GetType()->Name != "MyUserControl") {
+        parent = parent->Parent;
+    }
+
+    if (parent != nullptr) {
+        QQ::MyUserControl^ main = safe_cast<QQ::MyUserControl^>(parent);
+        UserPage^ page = gcnew UserPage(u);
+        page->OnEditRequested += gcnew UserPage::EditRequestedHandler(main, &MyUserControl::OpenEditProfile);
+        page->OnCreatePost += gcnew UserPage::CreatePostRequestedHandler(main, &MyUserControl::OpenCreatePost);
+        main->Controls->Find("mainflow", true)[0]->Controls->Clear();
+        main->Controls->Find("mainflow", true)[0]->Controls->Add(page);
+    }
+}
+void QQ::PostOpen::AuthorLabel_Click(System::Object^ sender, System::EventArgs^ e)
+{
+    System::String^ name = this->user_post->Text->TrimStart('@');
+
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) {
+        MessageBox::Show("Не удалось подключиться к базе данных.");
+        return;
+    }
+
+    PGconn* conn = db.get();
+    std::string nameStr = marshal_as<std::string>(name);
+    std::string query = "SELECT * FROM people WHERE name = '" + nameStr + "' LIMIT 1;";
+    PGresult* res = PQexec(conn, query.c_str());
+
+    if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0) {
+        MessageBox::Show("Пользователь не найден.");
+        PQclear(res);
+        db.disconnect();
+        return;
+    }
+
+    QQ::User^ u = QQ::User::CreateEmpty();
+    u->ID = Convert::ToInt32(gcnew String(PQgetvalue(res, 0, 0)));
+    u->Username = gcnew String(PQgetvalue(res, 0, 1));
+    u->Password = gcnew String(PQgetvalue(res, 0, 2));
+    u->Interests = gcnew String(PQgetvalue(res, 0, 3));
+    u->Date = DateTime::ParseExact(gcnew String(PQgetvalue(res, 0, 4)), "yyyy-MM-dd", System::Globalization::CultureInfo::InvariantCulture);
+    u->About = gcnew String(PQgetvalue(res, 0, 5));
+    u->Contacts = gcnew String(PQgetvalue(res, 0, 7));
+
+    if (!PQgetisnull(res, 0, 6)) {
+        size_t unescapedLength = 0;
+        const char* escaped = PQgetvalue(res, 0, 6);
+        unsigned char* unescaped = PQunescapeBytea((const unsigned char*)escaped, &unescapedLength);
+
+        if (unescaped && unescapedLength > 0) {
+            array<Byte>^ bytes = gcnew array<Byte>((int)unescapedLength);
+            System::Runtime::InteropServices::Marshal::Copy(IntPtr((void*)unescaped), bytes, 0, (int)unescapedLength);
+            try {
+                MemoryStream^ ms = gcnew MemoryStream(bytes);
+                u->Photo = Image::FromStream(ms);
+            }
+            catch (...) {
+                u->Photo = nullptr;
+            }
+            PQfreemem(unescaped);
+        }
+    }
+
+    PQclear(res);
+    db.disconnect();
+
+    Session::SelectUser = u;
+
+    // Переход к UserPage
+    Control^ parent = this->Parent;
+    while (parent != nullptr && parent->GetType()->Name != "MyUserControl") {
+        parent = parent->Parent;
+    }
+
+    if (parent != nullptr) {
+        QQ::MyUserControl^ main = safe_cast<QQ::MyUserControl^>(parent);
+        UserPage^ page = gcnew UserPage(u);
+        page->OnEditRequested += gcnew UserPage::EditRequestedHandler(main, &MyUserControl::OpenEditProfile);
+        page->OnCreatePost += gcnew UserPage::CreatePostRequestedHandler(main, &MyUserControl::OpenCreatePost);
+        main->Controls->Find("mainflow", true)[0]->Controls->Clear();
+        main->Controls->Find("mainflow", true)[0]->Controls->Add(page);
+    }
+}
+
+void QQ::Comment::AuthorLabel_Click(System::Object^ sender, System::EventArgs^ e)
+{
+    System::String^ name = this->user_comm->Text->TrimStart('@');
+
+    PostgresConnection& db = PostgresConnection::getInstance();
+    if (!db.connect()) {
+        MessageBox::Show("Не удалось подключиться к базе данных.");
+        return;
+    }
+
+    PGconn* conn = db.get();
+    std::string nameStr = marshal_as<std::string>(name);
+    std::string query = "SELECT * FROM people WHERE name = '" + nameStr + "' LIMIT 1;";
+    PGresult* res = PQexec(conn, query.c_str());
+
+    if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0) {
+        MessageBox::Show("Пользователь не найден.");
+        PQclear(res);
+        db.disconnect();
+        return;
+    }
+
+    QQ::User^ u = QQ::User::CreateEmpty();
+    u->ID = Convert::ToInt32(gcnew String(PQgetvalue(res, 0, 0)));
+    u->Username = gcnew String(PQgetvalue(res, 0, 1));
+    u->Password = gcnew String(PQgetvalue(res, 0, 2));
+    u->Interests = gcnew String(PQgetvalue(res, 0, 3));
+    u->Date = DateTime::ParseExact(gcnew String(PQgetvalue(res, 0, 4)), "yyyy-MM-dd", System::Globalization::CultureInfo::InvariantCulture);
+    u->About = gcnew String(PQgetvalue(res, 0, 5));
+    u->Contacts = gcnew String(PQgetvalue(res, 0, 7));
+
+    if (!PQgetisnull(res, 0, 6)) {
+        size_t unescapedLength = 0;
+        const char* escaped = PQgetvalue(res, 0, 6);
+        unsigned char* unescaped = PQunescapeBytea((const unsigned char*)escaped, &unescapedLength);
+
+        if (unescaped && unescapedLength > 0) {
+            array<Byte>^ bytes = gcnew array<Byte>((int)unescapedLength);
+            System::Runtime::InteropServices::Marshal::Copy(IntPtr((void*)unescaped), bytes, 0, (int)unescapedLength);
+            try {
+                MemoryStream^ ms = gcnew MemoryStream(bytes);
+                u->Photo = Image::FromStream(ms);
+            }
+            catch (...) {
+                u->Photo = nullptr;
+            }
+            PQfreemem(unescaped);
+        }
+    }
+
+    PQclear(res);
+    db.disconnect();
+
+    Session::SelectUser = u;
+
+    // Переход к UserPage
+    Control^ parent = this->Parent;
+    while (parent != nullptr && parent->GetType()->Name != "MyUserControl") {
+        parent = parent->Parent;
+    }
+
+    if (parent != nullptr) {
+        QQ::MyUserControl^ main = safe_cast<QQ::MyUserControl^>(parent);
+        UserPage^ page = gcnew UserPage(u);
+        page->OnEditRequested += gcnew UserPage::EditRequestedHandler(main, &MyUserControl::OpenEditProfile);
+        page->OnCreatePost += gcnew UserPage::CreatePostRequestedHandler(main, &MyUserControl::OpenCreatePost);
+        main->Controls->Find("mainflow", true)[0]->Controls->Clear();
+        main->Controls->Find("mainflow", true)[0]->Controls->Add(page);
+    }
+}

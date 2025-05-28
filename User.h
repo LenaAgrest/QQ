@@ -17,6 +17,10 @@ namespace QQ {
             Contacts = contacts;
         }
 
+        static User^ CreateEmpty() {
+            return gcnew User(-1, "", "", "", DateTime::Now, "", nullptr, "");
+        }
+
         int ID;
         String^ Username;
         String^ Password;

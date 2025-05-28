@@ -26,6 +26,7 @@ void MyUserControl::InitializeComponent(void)
 	this->pictureBoxAvatar = (gcnew System::Windows::Forms::PictureBox());
 	this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 	this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+	this->contextMenuStrip1 = gcnew System::Windows::Forms::ContextMenuStrip();
 	this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 	this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 	this->panel1 = (gcnew System::Windows::Forms::Panel());
@@ -63,6 +64,7 @@ void MyUserControl::InitializeComponent(void)
 	this->panel4->Name = L"panel4";
 	this->panel4->Size = System::Drawing::Size(230, 80);
 	this->panel4->TabIndex = 5;
+	//this->panel4->Click += gcnew System::EventHandler(this, &MyUserControl::panel4_Click);
 	// 
 	// labelUserName
 	// 
@@ -76,7 +78,16 @@ void MyUserControl::InitializeComponent(void)
 	this->labelUserName->TabIndex = 2;
 	this->labelUserName->TabStop = true;
 	this->labelUserName->Text = L"Войти";
+	this->labelUserName->ContextMenuStrip = contextMenuStrip1;
 	this->labelUserName->Click += gcnew System::EventHandler(this, &MyUserControl::labelUserName_Click);
+	
+	this->menuItemLogout = gcnew ToolStripMenuItem("Выйти из аккаунта");
+	this->menuItemDeleteAccount = gcnew ToolStripMenuItem("Удалить аккаунт");
+	this->contextMenuStrip1->Items->AddRange(gcnew array<ToolStripItem^>{ menuItemLogout, menuItemDeleteAccount });
+	this->menuItemLogout->Click += gcnew EventHandler(this, &MyUserControl::Logout_Click);
+	this->menuItemDeleteAccount->Click += gcnew EventHandler(this, &MyUserControl::DeleteAccount_Click);
+
+
 	// 
 	// pictureBoxAvatar
 	// 
@@ -90,6 +101,7 @@ void MyUserControl::InitializeComponent(void)
 	this->pictureBoxAvatar->TabIndex = 0;
 	this->pictureBoxAvatar->TabStop = false;
 	this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyUserControl::pictureBoxAvatar_Paint);
+	this->pictureBoxAvatar->Click += gcnew System::EventHandler(this, &MyUserControl::panel4_Click);
 	// 
 	// pictureBox1
 	// 
@@ -151,7 +163,7 @@ void MyUserControl::InitializeComponent(void)
 	this->mainflow->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 	this->mainflow->Location = System::Drawing::Point(300, 0);
 	this->mainflow->Name = L"mainflow";
-	this->mainflow->Size = System::Drawing::Size(2, 2);
+	this->mainflow->Size = System::Drawing::Size(0, 0);
 	this->mainflow->TabIndex = 0;
 	this->mainflow->WrapContents = false;
 	this->mainflow->SizeChanged += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize2);
@@ -228,7 +240,7 @@ void MyUserControl::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 			g->DrawImage(img, RectangleF(offset, scaledSize));
 		}
 
-void MyUserControl::labelUserName_Click(Object^ sender, EventArgs^ e)
+void MyUserControl::panel4_Click(Object^ sender, EventArgs^ e)
 		{
 			if (user != nullptr) {
 				QQ::UserPage^ userpage = gcnew QQ::UserPage(user);
@@ -288,6 +300,56 @@ void MyUserControl::ReturnToUserPage(User^ updatedUser)
 			this->mainflow->Controls->Add(page);
 
 		}
+void MyUserControl::labelUserName_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	MouseEventArgs^ me = dynamic_cast<MouseEventArgs^>(e);
+	if (me != nullptr && me->Button == Windows::Forms::MouseButtons::Left) {
+		this->contextMenuStrip1->Show(this->labelUserName, Point(0, this->labelUserName->Height));
+
+	}
+}
+
+
+
+void MyUserControl::Logout_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	Session::CurrentUser = nullptr;
+	Application::Restart(); // Или переход на форму авторизации
+}
+
+void MyUserControl::DeleteAccount_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (MessageBox::Show("Вы уверены, что хотите удалить аккаунт? Это действие необратимо.",
+		"Подтверждение", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == System::Windows::Forms::DialogResult::Yes)
+	{
+		PostgresConnection& db = PostgresConnection::getInstance();
+		if (!db.connect()) {
+			MessageBox::Show("Ошибка подключения к БД при удалении аккаунта.");
+			return;
+		}
+
+		PGconn* conn = db.get();
+		int id = user->ID;
+
+		std::string idStr = std::to_string(id);
+		std::string q1 = "DELETE FROM posts WHERE blog_id = " + idStr + ";";
+		std::string q2 = "UPDATE commenti SET text = 'Пользователь удалён' WHERE id_user = " + idStr + ";";
+		std::string q3 = "DELETE FROM people WHERE id = " + idStr + ";";
+
+		PGresult* r1 = PQexec(conn, q1.c_str());
+		PQclear(r1);
+		PGresult* r2 = PQexec(conn, q2.c_str());
+		PQclear(r2);
+		PGresult* r3 = PQexec(conn, q3.c_str());
+		PQclear(r3);
+
+		db.disconnect();
+		MessageBox::Show("Аккаунт успешно удалён.");
+		Session::CurrentUser = nullptr;
+		Application::Restart(); // или переход на форму авторизации
+	}
+}
+
 
 void MyUserControl::MainForm_Load() {
 			try {

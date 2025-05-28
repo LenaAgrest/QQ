@@ -10,7 +10,9 @@ using namespace QQ;
         InitializeComponent();
         PostData = post;
         postId = post->ID;
-        user_post->Text = post->Author;
+        this->user_post->Text = post->Author;
+        this->user_post->Click += gcnew EventHandler(this, &PostControl::OnAuthorClick);
+
         title_post_l->Text = post->Title;
         
         date_post->Text = post->Date->ToString("dd.MM.yyyy HH:mm:ss");
@@ -20,8 +22,10 @@ using namespace QQ;
 
         this->tableLayoutPanel2->Click += gcnew EventHandler(this, &PostControl::HandleClick);
         for each (Control ^ ctrl in this->Controls) {
-            ctrl->Click += gcnew EventHandler(this, &PostControl::HandleClick);
+            if (ctrl != user_post) // игнорируем имя автора
+                ctrl->Click += gcnew EventHandler(this, &PostControl::HandleClick);
         }
+
         AttachClickHandlers(this); // Рекурсивно добавляем обработчик клика на всё содержимое
     }
 
@@ -34,6 +38,8 @@ using namespace QQ;
         this->user_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
         this->user_post->Location = System::Drawing::Point(3, 3);
         this->user_post->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left));
+        this->user_post->ForeColor = System::Drawing::Color::SlateBlue;
+        this->user_post->Cursor = Cursors::Hand;
 
 
         this->title_post_l = gcnew Label();
@@ -99,12 +105,15 @@ using namespace QQ;
 
     void QQ::PostControl::AttachClickHandlers(Control^ parent)
     {
-        parent->Click += gcnew EventHandler(this, &PostControl::HandleClick);
+        if (parent != this->user_post)
+            parent->Click += gcnew EventHandler(this, &PostControl::HandleClick);
+
         for each (Control ^ child in parent->Controls)
         {
-            AttachClickHandlers(child);
+            AttachClickHandlers(child); // рекурсивно — но уже исключено выше
         }
     }
+
 
 
     void QQ::PostControl::HandleClick(System::Object^ sender, System::EventArgs^ e)

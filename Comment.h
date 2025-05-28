@@ -67,6 +67,7 @@ namespace QQ {
            void Label1_Click(Object^ sender, EventArgs^ e);
            void Comment::otvet_Click(Object^ sender, EventArgs^ e);
            void comm_send_Click(System::Object^ sender, System::EventArgs^ e);
+           void AuthorLabel_Click(System::Object^ sender, System::EventArgs^ e);
 
     };
 }

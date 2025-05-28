@@ -62,6 +62,9 @@ void Comment::InitializeComponent(void)
 	this->user_comm->AutoSize = true;
 	this->user_comm->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold));
 	this->user_comm->Location = System::Drawing::Point(0, 0);
+	this->user_comm->ForeColor = System::Drawing::Color::SlateBlue;
+	this->user_comm->Cursor = Cursors::Hand;
+	this->user_comm->Click += gcnew EventHandler(this, &Comment::AuthorLabel_Click);
 
 	this->otvet_user_name = gcnew Label();
 	this->otvet_user_name->AutoSize = true;

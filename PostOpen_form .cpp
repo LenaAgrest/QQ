@@ -6,6 +6,7 @@
 #include "CommRepository.h"
 #include "Session.h"
 #include "Comment.h"
+#include "PostControl.h"
 
 using namespace QQ;
 
@@ -14,7 +15,9 @@ PostOpen::PostOpen(Post^ post) {
 	this->PostData = post;
 	InitializeComponent();
 	postId = post->ID;
-	user_post->Text = post->Author;
+	this->user_post->Text = post->Author;
+	this->user_post->Click += gcnew EventHandler(this, &PostOpen::AuthorLabel_Click);
+
 	title_post_l->Text = post->Title;
 	text_post->Text = post->Content;
 	date_post->Text = post->Date->ToString("dd.MM.yyyy HH:mm:ss");
@@ -51,6 +54,8 @@ void PostOpen::InitializeComponent(void)
 	this->user_post->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
 	this->user_post->Location = System::Drawing::Point(3, 3);
 	this->user_post->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left));
+	this->user_post->ForeColor = System::Drawing::Color::SlateBlue;
+	this->user_post->Cursor = Cursors::Hand;
 
 
 	this->title_post_l = gcnew Label();

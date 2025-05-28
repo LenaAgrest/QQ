@@ -12,8 +12,6 @@ using namespace System::Drawing;
 using namespace System::IO;
 using namespace System;
 
-int update_post(System::String^ title_post, System::String^ text_post, const int id);
-
 namespace QQ {
     public ref class PostOpen : public UserControl
     {
@@ -71,6 +69,7 @@ namespace QQ {
         void comm_send_Click(System::Object^ sender, System::EventArgs^ e);
 
         void ToggleComments_Click(Object^ sender, EventArgs^ e);
+        void AuthorLabel_Click(System::Object^ sender, System::EventArgs^ e);
 
     };
 }

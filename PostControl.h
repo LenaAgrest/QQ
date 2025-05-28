@@ -46,5 +46,7 @@ namespace QQ {
         TableLayoutPanel^ tableLayoutPanel2;
         int postId;
         System::Void HandleClick(System::Object^ sender, System::EventArgs^ e);
+        void OnAuthorClick(System::Object^ sender, System::EventArgs^ e);
+
     };
 }
