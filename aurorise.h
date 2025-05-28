@@ -5,8 +5,8 @@
 #include "reg.h"
 #include "MainForm1.h"
 int Check_ñredentials(std::string username, std::string password);
-namespace QQ {
 
+namespace QQ {
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
