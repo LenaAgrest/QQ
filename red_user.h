@@ -62,7 +62,7 @@ namespace QQ {
     public: event ProfileSavedHandler^ OnProfileSaved;
         
     public: 
-          bool UpdateUserFull(QQ::User^ user);
+          //bool UpdateUserFull(QQ::User^ user);
 
 
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
@@ -70,5 +70,6 @@ namespace QQ {
         void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPageRed::UpdatePhoto_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPageRed::update_pswd_Click(System::Object^ sender, System::EventArgs^ e);
+        bool UpdateUserFull(QQ::User^ user, System::String^ currentPassword, System::String^ newPassword);
     };
 }

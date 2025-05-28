@@ -81,23 +81,8 @@ int update_post(System::String^ title_post, System::String^ text_post, const int
     return 1;
 }
 
-bool QQ::UserPageRed::UpdateUserFull(QQ::User^ user)
+bool QQ::UserPageRed::UpdateUserFull(QQ::User^ user, System::String^ currentPassword, System::String^ newPassword)
 {
-    if (user->Photo == nullptr) {
-        MessageBox::Show("user->Photo == nullptr");
-    }
-    else {
-        MemoryStream^ testStream = gcnew MemoryStream();
-        try {
-            user->Photo->Save(testStream, System::Drawing::Imaging::ImageFormat::Png);
-            MessageBox::Show("user->Photo успешно сериализуется");
-        }
-        catch (Exception^ ex) {
-            MessageBox::Show("Ошибка сериализации photo: " + ex->Message);
-        }
-    }
-
-
     PostgresConnection& dbConnection = PostgresConnection::getInstance();
     if (!dbConnection.connect()) {
         MessageBox::Show("Ошибка подключения к базе данных");
@@ -106,6 +91,45 @@ bool QQ::UserPageRed::UpdateUserFull(QQ::User^ user)
 
     PGconn* conn = dbConnection.get();
 
+    // Проверка необходимости смены пароля
+    std::string passwordUpdatePart;
+    String^ old_password = user->Password;
+    std::string escapedNewPassword;
+    bool changePassword = false;
+
+    if (!String::IsNullOrWhiteSpace(newPassword)) {
+        std::string current = marshal_as<std::string>(currentPassword);
+        std::string stored = marshal_as<std::string>(old_password);
+
+        if (current != stored) {
+            MessageBox::Show("Текущий пароль неверен!");
+            dbConnection.disconnect();
+            return false;
+        }
+
+        std::string newPass = marshal_as<std::string>(newPassword);
+        if (newPass == current) {
+            MessageBox::Show("Новый пароль не должен совпадать с текущим!");
+            dbConnection.disconnect();
+            return false;
+        }
+
+        char* escapedPass = PQescapeLiteral(conn, newPass.c_str(), newPass.length());
+        if (!escapedPass) {
+            MessageBox::Show("Ошибка экранирования нового пароля");
+            dbConnection.disconnect();
+            return false;
+        }
+        escapedNewPassword = std::string(escapedPass);
+        PQfreemem(escapedPass);
+        passwordUpdatePart = ", pswd = " + escapedNewPassword;
+        changePassword = true;
+
+        // Обновляем локальное поле
+        user->Password = newPassword;
+    }
+
+    // Сериализация прочих полей
     String^ interests1 = user->Interests;
     String^ about1 = user->About;
     String^ contacts1 = user->Contacts;
@@ -139,8 +163,8 @@ bool QQ::UserPageRed::UpdateUserFull(QQ::User^ user)
         }
     }
 
-    const Oid TEXTOID = 25;     // text
-    const Oid BYTEAOID = 17;    // bytea
+    const Oid TEXTOID = 25;
+    const Oid BYTEAOID = 17;
     const Oid DATEOID = 1082;
 
     const char* paramValues[5];
@@ -148,18 +172,17 @@ bool QQ::UserPageRed::UpdateUserFull(QQ::User^ user)
     int paramFormats[5] = { 0, 0, 0, hasPhoto ? 1 : 0, 0 };
     Oid paramTypes[5] = { TEXTOID, DATEOID, TEXTOID, BYTEAOID, TEXTOID };
 
-    paramValues[0] = interests.c_str();
-    paramLengths[0] = interests.length();
-    paramValues[1] = born.c_str();
-    paramLengths[1] = born.length();
-    paramValues[2] = about.c_str();
-    paramLengths[2] = about.length();
-    paramValues[3] = hasPhoto ? photoPtr : nullptr;
-    paramLengths[3] = photoLength;
-    paramValues[4] = contacts.c_str();
-    paramLengths[4] = contacts.length();
+    paramValues[0] = interests.c_str();     paramLengths[0] = interests.length();
+    paramValues[1] = born.c_str();          paramLengths[1] = born.length();
+    paramValues[2] = about.c_str();         paramLengths[2] = about.length();
+    paramValues[3] = hasPhoto ? photoPtr : nullptr; paramLengths[3] = photoLength;
+    paramValues[4] = contacts.c_str();      paramLengths[4] = contacts.length();
 
-    std::string query = "UPDATE people SET interests = $1, date_of_birth = $2, about_me = $3, photo = $4, contacts = $5 WHERE id = " + std::to_string(user->ID);
+    std::string query = "UPDATE public.people SET interests = $1, date_of_birth = $2, about_me = $3, photo = $4, contacts = $5";
+    if (changePassword) {
+        query += passwordUpdatePart;
+    }
+    query += " WHERE id = " + std::to_string(user->ID);
 
     PGresult* res = PQexecParams(
         conn,

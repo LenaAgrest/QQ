@@ -477,7 +477,7 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 		}
 	}
 
-	if (UpdateUserFull(user_izm)) {
+	if (UpdateUserFull(user_izm, now_pswd_text->Text, new_pswd_text->Text)) {
 		this->OnProfileSaved(user_izm);
 	}
 	else {
