@@ -39,7 +39,7 @@ Comment::Comment(Post^ post, Comm^ comm) {
 	// ограничение по ширине и поведение
 	this->MaximumSize = System::Drawing::Size(1018, 0);
 	this->Dock = DockStyle::Top;
-	this->Margin = System::Windows::Forms::Padding(0, 10, 0, 0);
+	this->Margin = System::Windows::Forms::Padding(0, 0, 0, 0);
 	this->BackColor = System::Drawing::Color::White;
 
 	if (!comm_allowed)
@@ -143,7 +143,7 @@ void Comment::InitializeComponent(void)
 	this->panel1->Controls->Add(this->comm_send);
 	this->panel1->Controls->Add(this->comm_tb);
 	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
-	this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	//this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->panel1->Location = System::Drawing::Point(0, 0);
 	this->panel1->MaximumSize = System::Drawing::Size(980, 34);
 
@@ -151,15 +151,16 @@ void Comment::InitializeComponent(void)
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
 	this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel2->AutoSize = true;
-	this->tableLayoutPanel2->ColumnCount = 1;
-	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
+	this->tableLayoutPanel2->ColumnCount = 2;
+	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 1));
+	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 99));
 	this->tableLayoutPanel2->RowCount = 3;
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-	this->tableLayoutPanel2->Controls->Add(this->panel2, 0, 0);
-	this->tableLayoutPanel2->Controls->Add(this->text_comm, 0, 1);
-	this->tableLayoutPanel2->Controls->Add(this->panel3, 0, 2);
+	this->tableLayoutPanel2->Controls->Add(this->panel2, 1, 0);
+	this->tableLayoutPanel2->Controls->Add(this->text_comm, 1, 1);
+	this->tableLayoutPanel2->Controls->Add(this->panel3, 1, 2);
 	this->Controls->Add(tableLayoutPanel2);
 }
 
@@ -228,8 +229,6 @@ void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
 		this->commId
 	);
 
-
-
 	if (success) {
 		comm_tb->Clear();
 
@@ -242,7 +241,6 @@ void Comment::comm_send_Click(Object^ sender, EventArgs^ e)
 	}
 
 }
-
 
 Comment::~Comment()
 {

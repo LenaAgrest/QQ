@@ -15,7 +15,8 @@ PostOpen::PostOpen(Post^ post) {
 	PostData = post;
 	postId = post->ID;
 	user_post->Text = post->Author;
-	title_post->Text = post->Title;
+	title_post_l->Text = post->Title;
+	//title_post->Text = post->Title;
 	text_post->Text = post->Content;
 	date_post->Text = post->Date->ToString("dd.MM.yyyy hh:mm:ss");
 
@@ -23,9 +24,9 @@ PostOpen::PostOpen(Post^ post) {
 	post->Image ? image_post->Image = post->Image : this->tableLayoutPanel2->Controls->Remove(this->image_post);
 
 	comm_info->Text = post->CommentsAllowed ? L"" : L"Запрещены";
-	if (comm_info->Text == "")
+	if (comm_info->Text == "Запрещены")
 	{
-		this->tableLayoutPanel2->Controls->Remove(this->comm_info);
+		this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
 	}
 
 	RenderComments();
@@ -83,7 +84,6 @@ void PostOpen::InitializeComponent(void)
 	this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 	this->label1->Font = (gcnew System::Drawing::Font(L"Montserrat ExtraBold", 19.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 	this->label1->Size = System::Drawing::Size(40, 20);
-	this->label1->TabIndex = 8;
 	this->label1->Text = L"...";
 	this->label1->Dock = DockStyle::Right;
 	this->label1->UseCompatibleTextRendering = true;
@@ -102,15 +102,12 @@ void PostOpen::InitializeComponent(void)
 	this->label2 = gcnew Label();
 	this->label2->AutoSize = true;
 	this->label2->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 16.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point));
-	this->label2->Location = System::Drawing::Point(0, 5);
-	this->label2->TabIndex = 9;
 	this->label2->Text = L"Комментарии";
 
 
 	this->panel2 = gcnew Panel();
 	this->panel2->AutoSize = true;
 	this->panel2->Dock = DockStyle::Top;
-	this->panel2->TabIndex = 4;
 	this->panel2->Controls->Add(label1);
 	this->panel2->Controls->Add(user_post);
 
@@ -122,7 +119,7 @@ void PostOpen::InitializeComponent(void)
 	this->panel3 = gcnew Panel();
 	this->panel3->Size = System::Drawing::Size(730, 30);
 	this->panel3->Dock = DockStyle::Top;
-	this->panel3->TabIndex = 4;
+	this->panel3->Margin = System::Windows::Forms::Padding(0);
 	this->panel3->Controls->Add(this->date_post);
 
 
@@ -166,13 +163,16 @@ void PostOpen::InitializeComponent(void)
 	this->panel1->Controls->Add(this->comm_send);
 	this->panel1->Controls->Add(this->comm_tb);
 	this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
+	this->panel1->Padding = System::Windows::Forms::Padding(0);
 	this->panel1->Location = System::Drawing::Point(0, 0);
 	this->panel1->MaximumSize = System::Drawing::Size(1010, 34);
-	this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	//this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
 	this->tableLayoutPanel2->AutoSize = true;
+	this->tableLayoutPanel2->Padding = System::Windows::Forms::Padding(0);
+	//this->tableLayoutPanel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->tableLayoutPanel2->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->tableLayoutPanel2->ColumnCount = 1;
 	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
@@ -191,8 +191,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->Controls->Add(this->image_post, 0, 3);
 	this->tableLayoutPanel2->Controls->Add(this->panel3, 0, 4);
 	this->tableLayoutPanel2->Controls->Add(this->label2, 0, 5);
-	this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
-	this->tableLayoutPanel2->Location = System::Drawing::Point(0, 0);
+	//this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
 	this->tableLayoutPanel2->Size = System::Drawing::Size(1018, 402);
 	this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
 
@@ -201,9 +200,11 @@ void PostOpen::InitializeComponent(void)
 	this->commentsLayout = gcnew TableLayoutPanel();
 	this->commentsLayout->AutoSize = true;
 	this->commentsLayout->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
+	//this->commentsLayout->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->commentsLayout->ColumnCount = 1;
 	this->commentsLayout->RowCount = 0;
 	this->commentsLayout->Dock = DockStyle::Top;
+	this->commentsLayout->Padding = System::Windows::Forms::Padding(0);
 	this->commentsLayout->BackColor = Color::White;
 
 
@@ -211,22 +212,22 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel1 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel1->ColumnCount = 1;
 	this->tableLayoutPanel1->Dock = DockStyle::Fill;
-	//this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
+	this->tableLayoutPanel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->tableLayoutPanel1->BackColor = System::Drawing::Color::White;
 	this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100)));
 	this->tableLayoutPanel1->Controls->Add(this->tableLayoutPanel2, 0, 0);
 	this->tableLayoutPanel1->Controls->Add(this->commentsLayout, 0, 1);
-	this->tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
 	this->tableLayoutPanel1->RowCount = 2;
 	this->tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel1->AutoSize = true;
 	this->tableLayoutPanel1->MaximumSize = System::Drawing::Size(1018, 0);
 	this->tableLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+
 	this->Controls->Add(tableLayoutPanel1);
 }
 
 void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
-
 {
 	this->title_post->Multiline = true;
 	this->title_post->BackColor = System::Drawing::Color::White;
@@ -280,7 +281,6 @@ void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
 	this->otmena->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 	this->otmena->UseVisualStyleBackColor = false;
 	this->otmena->Click += gcnew System::EventHandler(this, &PostOpen::otmena_Click);
-
 
 
 	this->panel3->Controls->Add(this->save);

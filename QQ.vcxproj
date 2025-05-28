@@ -142,6 +142,8 @@
     <ClCompile Include="Comment.cpp" />
     <ClCompile Include="CommRepository.cpp" />
     <ClCompile Include="CreatePost.cpp" />
+    <ClCompile Include="MainForm1.cpp" />
+    <ClCompile Include="MyUserControl.cpp" />
     <ClCompile Include="PostControl_form.cpp" />
     <ClCompile Include="PostOpen_form .cpp" />
     <ClCompile Include="update.cpp" />
