@@ -337,27 +337,37 @@ void QQ::UserPage::post_Load(User^ user)
 	try {
 		List<QQ::Post^>^ posts = PostRepository::LoadPostsUser(user);
 
-		// Добавляем каждый пост как элемент управления
+		// Удалим все посты, добавленные ранее (оставляем только служебные элементы)
+		for (int i = user_table->Controls->Count - 1; i >= 0; --i)
+		{
+			Control^ ctrl = user_table->Controls[i];
+			if (dynamic_cast<PostControl^>(ctrl) != nullptr)
+			{
+				user_table->Controls->RemoveAt(i);
+			}
+		}
+
+		// Добавим отсортированные посты
 		for each (QQ::Post ^ post in posts) {
 			QQ::PostControl^ control = gcnew QQ::PostControl(post);
-			//control->Margin = System::Windows::Forms::Padding(0,10,0,0);
 			control->OnPostSelected = gcnew QQ::PostControl::PostSelectedHandler(this, &UserPage::OpenPost);
-			this->user_table->Controls->Add(control, 0, 3);
-			control->Dock = DockStyle::Left;
+			control->Dock = DockStyle::Top;
+			user_table->Controls->Add(control);
 		}
 	}
 	catch (Exception^ ex) {
 		MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
 	}
-	if (image != nullptr)
-	{
+
+	// Аватарка
+	if (image != nullptr) {
 		this->pictureBoxAvatar->BackgroundImage = image;
 	}
-	else
-	{
+	else {
 		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
 	}
 }
+
 
 void QQ::UserPage::RefreshUserPageAfterDeletion()
 {
