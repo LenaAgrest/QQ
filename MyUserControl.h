@@ -30,7 +30,7 @@ namespace QQ {
 
 	private: System::Windows::Forms::Panel^ Panel;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
+	public: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 	private: System::Windows::Forms::PictureBox^ pictureBoxAvatar;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Label^ user_post;
@@ -89,6 +89,9 @@ namespace QQ {
 
 		void Logout_Click(System::Object^ sender, System::EventArgs^ e);
 		void DeleteAccount_Click(System::Object^ sender, System::EventArgs^ e);
+		void UserPageNextClick(System::Object^ sender, System::EventArgs^ e);
+		void UserPagePrevClick(System::Object^ sender, System::EventArgs^ e);
+
 
 	};
 }

@@ -4,10 +4,11 @@
 #include "Comm.h"
 #include "Session.h"
 #include "CommRepository.h"
+#include "PostOpen.h"
 
 using namespace QQ;
 
-Comment::Comment(Post^ post, Comm^ comm) {
+Comment::Comment(Post^ post, Comm^ comm, bool check) {
 	this->PostData = post;
 	InitializeComponent();
 	postId = post->ID;
@@ -57,6 +58,15 @@ Comment::Comment(Post^ post, Comm^ comm) {
 		this->tableLayoutPanel2->Controls->Remove(this->panel1);
 		this->otvet->BackgroundImage = Image::FromFile("answer.png");
 		this->otvet->Enabled = true;
+	}
+
+	if (Session::CurrentUser == nullptr ||
+		(Session::CurrentUser->ID != comm->ID_user && !check))
+	{
+		this->label1->Visible = false;
+	}
+	else {
+		this->label1->Visible = true;
 	}
 }
 

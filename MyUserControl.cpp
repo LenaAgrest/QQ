@@ -246,20 +246,31 @@ void MyUserControl::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 		}
 
 void MyUserControl::panel4_Click(Object^ sender, EventArgs^ e)
-		{
-			if (user != nullptr) {
-				QQ::UserPage^ userpage = gcnew QQ::UserPage(user);
-				QQ::CreatePost^ cr_post = gcnew QQ::CreatePost(user);
-				userpage->OnEditRequested += gcnew QQ::UserPage::EditRequestedHandler(this, &MyUserControl::OpenEditProfile);
-				userpage->OnCreatePost += gcnew UserPage::CreatePostRequestedHandler(this, &MyUserControl::OpenCreatePost);
+{
+	if (user != nullptr)
+	{
+		ReturnToUserPage(user);
+	}
+}
 
-				this->mainflow->Controls->Clear();
-				this->mainflow->Controls->Add(userpage);
-			}
-			this->panel1->ResumeLayout(false);
-			//this->panel1->Resize += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize);
-			this->panel1->PerformLayout();
-		}
+void MyUserControl::UserPageNextClick(System::Object^ sender, System::EventArgs^ e)
+{
+	if (mainflow->Controls->Count > 0) {
+		UserPage^ page = dynamic_cast<UserPage^>(mainflow->Controls[0]);
+		if (page != nullptr)
+			page->NextUserPage(sender, e);
+	}
+}
+
+void MyUserControl::UserPagePrevClick(System::Object^ sender, System::EventArgs^ e)
+{
+	if (mainflow->Controls->Count > 0) {
+		UserPage^ page = dynamic_cast<UserPage^>(mainflow->Controls[0]);
+		if (page != nullptr)
+			page->PrevUserPage(sender, e);
+	}
+}
+
 
 void MyUserControl::OpenEditProfile(User^ user)
 {
@@ -296,26 +307,53 @@ void MyUserControl::OpenCreatePost(User^ user)
 
 
 void MyUserControl::ReturnToUserPage(User^ updatedUser)
-		{
-			this->user = updatedUser;
-			QQ::Session::CurrentUser = updatedUser;
-			this->flowLayoutPanel2->Visible = true;
+{
+	this->user = updatedUser;
+	QQ::Session::CurrentUser = updatedUser;
+	this->labelUserName->Text = updatedUser->Username;
 
-			this->labelUserName->Text = updatedUser->Username;
+	this->pictureBoxAvatar->BackgroundImage = updatedUser->Photo != nullptr
+		? updatedUser->Photo
+		: Image::FromFile("ava.png");
 
-			if (updatedUser->Photo != nullptr) {
-				this->pictureBoxAvatar->BackgroundImage = updatedUser->Photo;
-			}
-			else {
-				this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
-			}
+	// Очистка mainflow
+	this->mainflow->Controls->Clear();
 
-			this->mainflow->Controls->Clear();
-			UserPage^ page = gcnew UserPage(updatedUser);
-			page->OnEditRequested += gcnew UserPage::EditRequestedHandler(this, &MyUserControl::OpenEditProfile);
-			this->mainflow->Controls->Add(page);
+	// Создаём UserPage
+	UserPage^ page = gcnew UserPage(updatedUser);
+	page->OnEditRequested += gcnew UserPage::EditRequestedHandler(this, &MyUserControl::OpenEditProfile);
+	page->OnCreatePost += gcnew UserPage::CreatePostRequestedHandler(this, &MyUserControl::OpenCreatePost);
+	this->mainflow->Controls->Add(page);
 
-		}
+	// Получаем посты и определяем нужно ли листание
+	List<QQ::Post^>^ posts = PostRepository::LoadPostsUser(updatedUser);
+	bool isCurrentUser = (Session::CurrentUser->ID == updatedUser->ID);
+	int totalPosts = posts != nullptr ? posts->Count : 0;
+
+	if (isCurrentUser && totalPosts > 10) {
+		// Показываем листалку
+		this->flowLayoutPanel2->Visible = true;
+		this->pageLabel->Text = "Страница 1";
+		this->prevPageButton->Enabled = false;
+		this->pageButton->Enabled = true;
+
+		// Очищаем все предыдущие обработчики
+		this->pageButton->Click -= gcnew EventHandler(this, &MyUserControl::pageButton_Click);
+		this->prevPageButton->Click -= gcnew EventHandler(this, &MyUserControl::prevPageButton_Click);
+		this->pageButton->Click -= gcnew EventHandler(this, &MyUserControl::UserPageNextClick);
+		this->prevPageButton->Click -= gcnew EventHandler(this, &MyUserControl::UserPagePrevClick);
+
+		// Назначаем только нужные
+		this->pageButton->Click += gcnew EventHandler(this, &MyUserControl::UserPageNextClick);
+		this->prevPageButton->Click += gcnew EventHandler(this, &MyUserControl::UserPagePrevClick);
+	}
+	else {
+		this->flowLayoutPanel2->Visible = false;
+	}
+}
+
+
+
 
 void MyUserControl::labelUserName_Click(System::Object^ sender, System::EventArgs^ e)
 {
@@ -357,7 +395,7 @@ void MyUserControl::DeleteAccount_Click(System::Object^ sender, System::EventArg
 
 		std::string idStr = std::to_string(id);
 		std::string q1 = "DELETE FROM posts WHERE blog_id = " + idStr + ";";
-		std::string q2 = "UPDATE commenti SET text = 'Пользователь удалён' WHERE id_user = " + idStr + ";";
+		std::string q2 = "DELETE FROM commenti WHERE id_user = " + idStr + ";";
 		std::string q3 = "DELETE FROM people WHERE id = " + idStr + ";";
 
 		PGresult* r1 = PQexec(conn, q1.c_str());
@@ -394,6 +432,9 @@ void MyUserControl::MainForm_Load() {
 	// Показывать/прятать кнопку
 	pageButton->Visible = (totalPosts > currentPage * postsPerPage);
 	prevPageButton->Visible = (currentPage > 1);
+
+
+
 		}
 
 		void MyUserControl::RefreshHomeAfterDeletion()

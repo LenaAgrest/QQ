@@ -49,6 +49,19 @@ PostOpen::PostOpen(Post^ post) {
 		gcnew EventHandler(this, &PostOpen::ToggleComments_Click)
 	);
 	this->svoistva_post->Items->Add(this->toggleCommentsItem);
+
+	String^ authorName = post->Author->StartsWith("@") ? post->Author->Substring(1) : post->Author;
+	if (Session::CurrentUser == nullptr || authorName != Session::CurrentUser->Username)
+	{
+		this->label1->Visible = false;
+		isPostAuthor = false;
+	}
+	else
+	{
+		this->label1->Visible = true;
+		isPostAuthor = true;
+	}
+
 	//comm_en = post->CommentsAllowed ? L"Запретить комментарии" : L"Разрешить комментарии";
 	RenderComments();
 }
@@ -348,7 +361,7 @@ void PostOpen::Label1_Click(Object^ sender, EventArgs^ e)
 // Рекурсивно рендерит один узел дерева
 void PostOpen::RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idToUI)
 {
-	Comment^ ui = gcnew Comment(this->PostData, comm);
+	Comment^ ui = gcnew Comment(this->PostData, comm, isPostAuthor);
 	idToUI[comm->ID] = ui;
 
 	ui->Dock = DockStyle::Top;

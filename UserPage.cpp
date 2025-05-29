@@ -7,6 +7,7 @@
 #include "PostRepository.h"
 #include <ctime>
 #include <string>
+#include "MyUserControl.h"
 
 
 using namespace QQ;
@@ -276,7 +277,7 @@ void UserPage::InitializeComponent(void)
 	this->user_table->Controls->Add(this->panel4, 0, 0);
 	this->user_table->Controls->Add(this->about_user, 0, 1);
 	this->user_table->Location = System::Drawing::Point(0, 0);
-	this->user_table->RowCount = 4;
+	this->user_table->RowCount = 3;
 	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
 	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
 	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
@@ -336,37 +337,72 @@ void QQ::UserPage::post_Load(User^ user)
 {
 	try {
 		List<QQ::Post^>^ posts = PostRepository::LoadPostsUser(user);
+		int total = posts->Count;
+		int perPage = 10;
 
-		// Удалим все посты, добавленные ранее (оставляем только служебные элементы)
-		for (int i = user_table->Controls->Count - 1; i >= 0; --i)
-		{
+		// расчёт страниц
+		totalUserPages = Math::Max(1, (total + perPage - 1) / perPage);
+		if (currentUserPage > totalUserPages)
+			currentUserPage = totalUserPages;
+
+		// Найдём индекс blogLabel — посты идут после него
+		int blogLabelIndex = user_table->Controls->IndexOf(blogLabel);
+		MessageBox::Show("Надпись " + blogLabelIndex + ", ");
+
+		// Удалим старые посты (только после blogLabel)
+		for (int i = user_table->Controls->Count - 1; i > blogLabelIndex; --i) {
 			Control^ ctrl = user_table->Controls[i];
 			if (dynamic_cast<PostControl^>(ctrl) != nullptr)
-			{
 				user_table->Controls->RemoveAt(i);
-			}
 		}
 
-		// Добавим отсортированные посты
-		for each (QQ::Post ^ post in posts) {
+		// отображение нужных постов
+		int start = (currentUserPage - 1) * perPage;
+		int end = Math::Min(start + perPage, total);
+
+		for (int i = start; i < end; ++i) {
+			QQ::Post^ post = posts[i];
 			QQ::PostControl^ control = gcnew QQ::PostControl(post);
 			control->OnPostSelected = gcnew QQ::PostControl::PostSelectedHandler(this, &UserPage::OpenPost);
 			control->Dock = DockStyle::Top;
-			user_table->Controls->Add(control);
+
+			user_table->Controls->Add(control, 0, 3 + (i - start));
 		}
+
 	}
 	catch (Exception^ ex) {
 		MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
 	}
 
 	// Аватарка
-	if (image != nullptr) {
+	if (image != nullptr)
 		this->pictureBoxAvatar->BackgroundImage = image;
-	}
-	else {
+	else
 		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+}
+
+
+
+
+
+void QQ::UserPage::NextUserPage(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentUserPage < totalUserPages)
+	{
+		currentUserPage++;
+		post_Load(gcnew User(user_Id, user_name->Text, pswd, "", DateTime::Now, "", nullptr, ""));
 	}
 }
+
+void QQ::UserPage::PrevUserPage(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentUserPage > 1)
+	{
+		currentUserPage--;
+		post_Load(gcnew User(user_Id, user_name->Text, pswd, "", DateTime::Now, "", nullptr, ""));
+	}
+}
+
 
 
 void QQ::UserPage::RefreshUserPageAfterDeletion()
@@ -411,8 +447,9 @@ void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
 
 void QQ::UserPage::createPost_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	if (OnCreatePost != nullptr)
+	if (OnCreatePost != nullptr) {
 		OnCreatePost(Session::CurrentUser);
+	}
 }
 
 

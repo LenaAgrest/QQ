@@ -56,13 +56,18 @@ namespace QQ {
         bool isExpanded = true;
         String^ pswd;
         Image^ image;
+        int currentUserPage = 1;
+        int totalUserPages = 1;
+
         
+
 
     public: delegate void EditRequestedHandler(User^ user);
     public: EditRequestedHandler^ OnEditRequested;
     public: delegate void CreatePostRequestedHandler(User^ user);
     public: CreatePostRequestedHandler^ OnCreatePost;
-
+    public: void NextUserPage(System::Object^ sender, System::EventArgs^ e);
+    public: void PrevUserPage(System::Object^ sender, System::EventArgs^ e);
 
     private:
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
@@ -73,7 +78,5 @@ namespace QQ {
         void QQ::UserPage::OpenPost(QQ::Post^ post);
         void QQ::UserPage::RefreshUserPageAfterDeletion(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::RefreshUserPageAfterDeletion();
-        
-
     };
 }

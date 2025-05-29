@@ -56,6 +56,7 @@ namespace QQ {
         TableLayoutPanel^ tableLayoutPanel2;
         TableLayoutPanel^ commentsLayout;
         int postId;
+    public: bool isPostAuthor;
     private: FlowLayoutPanel^ repliesPanel;
 
         void Delete_Click(Object^ sender, EventArgs^ e);

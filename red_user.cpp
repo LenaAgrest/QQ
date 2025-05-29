@@ -3,6 +3,7 @@
 #include <ctime>
 #include <string>
 #include "UserPage.h"
+#include "Session.h"
 
 using namespace QQ;
 
@@ -434,6 +435,8 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 	user_izm->Interests = interesi_text->Text;
 	user_izm->Contacts = contacts_text->Text;
 	user_izm->Photo = img;
+	QQ::Session::CurrentUser = user_izm;
+
 
 	// Обрабатываем дату рождения
 	try {

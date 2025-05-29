@@ -14,7 +14,7 @@ using namespace System;
 namespace QQ {
     public ref class Comment : public UserControl
     {
-    public: Comment(Post^ post, Comm^ comm);
+    public: Comment(Post^ post, Comm^ comm, bool check);
     public:
         property int ID;
         property int parentId;
