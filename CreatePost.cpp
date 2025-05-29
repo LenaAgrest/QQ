@@ -1,5 +1,7 @@
 
 #include "User.h"
+#include "UserPage.h"
+#include "Session.h"
 #include "CreatePost.h"
 #include "PostRepository.h"
 #include <ctime>
@@ -233,6 +235,7 @@ void QQ::CreatePost::UpdatePhoto_Click(System::Object^ sender, System::EventArgs
 			this->testBox->Image = img;
 			this->testBox->Visible = true;
 			this->testBox->Refresh();
+			this->upd_photo->Text = "Изменить";
 		}
 		catch (Exception^ ex)
 		{
@@ -248,30 +251,36 @@ void QQ::CreatePost::save_Click(System::Object^ sender, System::EventArgs^ e)
 	String^ title = header_text->Text->Trim();
 	String^ content = text_post_text->Text->Trim();
 
-	/*if (String::IsNullOrWhiteSpace(title) || String::IsNullOrWhiteSpace(content))
-	{
-		MessageBox::Show("Поля заголовка и текста не должны быть пустыми.");
-		return;
-	}*/
 	DateTime^ s = DateTime::Now;
-	// сохранение
+
 	bool success = PostRepository::AddPost(
 		this->user_Id,
-		this->header_text->Text,
-		this->text_post_text->Text,
+		title,
+		content,
 		DateTime::Now,
-		this->imageBytes // массив байтов PNG-фото
+		this->imageBytes
 	);
-
-
 
 	if (success) {
 		MessageBox::Show("Пост успешно создан!");
+
+		if (OnPostCreated != nullptr) {
+			OnPostCreated(Session::CurrentUser);
+		}
+		else {
+			// Резервный переход — на всякий случай
+			Control^ parent = this->Parent;
+			if (parent != nullptr) {
+				parent->Controls->Clear();
+				parent->Controls->Add(gcnew UserPage(Session::CurrentUser));
+			}
+		}
 	}
 	else {
 		MessageBox::Show("Ошибка при создании поста.");
 	}
 }
+
 
 CreatePost::~CreatePost()
 {

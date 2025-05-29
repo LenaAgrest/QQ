@@ -42,7 +42,6 @@ UserPage::UserPage(User^ user) {
 	birthday_text->Text = user->Date->ToString("dd.MM.yyyy");
 	image = user->Photo;
 	post_Load(user);
-
 }
 
 void UserPage::InitializeComponent(void)
@@ -188,7 +187,6 @@ void UserPage::InitializeComponent(void)
 	this->user_name->Size = System::Drawing::Size(188, 69);
 	this->user_name->TabIndex = 1;
 	this->user_name->Text = L"label3";
-	this->user_name->Click += gcnew System::EventHandler(this, &UserPage::user_name_Click);
 	// 
 	// pictureBoxAvatar
 	// 
@@ -241,6 +239,7 @@ void UserPage::InitializeComponent(void)
 	this->panel4->Name = L"panel4";
 	this->panel4->Size = System::Drawing::Size(1010, 140);
 
+
 	this->blogLabel = gcnew Label();
 	this->blogLabel->Font = gcnew System::Drawing::Font(L"Montserrat", 18, System::Drawing::FontStyle::Bold);
 	this->blogLabel->ForeColor = System::Drawing::Color::SlateBlue;
@@ -253,16 +252,16 @@ void UserPage::InitializeComponent(void)
 
 	this->about_user = gcnew TableLayoutPanel();
 	this->about_user->AutoSize = true;
-	this->about_user->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowOnly;
+	this->about_user->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 	this->about_user->BackColor = System::Drawing::Color::SlateBlue;
 	this->about_user->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->about_user->ColumnCount = 1;
 	this->about_user->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 100));
 	this->about_user->Location = System::Drawing::Point(0, 0);
-	this->about_user->Margin = System::Windows::Forms::Padding(2, 0, 2, 2);
+	this->about_user->Margin = System::Windows::Forms::Padding(2, 0, 0, 2);
 	this->about_user->RowCount = 8; // будет нарастать динамически
-	this->about_user->Size = System::Drawing::Size(1010, 434);
-	this->about_user->MaximumSize = System::Drawing::Size(1010, 0);
+	this->about_user->Size = System::Drawing::Size(1018, 434);
+	this->about_user->MaximumSize = System::Drawing::Size(1018, 0);
 	//this->about_user->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// user_table
@@ -302,9 +301,6 @@ void QQ::UserPage::RefreshUserPageAfterDeletion(System::Object^ sender, System::
 	}
 }
 
-
-
-
 void QQ::UserPage::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 {
 	if (this->pictureBoxAvatar->BackgroundImage == nullptr)
@@ -336,8 +332,6 @@ void QQ::UserPage::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 	g->DrawImage(img, RectangleF(offset, scaledSize));
 }
 
-
-
 void QQ::UserPage::post_Load(User^ user)
 {
 	try {
@@ -350,9 +344,7 @@ void QQ::UserPage::post_Load(User^ user)
 			control->OnPostSelected = gcnew QQ::PostControl::PostSelectedHandler(this, &UserPage::OpenPost);
 			this->user_table->Controls->Add(control, 0, 3);
 			control->Dock = DockStyle::Left;
-
 		}
-
 	}
 	catch (Exception^ ex) {
 		MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
@@ -426,10 +418,6 @@ void QQ::UserPage::OpenPost(QQ::Post^ post)
 void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	this->OnEditRequested(Session::CurrentUser);
-}
-
-void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e)
-{
 }
 
 UserPage::~UserPage()

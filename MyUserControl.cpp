@@ -278,6 +278,7 @@ void MyUserControl::OpenPost(Post^ post)
 	this->flowLayoutPanel2->Visible = false;
 
 	PostOpen^ postOpen = gcnew PostOpen(post);
+	postOpen->OnPostDeleted += gcnew PostOpen::PostDeletedHandler(this, &MyUserControl::RefreshHomeAfterDeletion);
 	this->mainflow->Controls->Add(postOpen);
 }
 
@@ -288,15 +289,17 @@ void MyUserControl::OpenCreatePost(User^ user)
 	this->flowLayoutPanel2->Visible = false;
 
 	CreatePost^ create = gcnew CreatePost(user);
+	create->OnPostCreated += gcnew CreatePost::PostSavedHandler(this, &MyUserControl::ReturnToUserPage);
+
 	this->mainflow->Controls->Add(create);
 }
-
 
 
 void MyUserControl::ReturnToUserPage(User^ updatedUser)
 		{
 			this->user = updatedUser;
 			QQ::Session::CurrentUser = updatedUser;
+			this->flowLayoutPanel2->Visible = true;
 
 			this->labelUserName->Text = updatedUser->Username;
 
@@ -391,7 +394,6 @@ void MyUserControl::MainForm_Load() {
 	// Показывать/прятать кнопку
 	pageButton->Visible = (totalPosts > currentPage * postsPerPage);
 	prevPageButton->Visible = (currentPage > 1);
-
 		}
 
 		void MyUserControl::RefreshHomeAfterDeletion()

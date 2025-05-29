@@ -53,6 +53,9 @@ namespace QQ {
 
     public:
         //bool UpdateUserFull(QQ::User^ user);
+    public:
+        delegate void PostSavedHandler(QQ::User^ user);
+        PostSavedHandler^ OnPostCreated;
 
 
         //void QQ::CreatePost::username(System::Object^ sender, System::EventArgs^ e);

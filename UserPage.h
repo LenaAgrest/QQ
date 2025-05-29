@@ -67,7 +67,6 @@ namespace QQ {
     private:
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
         void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e);
-        void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::createPost_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::post_Load(User^ user);

@@ -177,7 +177,7 @@ bool PostRepository::AddPost(int user_id, String^ title, String^ content, DateTi
 
     PGconn* conn = db.get();
 
-    std::string query = "INSERT INTO public.posts (blog_id, title, content, post_date, photo) VALUES ($1, $2, $3, $4, $5);";
+    std::string query = "INSERT INTO public.posts (blog_id, title, content, post_date, photo, comment_enable) VALUES ($1, $2, $3, $4, $5, $6);";
 
     // Преобразуем параметры
     std::string blog_id_str = std::to_string(user_id);
@@ -186,9 +186,9 @@ bool PostRepository::AddPost(int user_id, String^ title, String^ content, DateTi
     std::string date_str = marshal_as<std::string>(date.ToString("yyyy-MM-dd HH:mm:ss"));
 
     // Подготовим параметры
-    const char* paramValues[5];
-    int paramLengths[5] = { 0 };
-    int paramFormats[5] = { 0, 0, 0, 0, 1 }; // Последний параметр (фото) в бинарном формате
+    const char* paramValues[6];
+    int paramLengths[6] = { 0 };
+    int paramFormats[6] = { 0, 0, 0, 0, 1, 0 }; // Последний параметр (фото) в бинарном, последний — текст
 
     paramValues[0] = blog_id_str.c_str();
     paramValues[1] = title_str.c_str();
@@ -207,11 +207,13 @@ bool PostRepository::AddPost(int user_id, String^ title, String^ content, DateTi
         paramLengths[4] = 0;
     }
 
+    paramValues[5] = "true"; // Включаем комментарии по умолчанию
+
     // Выполняем запрос
     PGresult* res = PQexecParams(
         conn,
         query.c_str(),
-        5,             // параметров 5
+        6,             // параметров 6
         nullptr,       // типы не указываем
         paramValues,
         paramLengths,
@@ -229,6 +231,7 @@ bool PostRepository::AddPost(int user_id, String^ title, String^ content, DateTi
     db.disconnect();
     return success;
 }
+
 
 
 bool PostRepository::DeletePost(int postId)
