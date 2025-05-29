@@ -42,13 +42,19 @@ Comment::Comment(Post^ post, Comm^ comm) {
 	this->Margin = System::Windows::Forms::Padding(0, 0, 0, 0);
 	this->BackColor = System::Drawing::Color::White;
 
-	if (this->PostData->CommentsAllowed == false)
+	if (this->PostData->CommentsAllowed == true)
 	{
+		this->otvet->Enabled = true;
+	}
+	else if (this->PostData->CommentsAllowed == false)
+	{
+		this->tableLayoutPanel2->Controls->Remove(this->panel1);
 		this->otvet->BackgroundImage = Image::FromFile("answer_disable.png");
 		this->otvet->Enabled = false;
 	}
 	else
 	{
+		this->tableLayoutPanel2->Controls->Remove(this->panel1);
 		this->otvet->BackgroundImage = Image::FromFile("answer.png");
 		this->otvet->Enabled = true;
 	}
@@ -112,6 +118,7 @@ void Comment::InitializeComponent(void)
 	this->otvet->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 	this->otvet->Size = System::Drawing::Size(date_post->Height, date_post->Height);
 
+
 	this->panel3 = gcnew Panel();
 	this->panel3->AutoSize = true;
 	this->panel3->Dock = DockStyle::Top;
@@ -141,7 +148,7 @@ void Comment::InitializeComponent(void)
 	// 
 	this->comm_tb->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->comm_tb->Location = System::Drawing::Point(0, 0);
-	this->comm_tb->Margin = System::Windows::Forms::Padding(3);
+	this->comm_tb->Margin = System::Windows::Forms::Padding(3, 3, 0, 3);
 	this->comm_tb->MaximumSize = System::Drawing::Size(980 - comm_send->Width, 0);
 	this->comm_tb->Multiline = true;
 	this->comm_tb->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 14.8F, System::Drawing::FontStyle::Bold));
@@ -161,7 +168,6 @@ void Comment::InitializeComponent(void)
 	this->tableLayoutPanel2->AutoSize = true;
 	this->tableLayoutPanel2->ColumnCount = 1;
 	this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100));
-	//this->tableLayoutPanel2->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 99));
 	this->tableLayoutPanel2->RowCount = 3;
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	this->tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
@@ -197,10 +203,17 @@ void Comment::Delete_Click(Object^ sender, EventArgs^ e)
 
 void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 {
-	if (isExpanded && this->PostData->CommentsAllowed)
+	if (isExpanded && this->PostData->CommentsAllowed == true)
 	{
 		this->tableLayoutPanel2->Controls->Add(this->panel1);
 		this->otvet->BackgroundImage = Image::FromFile("answer_enable.png");
+		this->otvet->Enabled = true;
+	}
+	else if (isExpanded && this->PostData->CommentsAllowed == false)
+	{
+		this->tableLayoutPanel2->Controls->Remove(this->panel1);
+		this->otvet->BackgroundImage = Image::FromFile("answer_disable.png");
+		this->otvet->Enabled = false;
 	}
 	else
 	{
@@ -213,9 +226,9 @@ void Comment::otvet_Click(Object^ sender, EventArgs^ e)
 void Comment::Label1_Click(Object^ sender, EventArgs^ e)
 {
 	MouseEventArgs^ me = dynamic_cast<MouseEventArgs^>(e);
-	if(me != nullptr && me->Button == Windows::Forms::MouseButtons::Left) {
+	if (me != nullptr && me->Button == Windows::Forms::MouseButtons::Left) {
 		this->svoistva_post->Show(this->label1, Point(0, this->label1->Height));
-		
+
 	}
 }
 

@@ -34,6 +34,14 @@ PostOpen::PostOpen(Post^ post) {
 	else {
 		comm_en = L"Разрешить комментарии";
 	}*/
+	if (comm_info->Text == "Запрещены")
+	{
+		this->tableLayoutPanel2->Controls->Add(this->comm_info, 0, 6);
+	}
+	else
+	{
+		this->tableLayoutPanel2->Controls->Remove(this->comm_info);
+	}
 
 	this->toggleCommentsItem = gcnew ToolStripMenuItem(
 		post->CommentsAllowed ? L"Запретить комментарии" : L"Разрешить комментарии",
@@ -145,7 +153,7 @@ void PostOpen::InitializeComponent(void)
 	this->date_post->TextAlign = ContentAlignment::BottomRight;
 	this->date_post->Dock = DockStyle::Right;
 	this->date_post->AutoSize = true;
-	
+
 	// 
 	// comm_send
 	// 
@@ -170,7 +178,7 @@ void PostOpen::InitializeComponent(void)
 	this->comm_tb = gcnew TextBox();
 	this->comm_tb->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->comm_tb->Location = System::Drawing::Point(0, 0);
-	this->comm_tb->Margin = System::Windows::Forms::Padding(3,0,0,0);
+	this->comm_tb->Margin = System::Windows::Forms::Padding(3, 0, 0, 0);
 	this->comm_tb->MaximumSize = System::Drawing::Size(1000 - comm_send->Width, 0);
 	this->comm_tb->Multiline = true;
 	this->comm_tb->Font = (gcnew System::Drawing::Font(L"Montserrat SemiBold", 14.8F, System::Drawing::FontStyle::Bold));
@@ -185,7 +193,7 @@ void PostOpen::InitializeComponent(void)
 	this->panel1->Location = System::Drawing::Point(0, 0);
 	this->panel1->MaximumSize = System::Drawing::Size(1010, 34);
 	//this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	
+
 	this->tableLayoutPanel2 = gcnew TableLayoutPanel();
 	this->tableLayoutPanel2->Dock = DockStyle::Fill;
 	this->tableLayoutPanel2->AutoSize = true;
@@ -214,7 +222,7 @@ void PostOpen::InitializeComponent(void)
 	this->tableLayoutPanel2->MaximumSize = System::Drawing::Size(1018, 0);
 
 
-	
+
 	this->commentsLayout = gcnew TableLayoutPanel();
 	this->commentsLayout->AutoSize = true;
 	this->commentsLayout->AutoSizeMode = Windows::Forms::AutoSizeMode::GrowAndShrink;
@@ -248,7 +256,7 @@ void PostOpen::InitializeComponent(void)
 
 void PostOpen::Edit_Click(Object^ sender, EventArgs^ e)
 {
-	this-> title_post->Text = this-> title_post_l->Text;
+	this->title_post->Text = this->title_post_l->Text;
 	this->text_post_t->Text = this->text_post->Text;
 
 	this->title_post->Multiline = true;
@@ -337,7 +345,7 @@ void PostOpen::Label1_Click(Object^ sender, EventArgs^ e)
 	}
 }
 
-	// Рекурсивно рендерит один узел дерева
+// Рекурсивно рендерит один узел дерева
 void PostOpen::RenderCommentNode(QQ::Comm^ comm, Dictionary<int, Comment^>^ idToUI)
 {
 	Comment^ ui = gcnew Comment(this->PostData, comm);
@@ -376,7 +384,7 @@ void PostOpen::RenderComments() {
 	for each (Comm ^ root in rootComments) {
 		RenderCommentNode(root, idToUI);
 	}
-	
+
 	if (comm_info->Text == "") {
 		// добавляем поле для нового комментария
 		commentsLayout->Controls->Add(this->panel1);
@@ -488,6 +496,7 @@ void PostOpen::ToggleComments_Click(Object^ sender, EventArgs^ e)
 	else {
 		MessageBox::Show("Ошибка при обновлении статуса комментариев.");
 	}
+	RenderComments();
 }
 
 
