@@ -38,7 +38,6 @@ int update_post(System::String^ title_post, System::String^ text_post, const int
     char* title_new = PQescapeLiteral(conn, title.c_str(), title.length());
     char* content_new = PQescapeLiteral(conn, content.c_str(), content.length());
     char* escapedId = PQescapeLiteral(conn, idStr.c_str(), idStr.length());
-    //char* photo = PQescapeLiteral(conn, photo_data.c_str(), photo_data.length());
 
     // Проверка успешности экранирования
     if (!title_new || !content_new || !escapedId) {
@@ -53,7 +52,6 @@ int update_post(System::String^ title_post, System::String^ text_post, const int
     // Формирование запроса
     std::string query = "UPDATE posts SET title = " + std::string(title_new) +
         ", content = " + std::string(content_new) +
-        //", photo = " + std::string(photo) +
         " WHERE posts.id = " + std::string(escapedId) + ";";
 
     // Выполнение запроса

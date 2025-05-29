@@ -1,4 +1,4 @@
-#include "MyUserControl.h"
+ï»¿#include "MyUserControl.h"
 #include "PostgresConnection.h"
 #include "CreatePost.h"
 #include "PostRepository.h"
@@ -71,12 +71,12 @@ void MyUserControl::InitializeComponent(void)
 	this->labelUserName->Name = L"labelUserName";
 	this->labelUserName->Size = System::Drawing::Size(116, 41);
 	this->labelUserName->TabStop = true;
-	this->labelUserName->Text = L"Âîéòè";
+	this->labelUserName->Text = L"Ð’Ð¾Ð¹Ñ‚Ð¸";
 	this->labelUserName->ContextMenuStrip = contextMenuStrip1;
 	this->labelUserName->Click += gcnew System::EventHandler(this, &MyUserControl::labelUserName_Click);
 	
-	this->menuItemLogout = gcnew ToolStripMenuItem("Âûéòè èç àêêàóíòà");
-	this->menuItemDeleteAccount = gcnew ToolStripMenuItem("Óäàëèòü àêêàóíò");
+	this->menuItemLogout = gcnew ToolStripMenuItem("Ð’Ñ‹Ð¹Ñ‚Ð¸ Ð¸Ð· Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°");
+	this->menuItemDeleteAccount = gcnew ToolStripMenuItem("Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚");
 	this->contextMenuStrip1->Items->AddRange(gcnew array<ToolStripItem^>{ menuItemLogout, menuItemDeleteAccount });
 	this->menuItemLogout->Click += gcnew EventHandler(this, &MyUserControl::Logout_Click);
 	this->menuItemDeleteAccount->Click += gcnew EventHandler(this, &MyUserControl::DeleteAccount_Click);
@@ -109,7 +109,7 @@ void MyUserControl::InitializeComponent(void)
 
 
 	this->pageButton = gcnew Button();
-	this->pageButton->Text = "Ñëåäóþùàÿ ñòðàíèöà";
+	this->pageButton->Text = "Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°";
 	this->pageButton->Font = gcnew System::Drawing::Font(L"Montserrat", 12, FontStyle::Bold);
 	this->pageButton->BackColor = Color::SlateBlue;
 	this->pageButton->ForeColor = Color::White;
@@ -119,7 +119,7 @@ void MyUserControl::InitializeComponent(void)
 	this->pageButton->Visible = false;
 
 	this->prevPageButton = gcnew Button();
-	this->prevPageButton->Text = "Ïðåäûäóùàÿ ñòðàíèöà";
+	this->prevPageButton->Text = "ÐŸÑ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°";
 	this->prevPageButton->Font = gcnew System::Drawing::Font(L"Montserrat", 12, FontStyle::Bold);
 	this->prevPageButton->BackColor = Color::SlateBlue;
 	this->prevPageButton->ForeColor = Color::White;
@@ -131,7 +131,7 @@ void MyUserControl::InitializeComponent(void)
 
 
 	this->pageLabel = gcnew Label();
-	this->pageLabel->Text = "Ñòðàíèöà 1";
+	this->pageLabel->Text = "Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° 1";
 	this->pageLabel->Font = gcnew System::Drawing::Font(L"Montserrat", 12, FontStyle::Bold);
 	this->pageLabel->AutoSize = true;
 	this->pageLabel->ForeColor = Color::White;
@@ -229,7 +229,7 @@ void MyUserControl::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 			float imgWidth = static_cast<float>(img->Width);
 			float imgHeight = static_cast<float>(img->Height);
 
-			// Ìàñøòàáèðîâàíèå êàê cover
+			// ÐœÐ°ÑÑˆÑ‚Ð°Ð±Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ ÐºÐ°Ðº cover
 			float scale = Math::Max(boxWidth / imgWidth, boxHeight / imgHeight);
 			SizeF scaledSize(imgWidth * scale, imgHeight * scale);
 			PointF offset((boxWidth - scaledSize.Width) / 2, (boxHeight - scaledSize.Height) / 2);
@@ -238,10 +238,10 @@ void MyUserControl::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 			path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
 			this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);
 
-			// Îáðåçàåì âñ¸ ïî êðóãó
+			// ÐžÐ±Ñ€ÐµÐ·Ð°ÐµÐ¼ Ð²ÑÑ‘ Ð¿Ð¾ ÐºÑ€ÑƒÐ³Ñƒ
 			g->SetClip(path);
 
-			// Îòðèñîâêà
+			// ÐžÑ‚Ñ€Ð¸ÑÐ¾Ð²ÐºÐ°
 			g->DrawImage(img, RectangleF(offset, scaledSize));
 		}
 
@@ -269,6 +269,7 @@ void MyUserControl::OpenEditProfile(User^ user)
 	UserPageRed^ red = gcnew UserPageRed(user);
 	this->mainflow->Controls->Add(red);
 }
+
 
 
 void MyUserControl::OpenPost(Post^ post)
@@ -312,6 +313,7 @@ void MyUserControl::ReturnToUserPage(User^ updatedUser)
 			this->mainflow->Controls->Add(page);
 
 		}
+
 void MyUserControl::labelUserName_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	MouseEventArgs^ me = dynamic_cast<MouseEventArgs^>(e);
@@ -333,17 +335,17 @@ void MyUserControl::prevPageButton_Click(System::Object^ sender, System::EventAr
 void MyUserControl::Logout_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	Session::CurrentUser = nullptr;
-	Application::Restart(); // Èëè ïåðåõîä íà ôîðìó àâòîðèçàöèè
+	Application::Restart(); // Ð˜Ð»Ð¸ Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´ Ð½Ð° Ñ„Ð¾Ñ€Ð¼Ñƒ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ð¸
 }
 
 void MyUserControl::DeleteAccount_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	if (MessageBox::Show("Âû óâåðåíû, ÷òî õîòèòå óäàëèòü àêêàóíò? Ýòî äåéñòâèå íåîáðàòèìî.",
-		"Ïîäòâåðæäåíèå", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == System::Windows::Forms::DialogResult::Yes)
+	if (MessageBox::Show("Ð’Ñ‹ ÑƒÐ²ÐµÑ€ÐµÐ½Ñ‹, Ñ‡Ñ‚Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚? Ð­Ñ‚Ð¾ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ðµ Ð½ÐµÐ¾Ð±Ñ€Ð°Ñ‚Ð¸Ð¼Ð¾.",
+		"ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ðµ", MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == System::Windows::Forms::DialogResult::Yes)
 	{
 		PostgresConnection& db = PostgresConnection::getInstance();
 		if (!db.connect()) {
-			MessageBox::Show("Îøèáêà ïîäêëþ÷åíèÿ ê ÁÄ ïðè óäàëåíèè àêêàóíòà.");
+			MessageBox::Show("ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ðº Ð‘Ð” Ð¿Ñ€Ð¸ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ð¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°.");
 			return;
 		}
 
@@ -352,7 +354,7 @@ void MyUserControl::DeleteAccount_Click(System::Object^ sender, System::EventArg
 
 		std::string idStr = std::to_string(id);
 		std::string q1 = "DELETE FROM posts WHERE blog_id = " + idStr + ";";
-		std::string q2 = "UPDATE commenti SET text = 'Ïîëüçîâàòåëü óäàë¸í' WHERE id_user = " + idStr + ";";
+		std::string q2 = "UPDATE commenti SET text = 'ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ ÑƒÐ´Ð°Ð»Ñ‘Ð½' WHERE id_user = " + idStr + ";";
 		std::string q3 = "DELETE FROM people WHERE id = " + idStr + ";";
 
 		PGresult* r1 = PQexec(conn, q1.c_str());
@@ -363,9 +365,9 @@ void MyUserControl::DeleteAccount_Click(System::Object^ sender, System::EventArg
 		PQclear(r3);
 
 		db.disconnect();
-		MessageBox::Show("Àêêàóíò óñïåøíî óäàë¸í.");
+		MessageBox::Show("ÐÐºÐºÐ°ÑƒÐ½Ñ‚ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ ÑƒÐ´Ð°Ð»Ñ‘Ð½.");
 		Session::CurrentUser = nullptr;
-		Application::Restart(); // èëè ïåðåõîä íà ôîðìó àâòîðèçàöèè
+		Application::Restart(); // Ð¸Ð»Ð¸ Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´ Ð½Ð° Ñ„Ð¾Ñ€Ð¼Ñƒ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ð¸
 	}
 }
 
@@ -386,7 +388,7 @@ void MyUserControl::MainForm_Load() {
 		this->mainflow->Controls->Add(control);
 	}
 
-	// Ïîêàçûâàòü/ïðÿòàòü êíîïêó
+	// ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ/Ð¿Ñ€ÑÑ‚Ð°Ñ‚ÑŒ ÐºÐ½Ð¾Ð¿ÐºÑƒ
 	pageButton->Visible = (totalPosts > currentPage * postsPerPage);
 	prevPageButton->Visible = (currentPage > 1);
 

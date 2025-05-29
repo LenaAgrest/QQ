@@ -341,11 +341,5 @@ void aurorise::vxod_Click(System::Object^ sender, System::EventArgs^ e) {
 void aurorise::button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	Form^ f2 = gcnew MyForm();
 	this->Hide();
-	if (f2->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-		this->Show();
-	}
-	else {
-		this->Close();
-	}
-
+	f2->Show();
 }

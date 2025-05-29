@@ -2,6 +2,7 @@
 #include "red_user.h"
 #include <ctime>
 #include <string>
+#include "UserPage.h"
 
 using namespace QQ;
 
@@ -16,6 +17,12 @@ UserPageRed::UserPageRed(User^ user) {
 	contacts_text->Text = user->Contacts;
 	birthday_text->Text = user->Date->ToString("dd.MM.yyyy hh:mm:ss");
 	img = user->Photo;
+	if (img != nullptr) {
+		this->pictureBoxAvatar->BackgroundImage = img;
+	}
+	else {
+		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
+	}
 	
 }
 
@@ -205,22 +212,10 @@ void UserPageRed::InitializeComponent(void)
 	// pictureBoxAvatar
 	// 
 	this->pictureBoxAvatar = gcnew PictureBox();
-	if (img != nullptr)
-	{
-		this->pictureBoxAvatar->BackgroundImage = img;
-	}
-	else
-	{
-		this->pictureBoxAvatar->BackgroundImage = Image::FromFile("ava.png");
-	}
 	this->pictureBoxAvatar->Margin = System::Windows::Forms::Padding(33, 10, 3, 5);
 	this->pictureBoxAvatar->Size = System::Drawing::Size(95, 95);
 	this->pictureBoxAvatar->TabIndex = 0;
-	//this->pictureBoxAvatar->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->pictureBoxAvatar->TabStop = false;
 	this->pictureBoxAvatar->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
-	this->pictureBoxAvatar->ErrorImage = nullptr;
-	this->pictureBoxAvatar->InitialImage = nullptr;
 	this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UserPageRed::pictureBoxAvatar_Paint);
 
 	this->openFileDialog1 = gcnew OpenFileDialog();
@@ -483,11 +478,25 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 	}
 
 	if (UpdateUserFull(user_izm, now_pswd_text->Text, new_pswd_text->Text)) {
-		this->OnProfileSaved(user_izm);
+		MessageBox::Show("Профиль успешно обновлён");
+
+		if (this->OnProfileSaved != nullptr) {
+			this->OnProfileSaved(user_izm);
+		}
+		else {
+			// Отступаем назад вручную
+			Control^ parent = this->Parent;
+			if (parent != nullptr) {
+				parent->Controls->Clear();
+
+				parent->Controls->Add(gcnew QQ::UserPage(user_izm));
+			}
+		}
 	}
 	else {
 		MessageBox::Show("Ошибка при обновлении профиля!");
 	}
+
 }
 
 void QQ::UserPageRed::update_pswd_Click(System::Object^ sender, System::EventArgs^ e) {

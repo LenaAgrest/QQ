@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "User.h"
+﻿#include "User.h"
 #include <string>
 #include <ctime>
 
@@ -55,14 +53,14 @@ namespace QQ {
         MemoryStream^ ms;
         Image^ img;
 
-    private: 
+    private:
         bool isExpanded2 = true;
     private: array<Byte>^ imageBytes;
     public: delegate void ProfileSavedHandler(User^ updatedUser);
-    public: event ProfileSavedHandler^ OnProfileSaved;
-        
-    public: 
-          //bool UpdateUserFull(QQ::User^ user);
+    public:  ProfileSavedHandler^ OnProfileSaved;
+
+    public:
+        //bool UpdateUserFull(QQ::User^ user);
 
 
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);

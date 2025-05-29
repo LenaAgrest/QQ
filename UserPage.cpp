@@ -13,7 +13,7 @@ using namespace QQ;
 
 UserPage::UserPage(User^ user) {
 
-    InitializeComponent();
+	InitializeComponent();
 	// Если это текущий пользователь — сохраняем как CurrentUser
 	if (Session::CurrentUser != nullptr && Session::CurrentUser->ID == user->ID)
 	{
@@ -49,8 +49,8 @@ void UserPage::InitializeComponent(void)
 {
 	resources = (gcnew System::ComponentModel::ComponentResourceManager(UserPage::typeid));
 
-    this->AutoSize = true;
-    
+	this->AutoSize = true;
+
 
 	this->birthday_text = gcnew Label();
 	this->birthday_text->AutoSize = true;
@@ -212,7 +212,7 @@ void UserPage::InitializeComponent(void)
 	this->pictureBoxAvatar->ErrorImage = nullptr;
 	this->pictureBoxAvatar->InitialImage = nullptr;
 	this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UserPage::pictureBoxAvatar_Paint);
-	
+
 
 
 	this->create_post = gcnew Button();
@@ -226,7 +226,7 @@ void UserPage::InitializeComponent(void)
 	this->create_post->Dock = DockStyle::Fill;
 	this->create_post->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 	this->create_post->Text = L"Создать пост";
-	
+
 	// 
 	// panel4
 	// 
@@ -273,7 +273,7 @@ void UserPage::InitializeComponent(void)
 	//this->user_table->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->user_table->ColumnCount = 1;
 	this->user_table->Dock = DockStyle::Fill;
-	this->user_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,100)));
+	this->user_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 100)));
 	this->user_table->Controls->Add(this->panel4, 0, 0);
 	this->user_table->Controls->Add(this->about_user, 0, 1);
 	this->user_table->Location = System::Drawing::Point(0, 0);
@@ -435,4 +435,3 @@ void QQ::UserPage::user_name_Click(System::Object^ sender, System::EventArgs^ e)
 UserPage::~UserPage()
 {
 }
-

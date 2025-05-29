@@ -419,10 +419,10 @@ void QQ::MyForm::reg_Click(System::Object^ sender, System::EventArgs^ e) {
 
 		if (result == 1) {
 			MessageBox::Show("Регистрация успешна!", "Успех", MessageBoxButtons::OK, MessageBoxIcon::Information);
-			this->Hide();
+			
 			aurorise^ loginForm = gcnew aurorise();
-			loginForm->ShowDialog();
-			this->Close();
+			loginForm->Show();
+			this->Hide();
 		}
 		else if (result == 2) {
 			MessageBox::Show("Имя или пароль уже заняты. Пожалуйста, выберите другие.",

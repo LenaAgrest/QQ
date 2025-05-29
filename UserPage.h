@@ -59,7 +59,7 @@ namespace QQ {
         
 
     public: delegate void EditRequestedHandler(User^ user);
-    public: event EditRequestedHandler^ OnEditRequested;
+    public: EditRequestedHandler^ OnEditRequested;
     public: delegate void CreatePostRequestedHandler(User^ user);
     public: CreatePostRequestedHandler^ OnCreatePost;
 
