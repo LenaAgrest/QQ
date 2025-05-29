@@ -27,8 +27,6 @@ void MyUserControl::InitializeComponent(void)
 	this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 	this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->contextMenuStrip1 = gcnew System::Windows::Forms::ContextMenuStrip();
-	this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
-	this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 	this->panel1 = (gcnew System::Windows::Forms::Panel());
 	this->mainflow = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->Panel->SuspendLayout();
@@ -36,7 +34,6 @@ void MyUserControl::InitializeComponent(void)
 	(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBoxAvatar))->BeginInit();
 	(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 	this->flowLayoutPanel2->SuspendLayout();
-	(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 	this->panel1->SuspendLayout();
 	this->SuspendLayout();
 	// 
@@ -50,7 +47,6 @@ void MyUserControl::InitializeComponent(void)
 	this->Panel->Location = System::Drawing::Point(0, 0);
 	this->Panel->Name = L"Panel";
 	this->Panel->Size = System::Drawing::Size(1540, 80);
-	this->Panel->TabIndex = 0;
 	this->Panel->Resize += gcnew System::EventHandler(this, &MyUserControl::Panel_Resize);
 	// 
 	// panel4
@@ -63,7 +59,6 @@ void MyUserControl::InitializeComponent(void)
 	this->panel4->Location = System::Drawing::Point(1310, 0);
 	this->panel4->Name = L"panel4";
 	this->panel4->Size = System::Drawing::Size(230, 80);
-	this->panel4->TabIndex = 5;
 	//this->panel4->Click += gcnew System::EventHandler(this, &MyUserControl::panel4_Click);
 	// 
 	// labelUserName
@@ -75,7 +70,6 @@ void MyUserControl::InitializeComponent(void)
 	this->labelUserName->Location = System::Drawing::Point(111, 20);
 	this->labelUserName->Name = L"labelUserName";
 	this->labelUserName->Size = System::Drawing::Size(116, 41);
-	this->labelUserName->TabIndex = 2;
 	this->labelUserName->TabStop = true;
 	this->labelUserName->Text = L"Войти";
 	this->labelUserName->ContextMenuStrip = contextMenuStrip1;
@@ -98,7 +92,6 @@ void MyUserControl::InitializeComponent(void)
 	this->pictureBoxAvatar->Location = System::Drawing::Point(43, 8);
 	this->pictureBoxAvatar->Name = L"pictureBoxAvatar";
 	this->pictureBoxAvatar->Size = System::Drawing::Size(62, 62);
-	this->pictureBoxAvatar->TabIndex = 0;
 	this->pictureBoxAvatar->TabStop = false;
 	this->pictureBoxAvatar->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyUserControl::pictureBoxAvatar_Paint);
 	this->pictureBoxAvatar->Click += gcnew System::EventHandler(this, &MyUserControl::panel4_Click);
@@ -110,41 +103,59 @@ void MyUserControl::InitializeComponent(void)
 	this->pictureBox1->Name = L"pictureBox1";
 	this->pictureBox1->Size = System::Drawing::Size(126, 77);
 	this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
-	this->pictureBox1->TabIndex = 0;
 	this->pictureBox1->TabStop = false;
 	this->pictureBox1->Click += gcnew System::EventHandler(this, &MyUserControl::pictureBox1_Click);
+	
+
+
+	this->pageButton = gcnew Button();
+	this->pageButton->Text = "Следующая страница";
+	this->pageButton->Font = gcnew System::Drawing::Font(L"Montserrat", 12, FontStyle::Bold);
+	this->pageButton->BackColor = Color::SlateBlue;
+	this->pageButton->ForeColor = Color::White;
+	this->pageButton->AutoSize = true;
+	this->pageButton->FlatStyle = FlatStyle::Flat;
+	this->pageButton->Click += gcnew System::EventHandler(this, &MyUserControl::pageButton_Click);
+	this->pageButton->Visible = false;
+
+	this->prevPageButton = gcnew Button();
+	this->prevPageButton->Text = "Предыдущая страница";
+	this->prevPageButton->Font = gcnew System::Drawing::Font(L"Montserrat", 12, FontStyle::Bold);
+	this->prevPageButton->BackColor = Color::SlateBlue;
+	this->prevPageButton->ForeColor = Color::White;
+	this->prevPageButton->AutoSize = true;
+	this->prevPageButton->FlatStyle = FlatStyle::Flat;
+	this->prevPageButton->Click += gcnew System::EventHandler(this, &MyUserControl::prevPageButton_Click);
+	this->prevPageButton->Visible = false;
+
+
+
+	this->pageLabel = gcnew Label();
+	this->pageLabel->Text = "Страница 1";
+	this->pageLabel->Font = gcnew System::Drawing::Font(L"Montserrat", 12, FontStyle::Bold);
+	this->pageLabel->AutoSize = true;
+	this->pageLabel->ForeColor = Color::White;
+	this->pageLabel->TextAlign = ContentAlignment::MiddleCenter;
+	this->pageLabel->Margin = System::Windows::Forms::Padding(20, 10, 20, 10);
+
 	// 
 	// flowLayoutPanel2
 	// 
-	this->flowLayoutPanel2->BackColor = System::Drawing::Color::White;
-	this->flowLayoutPanel2->Controls->Add(this->pictureBox2);
-	this->flowLayoutPanel2->Controls->Add(this->textBox1);
-	this->flowLayoutPanel2->Location = System::Drawing::Point(432, 10);
-	this->flowLayoutPanel2->Margin = System::Windows::Forms::Padding(300, 10, 3, 0);
-	this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
-	this->flowLayoutPanel2->Size = System::Drawing::Size(649, 60);
-	this->flowLayoutPanel2->TabIndex = 3;
-	// 
-	// pictureBox2
-	// 
-	this->pictureBox2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox2.BackgroundImage")));
-	this->pictureBox2->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
-	this->pictureBox2->Location = System::Drawing::Point(3, 3);
-	this->pictureBox2->Name = L"pictureBox2";
-	this->pictureBox2->Size = System::Drawing::Size(42, 57);
-	this->pictureBox2->TabIndex = 0;
-	this->pictureBox2->TabStop = false;
-	// 
-	// textBox1
-	// 
-	this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->textBox1->Dock = System::Windows::Forms::DockStyle::Fill;
-	this->textBox1->Font = (gcnew System::Drawing::Font(L"Montserrat", 20, System::Drawing::FontStyle::Bold));
-	this->textBox1->Location = System::Drawing::Point(49, 13);
-	this->textBox1->Margin = System::Windows::Forms::Padding(1, 13, 1, 0);
-	this->textBox1->Name = L"textBox1";
-	this->textBox1->Size = System::Drawing::Size(583, 41);
-	this->textBox1->TabIndex = 3;
+	this->flowLayoutPanel2->Controls->Add(this->prevPageButton);
+	this->flowLayoutPanel2->Controls->Add(this->pageLabel);
+	this->flowLayoutPanel2->Controls->Add(this->pageButton);
+	//this->flowLayoutPanel2->Size = System::Drawing::Size(649, 60);
+	this->flowLayoutPanel2->FlowDirection = FlowDirection::LeftToRight;
+	this->flowLayoutPanel2->WrapContents = false;
+	this->flowLayoutPanel2->AutoSize = true;
+	this->flowLayoutPanel2->Anchor = AnchorStyles::Top;
+	//this->flowLayoutPanel2->Padding = System::Windows::Forms::Padding(10);
+	this->flowLayoutPanel2->Dock = DockStyle::Top;
+	this->flowLayoutPanel2->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+	this->flowLayoutPanel2->Margin = System::Windows::Forms::Padding(0, 20, 0, 10);
+	this->flowLayoutPanel2->Anchor = AnchorStyles::None;
+	this->flowLayoutPanel2->Location = System::Drawing::Point((this->Width - flowLayoutPanel2->Width) / 2, 20);
+
 	// 
 	// panel1
 	// 
@@ -154,7 +165,6 @@ void MyUserControl::InitializeComponent(void)
 	this->panel1->Location = System::Drawing::Point(0, 80);
 	this->panel1->Name = L"panel1";
 	this->panel1->Size = System::Drawing::Size(1540, 720);
-	this->panel1->TabIndex = 1;
 	// 
 	// mainflow
 	// 
@@ -164,7 +174,6 @@ void MyUserControl::InitializeComponent(void)
 	this->mainflow->Location = System::Drawing::Point(300, 0);
 	this->mainflow->Name = L"mainflow";
 	this->mainflow->Size = System::Drawing::Size(0, 0);
-	this->mainflow->TabIndex = 0;
 	this->mainflow->WrapContents = false;
 	this->mainflow->SizeChanged += gcnew System::EventHandler(this, &MyUserControl::panel1_Resize2);
 	// 
@@ -184,7 +193,6 @@ void MyUserControl::InitializeComponent(void)
 	(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 	this->flowLayoutPanel2->ResumeLayout(false);
 	this->flowLayoutPanel2->PerformLayout();
-	(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
 	this->panel1->ResumeLayout(false);
 	this->panel1->PerformLayout();
 	this->ResumeLayout(false);
@@ -208,9 +216,6 @@ void MyUserControl::SetUser()
 
 void MyUserControl::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
 		{
-			/*auto path = gcnew Drawing2D::GraphicsPath();
-			path->AddEllipse(0, 0, pictureBoxAvatar->Width - 1, pictureBoxAvatar->Height - 1);
-			this->pictureBoxAvatar->Region = gcnew System::Drawing::Region(path);*/
 			if (this->pictureBoxAvatar->BackgroundImage == nullptr)
 				return;
 
@@ -257,27 +262,34 @@ void MyUserControl::panel4_Click(Object^ sender, EventArgs^ e)
 		}
 
 void MyUserControl::OpenEditProfile(User^ user)
-		{
-			this->mainflow->Controls->Clear();
-			UserPageRed^ editor = gcnew UserPageRed(user);
-			editor->OnProfileSaved += gcnew UserPageRed::ProfileSavedHandler(this, &MyUserControl::ReturnToUserPage);
-			this->mainflow->Controls->Add(editor);
-		}
+{
+	this->mainflow->Controls->Clear();
+	this->flowLayoutPanel2->Visible = false;
 
-void MyUserControl::OpenPost(QQ::Post^ post)
-		{
-			this->mainflow->Controls->Clear();
-			PostOpen^ postPage = gcnew PostOpen(post);
-			this->mainflow->Controls->Add(postPage);
-			postPage->OnPostDeleted += gcnew QQ::PostOpen::PostDeletedHandler(this, &MyUserControl::RefreshHomeAfterDeletion);
-		}
+	UserPageRed^ red = gcnew UserPageRed(user);
+	this->mainflow->Controls->Add(red);
+}
+
+
+void MyUserControl::OpenPost(Post^ post)
+{
+	this->mainflow->Controls->Clear();
+	this->flowLayoutPanel2->Visible = false;
+
+	PostOpen^ postOpen = gcnew PostOpen(post);
+	this->mainflow->Controls->Add(postOpen);
+}
+
 
 void MyUserControl::OpenCreatePost(User^ user)
-		{
-			this->mainflow->Controls->Clear();
-			CreatePost^ page = gcnew CreatePost(user);
-			this->mainflow->Controls->Add(page);
-		}
+{
+	this->mainflow->Controls->Clear();
+	this->flowLayoutPanel2->Visible = false;
+
+	CreatePost^ create = gcnew CreatePost(user);
+	this->mainflow->Controls->Add(create);
+}
+
 
 
 void MyUserControl::ReturnToUserPage(User^ updatedUser)
@@ -309,6 +321,13 @@ void MyUserControl::labelUserName_Click(System::Object^ sender, System::EventArg
 	}
 }
 
+void MyUserControl::prevPageButton_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentPage > 1) {
+		currentPage--;
+		MainForm_Load();
+	}
+}
 
 
 void MyUserControl::Logout_Click(System::Object^ sender, System::EventArgs^ e)
@@ -352,25 +371,36 @@ void MyUserControl::DeleteAccount_Click(System::Object^ sender, System::EventArg
 
 
 void MyUserControl::MainForm_Load() {
-			try {
-				List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
+	this->mainflow->Controls->Clear();
 
-				for each (QQ::Post ^ post in posts) {
-					QQ::PostControl^ control = gcnew QQ::PostControl(post);
-					control->Margin = System::Windows::Forms::Padding(10);
-					control->OnPostSelected += gcnew PostControl::PostSelectedHandler(this, &MyUserControl::OpenPost);
-					this->mainflow->Controls->Add(control);
-				}
+	List<QQ::Post^>^ posts = PostRepository::LoadAllPosts();
+	int totalPosts = posts->Count;
+	int startIndex = (currentPage - 1) * postsPerPage;
+	int endIndex = Math::Min(startIndex + postsPerPage, totalPosts);
 
-			}
-			catch (Exception^ ex) {
-				MessageBox::Show("Ошибка при загрузке постов: " + ex->Message);
-			}
+	for (int i = startIndex; i < endIndex; ++i)
+	{
+		QQ::PostControl^ control = gcnew QQ::PostControl(posts[i]);
+		control->Margin = System::Windows::Forms::Padding(10);
+		control->OnPostSelected += gcnew PostControl::PostSelectedHandler(this, &MyUserControl::OpenPost);
+		this->mainflow->Controls->Add(control);
+	}
+
+	// Показывать/прятать кнопку
+	pageButton->Visible = (totalPosts > currentPage * postsPerPage);
+	prevPageButton->Visible = (currentPage > 1);
+
 		}
 
 		void MyUserControl::RefreshHomeAfterDeletion()
 		{
 			this->mainflow->Controls->Clear();
+			MainForm_Load();
+		}
+
+		void MyUserControl::pageButton_Click(System::Object^ sender, System::EventArgs^ e)
+		{
+			currentPage++;
 			MainForm_Load();
 		}
 
@@ -401,6 +431,8 @@ void MyUserControl::MainForm_Load() {
 		}
 
 		void MyUserControl::pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
-		this->mainflow->Controls->Clear();
-		MainForm_Load();
+			this->mainflow->Controls->Clear();
+			currentPage = 1;
+			MainForm_Load();
+
 	}

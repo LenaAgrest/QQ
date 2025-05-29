@@ -406,7 +406,12 @@ void QQ::MyForm::reg_Click(System::Object^ sender, System::EventArgs^ e) {
 		std::string about = marshal_as<std::string>(about_me->Text);
 
 		if (name->Text->Length == 0 || pswd->Text->Length == 0 || born->Text->Length == 0 || interes->Text->Length == 0 || contacts->Text->Length == 0 || about_me->TextLength == 0) {
-			MessageBox::Show("Пожалуйста, заполните все поля", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			MessageBox::Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+
+		if (pswd->Text->Length < 8) {
+			MessageBox::Show("Пароль не может быть короче 8 символов.", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
 			return;
 		}
 

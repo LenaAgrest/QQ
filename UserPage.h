@@ -33,6 +33,7 @@ namespace QQ {
 
     private:
         Label^ user_name;
+        Label^ blogLabel;
         PictureBox^ pictureBoxAvatar;
         Panel^ panel;
         Panel^ panel4;
@@ -55,12 +56,13 @@ namespace QQ {
         bool isExpanded = true;
         String^ pswd;
         Image^ image;
-        void RefreshUserPageAfterDeletion();
+        
 
     public: delegate void EditRequestedHandler(User^ user);
     public: event EditRequestedHandler^ OnEditRequested;
     public: delegate void CreatePostRequestedHandler(User^ user);
     public: CreatePostRequestedHandler^ OnCreatePost;
+
 
     private:
         void pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e);
@@ -70,6 +72,9 @@ namespace QQ {
         void QQ::UserPage::createPost_Click(System::Object^ sender, System::EventArgs^ e);
         void QQ::UserPage::post_Load(User^ user);
         void QQ::UserPage::OpenPost(QQ::Post^ post);
+        void QQ::UserPage::RefreshUserPageAfterDeletion(System::Object^ sender, System::EventArgs^ e);
+        void QQ::UserPage::RefreshUserPageAfterDeletion();
+        
 
     };
 }

@@ -14,14 +14,32 @@ using namespace QQ;
 UserPage::UserPage(User^ user) {
 
     InitializeComponent();
-	Session::CurrentUser = user; // на всякий случай, если вдруг не обновлён
+	// Если это текущий пользователь — сохраняем как CurrentUser
+	if (Session::CurrentUser != nullptr && Session::CurrentUser->ID == user->ID)
+	{
+		// показываем кнопки
+		this->user_red->Visible = true;
+		this->create_post->Visible = true;
+		this->user_table->Controls->Remove(this->blogLabel);
+		this->user_table->Controls->Add(this->create_post, 0, 2);
+	}
+	else
+	{
+		// скрываем кнопки
+		this->user_red->Visible = false;
+		this->create_post->Visible = false;
+		this->blogLabel->Text = "Блог пользователя @" + user->Username;
+		this->user_table->Controls->Remove(this->create_post);
+		this->user_table->Controls->Add(this->blogLabel, 0, 2);
+	}
+
 	user_Id = user->ID;
 	user_name->Text = user->Username;
 	pswd = user->Password;
 	o_sebe_text->Text = user->About;
 	interesi_text->Text = user->Interests;
 	contacts_text->Text = user->Contacts;
-	birthday_text->Text = user->Date->ToString("dd.MM.yyyy HH:mm:ss");
+	birthday_text->Text = user->Date->ToString("dd.MM.yyyy");
 	image = user->Photo;
 	post_Load(user);
 
@@ -42,7 +60,6 @@ void UserPage::InitializeComponent(void)
 	this->birthday_text->Margin = System::Windows::Forms::Padding(3);
 	this->birthday_text->MaximumSize = System::Drawing::Size(1004, 0);
 	this->birthday_text->Size = System::Drawing::Size(1004, 33);
-	//this->birthday_text->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// birthday
 	// 
@@ -55,7 +72,6 @@ void UserPage::InitializeComponent(void)
 	this->birthday->Location = System::Drawing::Point(3, 3);
 	this->birthday->Margin = System::Windows::Forms::Padding(3);
 	this->birthday->Size = System::Drawing::Size(1004, 47);
-	//this->birthday->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// contacts_text
 	// 
@@ -67,7 +83,6 @@ void UserPage::InitializeComponent(void)
 	this->contacts_text->Margin = System::Windows::Forms::Padding(3);
 	this->contacts_text->MaximumSize = System::Drawing::Size(1004, 0);
 	this->contacts_text->Size = System::Drawing::Size(1004, 33);
-	//this->contacts_text->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// contacts
 	// 
@@ -80,7 +95,6 @@ void UserPage::InitializeComponent(void)
 	this->contacts->Location = System::Drawing::Point(3, 3);
 	this->contacts->Margin = System::Windows::Forms::Padding(3);
 	this->contacts->Size = System::Drawing::Size(1004, 47);
-	//this->contacts->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// interesi_text
 	// 
@@ -92,7 +106,6 @@ void UserPage::InitializeComponent(void)
 	this->interesi_text->Location = System::Drawing::Point(0, 0); //3, 214
 	this->interesi_text->MaximumSize = System::Drawing::Size(1004, 0);
 	this->interesi_text->Size = System::Drawing::Size(1000, 200);
-	//this->interesi_text->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// interesi
 	// 
@@ -105,20 +118,17 @@ void UserPage::InitializeComponent(void)
 	this->interesi->Location = System::Drawing::Point(3, 3); //3, 161
 	this->interesi->Margin = System::Windows::Forms::Padding(3);
 	this->interesi->Size = System::Drawing::Size(1004, 47);
-	//this->interesi->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// o_sebe_text
 	// 
 	this->o_sebe_text = gcnew Label();
 	this->o_sebe_text->AutoSize = true;
-	//this->o_sebe_text->Dock = System::Windows::Forms::DockStyle::Fill;
 	this->o_sebe_text->Font = (gcnew System::Drawing::Font(L"Montserrat", 14, System::Drawing::FontStyle::Regular));
 	this->o_sebe_text->ForeColor = System::Drawing::Color::White;
 	this->o_sebe_text->Location = System::Drawing::Point(3, 56);
 	this->o_sebe_text->Margin = System::Windows::Forms::Padding(3);
 	this->o_sebe_text->MaximumSize = System::Drawing::Size(1010, 0);
 	this->o_sebe_text->Size = System::Drawing::Size(1000, 99);
-	//this->o_sebe_text->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	// 
 	// o_sebe
 	// 
@@ -131,7 +141,6 @@ void UserPage::InitializeComponent(void)
 	this->o_sebe->AutoSize = true;
 	this->o_sebe->Location = System::Drawing::Point(3, 3);
 	this->o_sebe->Size = System::Drawing::Size(1004, 47);
-	//this->o_sebe->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 
 
 	// Редактировать
@@ -155,16 +164,14 @@ void UserPage::InitializeComponent(void)
 	this->reveal->BackgroundImage = Image::FromFile("info_down.png");
 	this->reveal->BackgroundImageLayout = ImageLayout::Zoom;
 	this->reveal->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-	//this->reveal->Font = (gcnew System::Drawing::Font(L"Montserrat Medium", 22));
 	this->reveal->ForeColor = System::Drawing::Color::White;
 	this->reveal->Size = System::Drawing::Size(50, 45);
 	this->reveal->Location = System::Drawing::Point(210, 45);
 
 
 	this->buttonsPanel = gcnew Panel();
-	this->buttonsPanel->Size = System::Drawing::Size(270, 120); // фиксированная ширина
+	this->buttonsPanel->Size = System::Drawing::Size(270, 120);
 	this->buttonsPanel->Dock = DockStyle::Right;
-	//this->buttonsPanel->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->buttonsPanel->BackColor = System::Drawing::Color::SlateBlue;
 	this->buttonsPanel->Controls->Add(this->user_red);
 	this->buttonsPanel->Controls->Add(this->reveal);
@@ -173,7 +180,6 @@ void UserPage::InitializeComponent(void)
 	// 
 	this->user_name = gcnew Label();
 	this->user_name->AutoSize = true;
-	//this->user_name->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->user_name->Font = (gcnew System::Drawing::Font(L"Montserrat", 30, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 		static_cast<System::Byte>(204)));
 	this->user_name->ForeColor = System::Drawing::Color::White;
@@ -235,6 +241,14 @@ void UserPage::InitializeComponent(void)
 	this->panel4->Name = L"panel4";
 	this->panel4->Size = System::Drawing::Size(1010, 140);
 
+	this->blogLabel = gcnew Label();
+	this->blogLabel->Font = gcnew System::Drawing::Font(L"Montserrat", 18, System::Drawing::FontStyle::Bold);
+	this->blogLabel->ForeColor = System::Drawing::Color::SlateBlue;
+	this->blogLabel->AutoSize = true;
+	this->blogLabel->Cursor = Cursors::Hand;
+	this->blogLabel->TextAlign = ContentAlignment::MiddleCenter;
+	this->blogLabel->Margin = System::Windows::Forms::Padding(5, 10, 5, 10);
+	this->blogLabel->Click += gcnew System::EventHandler(this, &UserPage::RefreshUserPageAfterDeletion);
 
 
 	this->about_user = gcnew TableLayoutPanel();
@@ -256,13 +270,12 @@ void UserPage::InitializeComponent(void)
 	this->user_table = gcnew TableLayoutPanel();
 	this->user_table->AutoSize = true;
 	this->user_table->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowOnly;
-	this->user_table->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	//this->user_table->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->user_table->ColumnCount = 1;
 	this->user_table->Dock = DockStyle::Fill;
 	this->user_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,100)));
 	this->user_table->Controls->Add(this->panel4, 0, 0);
 	this->user_table->Controls->Add(this->about_user, 0, 1);
-	this->user_table->Controls->Add(this->create_post, 0, 2);
 	this->user_table->Location = System::Drawing::Point(0, 0);
 	this->user_table->RowCount = 4;
 	this->user_table->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::AutoSize)));
@@ -274,11 +287,22 @@ void UserPage::InitializeComponent(void)
 }
 
 
-void QQ::UserPage::RefreshUserPageAfterDeletion()
+void QQ::UserPage::RefreshUserPageAfterDeletion(System::Object^ sender, System::EventArgs^ e)
 {
-	this->user_table->Controls->Clear();
-	post_Load(Session::CurrentUser);
+	Control^ parent = this->Parent;
+	while (parent != nullptr && parent->Name != "mainflow") {
+		parent = parent->Parent;
+	}
+
+	if (parent != nullptr) {
+		parent->Controls->Clear();
+		QQ::User^ reloadUser = Session::SelectUser != nullptr ? Session::SelectUser : Session::CurrentUser;
+		QQ::UserPage^ page = gcnew QQ::UserPage(reloadUser);
+		parent->Controls->Add(page);
+	}
 }
+
+
 
 
 void QQ::UserPage::pictureBoxAvatar_Paint(Object^ sender, PaintEventArgs^ e)
@@ -343,6 +367,10 @@ void QQ::UserPage::post_Load(User^ user)
 	}
 }
 
+void QQ::UserPage::RefreshUserPageAfterDeletion()
+{
+	RefreshUserPageAfterDeletion(nullptr, nullptr);
+}
 
 
 void QQ::UserPage::open_Click(System::Object^ sender, System::EventArgs^ e)
@@ -393,6 +421,7 @@ void QQ::UserPage::OpenPost(QQ::Post^ post)
 	open->OnPostDeleted += gcnew QQ::PostOpen::PostDeletedHandler(this, &UserPage::RefreshUserPageAfterDeletion);
 	this->user_table->Controls->Add(open);
 }
+
 
 void QQ::UserPage::red_Click(System::Object^ sender, System::EventArgs^ e)
 {

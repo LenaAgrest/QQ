@@ -461,6 +461,11 @@ void QQ::UserPageRed::save_Click(System::Object^ sender, System::EventArgs^ e)
 			MessageBox::Show("Новый пароль должен отличаться от старого!");
 			return;
 		}
+
+		if (new_pswd_text->Text->Length < 8) {
+			MessageBox::Show("Пароль не может быть короче 8 символов.", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
 	}
 
 	// Сохраняем в БД

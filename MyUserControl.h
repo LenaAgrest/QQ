@@ -30,9 +30,7 @@ namespace QQ {
 
 	private: System::Windows::Forms::Panel^ Panel;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
-	private: System::Windows::Forms::PictureBox^ pictureBox2;
 	private: System::Windows::Forms::PictureBox^ pictureBoxAvatar;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Label^ user_post;
@@ -46,8 +44,14 @@ namespace QQ {
 		System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
 		System::Windows::Forms::ToolStripMenuItem^ menuItemLogout;
 		System::Windows::Forms::ToolStripMenuItem^ menuItemDeleteAccount;
+		System::Windows::Forms::Label^ pageLabel;
 
-		
+	private: System::Windows::Forms::Button^ pageButton;
+		   System::Windows::Forms::Button^ prevPageButton;
+
+	private: int currentPage = 1;
+	private: int postsPerPage = 10;
+
 
 
 	public: QQ::User^ user;
@@ -68,6 +72,8 @@ namespace QQ {
 
 		void RefreshHomeAfterDeletion();
 
+		void pageButton_Click(System::Object^ sender, System::EventArgs^ e);
+
 		void panel1_Resize(Object^ sender, EventArgs^ e);
 
 		void Panel_Resize(Object^ sender, EventArgs^ e);
@@ -78,6 +84,8 @@ namespace QQ {
 		void ReturnToUserPage(User^ updatedUser);
 
 		void labelUserName_Click(System::Object^ sender, System::EventArgs^ e);
+
+		void prevPageButton_Click(System::Object^ sender, System::EventArgs^ e);
 
 		void Logout_Click(System::Object^ sender, System::EventArgs^ e);
 		void DeleteAccount_Click(System::Object^ sender, System::EventArgs^ e);
